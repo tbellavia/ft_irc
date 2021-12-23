@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/22 15:03:39 by lperson-          #+#    #+#             */
-/*   Updated: 2021/12/23 12:55:07 by lperson-         ###   ########.fr       */
+/*   Updated: 2021/12/23 13:07:07 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,9 @@ public:
 protected:
     AIPAddress &operator=(AIPAddress const &rhs);
 
-    std::string const   _representation;
-    sa_family_t         _family;
-    void const          *_cStyle;
+    std::string _representation;
+    sa_family_t _family;
+    void        *_cStyle;
 
 };
 
