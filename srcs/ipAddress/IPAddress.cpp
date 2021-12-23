@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/22 15:19:30 by lperson-          #+#    #+#             */
-/*   Updated: 2021/12/23 13:00:42 by lperson-         ###   ########.fr       */
+/*   Updated: 2021/12/23 13:05:21 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,10 @@ IPv4Address::IPv4Address(std::string const &ipAddress):
 
 IPv4Address::IPv4Address(IPv4Address const &copy):
         AIPAddress(copy)
-{}
+{
+    _addr = copy._addr;
+    _cStyle = reinterpret_cast<void const *>(&_addr);
+}
 
 IPv4Address &IPv4Address::operator=(IPv4Address const &)
 {
@@ -127,8 +130,12 @@ IPv6Address::IPv6Address(std::string const &string):
     _cStyle = reinterpret_cast<void const *>(&_addr);
 }
 
-IPv6Address::IPv6Address(IPv6Address const &copy): AIPAddress(copy)
-{}
+IPv6Address::IPv6Address(IPv6Address const &copy):
+        AIPAddress(copy)
+{
+    _addr = copy._addr;
+    _cStyle = reinterpret_cast<void const *>(&_addr);
+}
 
 IPv6Address &IPv6Address::operator=(IPv6Address const &)
 {
