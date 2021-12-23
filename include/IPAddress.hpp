@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/22 15:03:39 by lperson-          #+#    #+#             */
-/*   Updated: 2021/12/22 16:22:58 by lperson-         ###   ########.fr       */
+/*   Updated: 2021/12/23 12:55:07 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,23 +31,23 @@ class AIPAddress
 {
 public:
     AIPAddress();
-    AIPAddress(std::string const &_string, int _addressFamily);
+    AIPAddress(std::string const &ipAddress, sa_family_t family);
     AIPAddress(AIPAddress const &copy);
 
     virtual AIPAddress *clone() const = 0;
 
-    std::string getString() const;
-    int         getAddressFamily() const;
-    void const  *getCStyleAddress() const;
+    std::string getRepresentation() const;
+    sa_family_t getFamily() const;
+    void const  *getCStyle() const;
 
     virtual ~AIPAddress();
 
 protected:
     AIPAddress &operator=(AIPAddress const &rhs);
 
-    std::string const   _string;
-    int const           _addressFamily;
-    void const          *_cStyleAddress;
+    std::string const   _representation;
+    sa_family_t         _family;
+    void const          *_cStyle;
 
 };
 
@@ -72,7 +72,7 @@ public:
     };
 
 private:
-    struct in_addr  _sin_addr; // C-style representation
+    struct in_addr  _addr; // C-style representation
 
     IPv4Address();
     IPv4Address &operator=(IPv4Address const &rhs);
@@ -99,7 +99,7 @@ public:
     };
 
 private:
-    struct in6_addr _sin6_addr; // C-style representation
+    struct in6_addr _addr; // C-style representation
 
     IPv6Address();
     IPv6Address &operator=(IPv6Address const &rhs);

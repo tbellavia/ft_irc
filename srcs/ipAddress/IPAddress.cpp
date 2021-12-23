@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/22 15:19:30 by lperson-          #+#    #+#             */
-/*   Updated: 2021/12/22 16:23:30 by lperson-         ###   ########.fr       */
+/*   Updated: 2021/12/23 13:00:42 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,42 +17,43 @@
  * Abstract ip address implementation
 */
 
-AIPAddress::AIPAddress(): _string(""),
-                          _addressFamily(AF_UNSPEC),
-                          _cStyleAddress(NULL)
+AIPAddress::AIPAddress():
+        _representation(""),
+        _family(AF_UNSPEC),
+        _cStyle(NULL)
 {}
 
-AIPAddress::AIPAddress(std::string const &string, int addressFamily): 
-        _string(string),
-        _addressFamily(addressFamily),
-        _cStyleAddress(NULL)
+AIPAddress::AIPAddress(std::string const &ipAddress, sa_family_t family):
+        _representation(ipAddress),
+        _family(family),
+        _cStyle(NULL)
 {}
 
-AIPAddress::AIPAddress(AIPAddress const &copy): _string(copy.getString()),
-                                                _addressFamily(
-                                                    copy.getAddressFamily()
-                                                ),
-                                                _cStyleAddress(
-                                                    copy.getCStyleAddress()
-                                                )
+AIPAddress::AIPAddress(AIPAddress const &copy):
+        _representation(copy.getRepresentation()),
+        _family(copy.getFamily()),
+        _cStyle(copy.getCStyle())
 {}
 
 // Since we're using polymorphism not needed copy
-AIPAddress &AIPAddress::operator=(AIPAddress const &) { return *this; }
-
-std::string AIPAddress::getString() const
+AIPAddress &AIPAddress::operator=(AIPAddress const &)
 {
-    return _string;
+    return *this;
 }
 
-int AIPAddress::getAddressFamily() const
+std::string AIPAddress::getRepresentation() const
 {
-    return _addressFamily;
+    return _representation;
 }
 
-void const *AIPAddress::getCStyleAddress() const
+sa_family_t AIPAddress::getFamily() const
 {
-    return _cStyleAddress;
+    return _family;
+}
+
+void const *AIPAddress::getCStyle() const
+{
+    return _cStyle;
 }
 
 AIPAddress::~AIPAddress()
@@ -65,23 +66,28 @@ AIPAddress::~AIPAddress()
 IPv4Address::IPv4Address()
 {}
 
-IPv4Address::IPv4Address(std::string const &string): AIPAddress(string, AF_INET)
+IPv4Address::IPv4Address(std::string const &ipAddress):
+        AIPAddress(ipAddress, AF_INET)
 {
     int ret = inet_pton(
-        getAddressFamily(),
-        getString().c_str(),
-        reinterpret_cast<void *>(&_sin_addr)
+        getFamily(),
+        getRepresentation().c_str(),
+        reinterpret_cast<void *>(&_addr)
     );
     if (ret != 1)
         throw AddressValueException();
 
-    _cStyleAddress = reinterpret_cast<void const *>(&_sin_addr);
+    _cStyle = reinterpret_cast<void const *>(&_addr);
 }
 
-IPv4Address::IPv4Address(IPv4Address const &copy): AIPAddress(copy)
+IPv4Address::IPv4Address(IPv4Address const &copy):
+        AIPAddress(copy)
 {}
 
-IPv4Address &IPv4Address::operator=(IPv4Address const &) { return *this; }
+IPv4Address &IPv4Address::operator=(IPv4Address const &)
+{
+    return *this;
+}
 
 AIPAddress *IPv4Address::clone() const
 {
@@ -107,25 +113,27 @@ const char *IPv4Address::AddressValueException::what() const throw()
 IPv6Address::IPv6Address()
 {}
 
-IPv6Address::IPv6Address(std::string const &string): AIPAddress(
-                                                         string, AF_INET6
-                                                     )
+IPv6Address::IPv6Address(std::string const &string):
+        AIPAddress(string, AF_INET6)
 {
     int ret = inet_pton(
-        getAddressFamily(),
-        getString().c_str(),
-        reinterpret_cast<void *>(&_sin6_addr)
+        getFamily(),
+        getRepresentation().c_str(),
+        reinterpret_cast<void *>(&_addr)
     );
     if (ret != 1)
         throw AddressValueException();
 
-    _cStyleAddress = reinterpret_cast<void const *>(&_sin6_addr);
+    _cStyle = reinterpret_cast<void const *>(&_addr);
 }
 
 IPv6Address::IPv6Address(IPv6Address const &copy): AIPAddress(copy)
 {}
 
-IPv6Address &IPv6Address::operator=(IPv6Address const &) { return *this; }
+IPv6Address &IPv6Address::operator=(IPv6Address const &)
+{
+    return *this;
+}
 
 AIPAddress *IPv6Address::clone() const
 {
@@ -147,8 +155,6 @@ const char *IPv6Address::AddressValueException::what() const throw()
 /*
  * Producer of ip address implementation
 */
-
-#include <iostream>
 
 AIPAddress *getIPAddress(std::string const &ipAddress)
 {
