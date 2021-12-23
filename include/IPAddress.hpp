@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/22 15:03:39 by lperson-          #+#    #+#             */
-/*   Updated: 2021/12/23 13:07:07 by lperson-         ###   ########.fr       */
+/*   Updated: 2021/12/23 13:13:32 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,13 @@ public:
     AIPAddress();
     AIPAddress(std::string const &ipAddress, sa_family_t family);
     AIPAddress(AIPAddress const &copy);
+    virtual ~AIPAddress();
 
     virtual AIPAddress *clone() const = 0;
 
     std::string getRepresentation() const;
     sa_family_t getFamily() const;
     void const  *getCStyle() const;
-
-    virtual ~AIPAddress();
 
 protected:
     AIPAddress &operator=(AIPAddress const &rhs);
@@ -60,10 +59,11 @@ class IPv4Address : public AIPAddress
 public:
     IPv4Address(std::string const &ipAddress);
     IPv4Address(IPv4Address const &copy);
+    ~IPv4Address();
 
     AIPAddress *clone() const;
 
-    ~IPv4Address();
+    IPv4Address &operator=(IPv4Address const &rhs);
 
     class AddressValueException : public std::exception
     {
@@ -71,11 +71,12 @@ public:
         const char *what() const throw();
     };
 
+
 private:
     struct in_addr  _addr; // C-style representation
 
     IPv4Address();
-    IPv4Address &operator=(IPv4Address const &rhs);
+
 };
 
 /*
@@ -87,10 +88,11 @@ class IPv6Address : public AIPAddress
 public:
     IPv6Address(std::string const &ipAddress);
     IPv6Address(IPv6Address const &copy);
+    ~IPv6Address();
 
     AIPAddress *clone() const;
 
-    ~IPv6Address();
+    IPv6Address &operator=(IPv6Address const &rhs);
 
     class AddressValueException : public std::exception
     {
@@ -102,7 +104,7 @@ private:
     struct in6_addr _addr; // C-style representation
 
     IPv6Address();
-    IPv6Address &operator=(IPv6Address const &rhs);
+
 };
 
 /*

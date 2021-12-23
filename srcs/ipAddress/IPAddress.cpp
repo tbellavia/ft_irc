@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/22 15:19:30 by lperson-          #+#    #+#             */
-/*   Updated: 2021/12/23 13:08:05 by lperson-         ###   ########.fr       */
+/*   Updated: 2021/12/23 13:11:16 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,14 @@ IPv4Address::IPv4Address(IPv4Address const &copy):
     _cStyle = reinterpret_cast<void *>(&_addr);
 }
 
-IPv4Address &IPv4Address::operator=(IPv4Address const &)
+IPv4Address &IPv4Address::operator=(IPv4Address const &rhs)
 {
+    if (this != &rhs)
+    {
+        _representation = rhs.getRepresentation();
+        _addr = rhs._addr;
+        _cStyle = reinterpret_cast<void *>(&_addr);
+    }
     return *this;
 }
 
@@ -136,8 +142,14 @@ IPv6Address::IPv6Address(IPv6Address const &copy):
     _cStyle = reinterpret_cast<void  *>(&_addr);
 }
 
-IPv6Address &IPv6Address::operator=(IPv6Address const &)
+IPv6Address &IPv6Address::operator=(IPv6Address const &rhs)
 {
+    if (this != &rhs)
+    {
+        _representation = rhs.getRepresentation();
+        _addr = rhs._addr;
+        _cStyle = reinterpret_cast<void *>(&_addr);
+    }
     return *this;
 }
 
