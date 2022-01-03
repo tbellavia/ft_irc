@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/22 15:19:30 by lperson-          #+#    #+#             */
-/*   Updated: 2021/12/23 13:11:16 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/01/03 13:01:05 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,22 @@ IPv4Address::IPv4Address(std::string const &ipAddress):
     _cStyle = reinterpret_cast<void *>(&_addr);
 }
 
+IPv4Address::IPv4Address(struct in_addr address):
+        AIPAddress(NULL, AF_INET), _addr(address)
+{
+    char    dst[INET_ADDRSTRLEN];
+
+    if (inet_ntop(
+            AF_INET, reinterpret_cast<const void *>(&address) ,dst, sizeof(dst)
+    ) != dst)
+    {
+        throw AddressValueException();
+    }
+
+    _representation = dst;
+    _cStyle = reinterpret_cast<void *>(&_addr);
+}
+
 IPv4Address::IPv4Address(IPv4Address const &copy):
         AIPAddress(copy)
 {
@@ -120,6 +136,22 @@ const char *IPv4Address::AddressValueException::what() const throw()
 
 IPv6Address::IPv6Address()
 {}
+
+IPv6Address::IPv6Address(struct in6_addr address):
+        AIPAddress(NULL, AF_INET6), _addr(address)
+{
+    char  dst[INET6_ADDRSTRLEN];
+
+    if (inet_ntop(
+            AF_INET6, reinterpret_cast<const void *>(&address), dst, sizeof(dst)
+        ) != dst)
+    {
+        throw AddressValueException();
+    }
+
+    _representation = dst;
+    _cStyle = reinterpret_cast<void *>(&_addr);
+}
 
 IPv6Address::IPv6Address(std::string const &string):
         AIPAddress(string, AF_INET6)
