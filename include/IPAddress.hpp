@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/22 15:03:39 by lperson-          #+#    #+#             */
-/*   Updated: 2021/12/23 13:13:32 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/01/03 12:38:38 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ class IPv4Address : public AIPAddress
 {
 public:
     IPv4Address(std::string const &ipAddress);
+    IPv4Address(struct in_addr address);
     IPv4Address(IPv4Address const &copy);
     ~IPv4Address();
 
@@ -87,6 +88,7 @@ class IPv6Address : public AIPAddress
 {
 public:
     IPv6Address(std::string const &ipAddress);
+    IPv6Address(struct in6_addr address);
     IPv6Address(IPv6Address const &copy);
     ~IPv6Address();
 
