@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/22 15:19:30 by lperson-          #+#    #+#             */
-/*   Updated: 2022/01/03 13:01:05 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/01/03 13:18:44 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,6 +222,30 @@ AIPAddress *getIPAddress(std::string const &ipAddress)
         return new IPv6Address(ipAddress);
     }
     catch (std::exception const &)
+    {
+        return NULL;
+    }
+}
+
+AIPAddress *getIPAddress(struct in_addr address)
+{
+    try
+    {
+        return new IPv4Address(address);
+    }
+    catch (std::exception const &)
+    {
+        return NULL;
+    }
+}
+
+AIPAddress *getIPAddress(struct in6_addr address)
+{
+    try
+    {
+        return new IPv6Address(address);
+    }
+    catch(const std::exception &)
     {
         return NULL;
     }

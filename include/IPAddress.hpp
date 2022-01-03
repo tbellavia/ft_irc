@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/22 15:03:39 by lperson-          #+#    #+#             */
-/*   Updated: 2022/01/03 12:38:38 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/01/03 13:16:56 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,5 +115,7 @@ private:
 */
 
 AIPAddress *getIPAddress(std::string const &ipAddress);
+AIPAddress *getIPAddress(struct in_addr address);
+AIPAddress *getIPAddress(struct in6_addr address);
 
 #endif
