@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/22 15:19:30 by lperson-          #+#    #+#             */
-/*   Updated: 2022/01/03 13:18:44 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/01/03 14:56:01 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,13 +80,13 @@ IPv4Address::IPv4Address(std::string const &ipAddress):
 }
 
 IPv4Address::IPv4Address(struct in_addr address):
-        AIPAddress(NULL, AF_INET), _addr(address)
+        AIPAddress("", AF_INET), _addr(address)
 {
     char    dst[INET_ADDRSTRLEN];
 
     if (inet_ntop(
-            AF_INET, reinterpret_cast<const void *>(&address) ,dst, sizeof(dst)
-    ) != dst)
+            AF_INET, reinterpret_cast<const void *>(&address), dst, sizeof(dst)
+    ) == NULL)
     {
         throw AddressValueException();
     }
@@ -138,13 +138,13 @@ IPv6Address::IPv6Address()
 {}
 
 IPv6Address::IPv6Address(struct in6_addr address):
-        AIPAddress(NULL, AF_INET6), _addr(address)
+        AIPAddress("", AF_INET6), _addr(address)
 {
     char  dst[INET6_ADDRSTRLEN];
 
     if (inet_ntop(
             AF_INET6, reinterpret_cast<const void *>(&address), dst, sizeof(dst)
-        ) != dst)
+        ) == NULL)
     {
         throw AddressValueException();
     }
@@ -233,7 +233,7 @@ AIPAddress *getIPAddress(struct in_addr address)
     {
         return new IPv4Address(address);
     }
-    catch (std::exception const &)
+    catch (std::exception const &e)
     {
         return NULL;
     }

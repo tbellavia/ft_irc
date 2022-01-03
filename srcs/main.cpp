@@ -6,26 +6,32 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/22 15:02:17 by lperson-          #+#    #+#             */
-/*   Updated: 2021/12/23 13:01:00 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/01/03 14:40:45 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cstdlib>
 #include <iostream>
-#include "IPAddress.hpp"
+#include "AddressInfo.hpp"
 
 int main(int ac, char const *av[])
 {
     if (ac != 2)
         return EXIT_FAILURE;
 
-    AIPAddress *ipAddress = getIPAddress(av[1]);
-    if (ipAddress == NULL)
-        std::cerr << av[1] << " is not a valid ip address" << std::endl;
-    else if (ipAddress->getFamily() == AF_INET)
-        std::cout << ipAddress->getRepresentation() << " is ipv4" << std::endl;
-    else
-        std::cout << ipAddress->getRepresentation() << " is ipv6" << std::endl;
+    AddressInfo infos;
+
+    try
+    {
+        infos = AddressInfo(av[1], NULL);
+        std::cout << infos.getIPAddress()->getRepresentation() << " protocol: "
+        << infos.getProtocol() << " socktype: " << infos.getSockType() 
+        << std::endl;
+    }
+    catch (std::exception const &e)
+    {
+        std::cerr << e.what() << std::endl;
+    }
 
     return EXIT_SUCCESS;
 }

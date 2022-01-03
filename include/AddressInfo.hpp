@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 11:21:25 by lperson-          #+#    #+#             */
-/*   Updated: 2021/12/29 11:41:04 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/01/03 14:58:24 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,20 @@ public:
     int         m_flags;
 
     AddressInfo();
-    AddressInfo(int sockType, int protocol, int flags);
+    AddressInfo(sa_family_t family, int sockType, int protocol, int flags);
     AddressInfo(
-        std::string const *ipAddress, std::string const *service,
-        AddressInfo const &hint = AddressInfo(0, 0, 0)
+        char const *ipAddress, char const *service,
+        AddressInfo const &hint = AddressInfo(0, 0, 0, 0)
     );
+    AddressInfo(AddressInfo const &copy);
     ~AddressInfo();
 
     int getSockType() const;
     int getProtocol() const;
-    AIPAddress *getIPAddress() const;
+    AIPAddress const *getIPAddress() const;
     sa_family_t getIPFamily() const;
+
+    AddressInfo &operator=(AddressInfo const &rhs);
 
     class GetAddressInfoException : public std::exception
     {
@@ -42,6 +45,12 @@ public:
 
     private:
         int _errcode;
+    };
+
+    class NoAddressInfoException : public std::exception
+    {
+    public:
+        const char *what() const throw();
     };
 
 private:

@@ -6,7 +6,7 @@
 #    By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/09 19:59:42 by lperson-          #+#    #+#              #
-#    Updated: 2021/12/22 16:15:42 by lperson-         ###   ########.fr        #
+#    Updated: 2022/01/03 13:37:48 by lperson-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,6 +32,7 @@ vpath %.cpp ${foreach dir, ${SRCS_DIR}, ${dir}:}
 
 SRCS := \
 IPAddress.cpp \
+AddressInfo.cpp \
 main.cpp
 OBJS = ${addprefix ${PATHB}/, ${SRCS:.cpp=.o}}
 DFILES = ${addprefix ${PATHD}/, ${SRCS:.cpp=.d}}
