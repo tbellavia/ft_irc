@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/22 15:03:39 by lperson-          #+#    #+#             */
-/*   Updated: 2022/01/03 13:16:56 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/01/10 09:16:08 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 # include <string>
 # include <stdexcept>
+# include <ostream>
 # include <sys/socket.h>
 # include <netinet/in.h>
 # include <netinet/ip.h>
@@ -117,5 +118,7 @@ private:
 AIPAddress *getIPAddress(std::string const &ipAddress);
 AIPAddress *getIPAddress(struct in_addr address);
 AIPAddress *getIPAddress(struct in6_addr address);
+
+std::ostream &operator<<(std::ostream &os, AIPAddress const &address);
 
 #endif

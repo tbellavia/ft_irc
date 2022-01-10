@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/22 15:02:17 by lperson-          #+#    #+#             */
-/*   Updated: 2022/01/03 14:40:45 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/01/10 09:15:42 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int main(int ac, char const *av[])
     try
     {
         infos = AddressInfo(av[1], NULL);
-        std::cout << infos.getIPAddress()->getRepresentation() << " protocol: "
+        std::cout << *infos.getIPAddress() << " protocol: "
         << infos.getProtocol() << " socktype: " << infos.getSockType() 
         << std::endl;
     }

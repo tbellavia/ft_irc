@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/22 15:19:30 by lperson-          #+#    #+#             */
-/*   Updated: 2022/01/03 14:56:01 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/01/10 09:15:03 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,16 @@ AIPAddress *IPv4Address::clone() const
 
 IPv4Address::~IPv4Address()
 {}
+
+/*
+ * Output AIPAddress for debug
+*/
+
+std::ostream &operator<<(std::ostream &os, AIPAddress const &address)
+{
+    os << address.getRepresentation();
+    return os;
+}
 
 /*
  * IPv4 AddressValueException implementation
