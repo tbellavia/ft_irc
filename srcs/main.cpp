@@ -10,28 +10,22 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <cstdlib>
 #include <iostream>
-#include "AddressInfo.hpp"
+#include <cstdlib>
+#include "../include/Socket.hpp"
+#include "../include/Network.hpp"
 
-int main(int ac, char const *av[])
+int main()
 {
-    if (ac != 2)
-        return EXIT_FAILURE;
+    const char *addr = NULL;
+    const char *proto = "3490";
 
-    AddressInfo infos;
+    struct addrinfo *res = network::tcp::getaddrinfo(addr, proto);
 
-    try
-    {
-        infos = AddressInfo(av[1], NULL);
-        std::cout << *infos.getIPAddress() << " protocol: "
-        << infos.getProtocol() << " socktype: " << infos.getSockType() 
-        << std::endl;
-    }
-    catch (std::exception const &e)
-    {
-        std::cerr << e.what() << std::endl;
-    }
+//    std::cout << "Create socket to addr " << addr << ":" << proto << std::endl;
 
+    Socket sock(res);
+
+    sock.sock_bind();
     return EXIT_SUCCESS;
 }
