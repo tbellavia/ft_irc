@@ -12,20 +12,32 @@
 
 #include <iostream>
 #include <cstdlib>
+#include <cstdio>
 #include "../include/Socket.hpp"
 #include "../include/Network.hpp"
 
 int main()
 {
-    const char *addr = NULL;
+    const char *addr = "127.0.0.1";
     const char *proto = "3490";
 
-    struct addrinfo *res = network::tcp::getaddrinfo(addr, proto);
+    std::cout << "Listening " << addr << ":" << proto << std::endl;
+    addrinfo *res = network::tcp::getaddrinfo(addr, proto);
+    Socket server(*res);
 
-//    std::cout << "Create socket to addr " << addr << ":" << proto << std::endl;
+    server.sock_bind();
+    server.sock_listen(5);
+    while ( true ){
+        try {
+            Socket client = server.sock_accept();
 
-    Socket sock(res);
-
-    sock.sock_bind();
+            std::cout << "Got connection from : " << client.get_storage() << std::endl;
+            client.sock_send("Pong\n");
+            client.sock_close();
+        } catch ( std::exception &e ){
+            std::cout << e.what() << std::endl;
+        }
+    }
+    server.sock_close();
     return EXIT_SUCCESS;
 }
