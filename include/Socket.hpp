@@ -54,17 +54,31 @@ struct SocketStorage {
 };
 
 class Socket {
-    addrinfo            m_addr;
-    int                 m_fd;
-    SocketStorage       m_storage;
+    int                 m_domain;
+    int                 m_type;
+    int                 m_protocol;
     bool                m_blocking;
+    int                 m_fd;
+
+    addrinfo            *m_addr;
+
+
+    SocketStorage       m_storage;
 public:
-    explicit Socket(addrinfo addr, int fd = FD_UNSET, SocketStorage const &storage = SocketStorage(), bool blocking = true )
-        : m_addr(addr), m_fd(fd), m_storage(storage), m_blocking(blocking) {
+    Socket() : m_addr(), m_fd(FD_UNSET), m_storage(), m_blocking(true) { std::cout << "Socket()" << std::endl; }
+
+    explicit Socket(int domain, int type, int protocol, bool blocking = true) :
+        m_domain(domain),
+        m_type(type),
+        m_protocol(protocol),
+        m_blocking(blocking),
+        m_fd(FD_UNSET),
+        m_addr(NULL),
+        m_storage()
+    {
         (void)m_blocking;
-        if ( m_fd == -1 )
-            m_fd = socket(m_addr.ai_family, m_addr.ai_socktype, m_addr.ai_protocol);
-        printf("Socket<fd=%i>\n", m_fd);
+        if ( m_fd == FD_UNSET )
+            m_fd = socket(m_domain, m_type, m_protocol);
     }
 
     Socket(Socket const &other)
