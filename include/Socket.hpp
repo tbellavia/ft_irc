@@ -165,12 +165,26 @@ public:
         return *this;
     }
 
-    SocketStorage const &get_storage() const {
-        return m_storage;
-    }
+    /**
+     * Access functions
+     */
+
+    SocketStorage const &storage() const { return m_storage; }
+
+    /**
+     * Get the underlying file descriptor
+     */
+    int fd() const { return m_fd; }
+
+    bool get_blocking() const { return m_blocking; }
+    void set_blocking(bool blocking) { m_blocking = blocking; }
+
+    /**
+     * Socket interface
+     */
 
     // TODO: Manage exception on bind failure
-    void sock_bind(std::string const &host, std::string const &port)  {
+    void bind(std::string const &host, std::string const &port)  {
         const char  *node = (host.length() == 0) ? NULL : host.c_str();
         addrinfo    *infos;
 
@@ -178,12 +192,12 @@ public:
         if ( status != 0 )
             throw SocketGaiException(status);
         m_addr = *infos;
-        if ( bind(m_fd, m_addr.ai_addr, m_addr.ai_addrlen) == -1 )
+        if ( ::bind(m_fd, m_addr.ai_addr, m_addr.ai_addrlen) == -1 )
             throw SocketException("bind exception");
     }
 
     // TODO: Manage exception on connect failure
-    void sock_connect(std::string const &host, std::string const &port) {
+    void connect(std::string const &host, std::string const &port) {
         const char  *node = (host.length() == 0) ? NULL : host.c_str();
         addrinfo    *infos;
 
@@ -191,31 +205,32 @@ public:
         if ( status != 0 )
             throw SocketGaiException(status);
         m_addr = *infos;
-        if ( connect(m_fd, m_addr.ai_addr, m_addr.ai_addrlen) == -1 )
+        if ( ::connect(m_fd, m_addr.ai_addr, m_addr.ai_addrlen) == -1 )
             throw SocketException("connect exception");
     }
 
     // TODO: Manage exception on listen failure
-    void sock_listen(int n) const {
-        listen(m_fd, n);
+    void listen(int n) const {
+        if ( ::listen(m_fd, n) == -1 )
+            throw SocketException("listen exception");
     }
 
     // TODO: Manage exception on accept failure
-    Socket *sock_accept() const {
+    Socket *accept() const {
         SocketStorage   storage;
 
-        int new_fd = accept(m_fd, (sockaddr*)&storage.storage, &storage.length);
+        int new_fd = ::accept(m_fd, (sockaddr*)&storage.storage, &storage.length);
         if ( new_fd == -1 )
             throw SocketException("accept exception");
         return new Socket(*this, new_fd, storage);
     }
 
-    ssize_t sock_send(const void *buf, int len, int flags) const {
-        return send(m_fd, buf, len, flags);
+    ssize_t send(const void *buf, int len, int flags) const {
+        return ::send(m_fd, buf, len, flags);
     }
 
-    ssize_t sock_send(std::string const &msg, int flags = 0) const {
-        return send(m_fd, msg.c_str(), msg.length(), flags);
+    ssize_t send(std::string const &msg, int flags = 0) const {
+        return ::send(m_fd, msg.c_str(), msg.length(), flags);
     }
 
     /**
@@ -223,15 +238,15 @@ public:
      *
      * - Write the received packet into a `stream` like `stringstream` ?
      */
-    ssize_t sock_recv(void *buf, size_t len, int flags = 0) const {
-        return recv(m_fd, buf, len, flags);
+    ssize_t recv(void *buf, size_t len, int flags = 0) const {
+        return ::recv(m_fd, buf, len, flags);
     }
 
-    void sock_recv(std::stringstream &s, int flags = 0) const {
+    void recv(std::stringstream &s, int flags = 0) const {
         ssize_t bytes = 0;
         char buf[BUF_SIZE];
 
-        while ( (bytes = recv(m_fd, buf, BUF_SIZE, flags)) > 0 ) {
+        while ( (bytes = ::recv(m_fd, buf, BUF_SIZE, flags)) > 0 ) {
             buf[bytes] = '\0';
 
             s << buf;
@@ -244,8 +259,21 @@ public:
             throw SocketException("recv exception");
     }
 
-    void sock_close() const {
-        close(m_fd);
+    void close() const {
+        ::close(m_fd);
+    }
+
+    void shutdown(int how) const {
+        if ( ::shutdown(m_fd, how) == -1 )
+            throw SocketException();
+    }
+
+    int setsockopt(int level, int optname, const void *optval, socklen_t optlen) const {
+        return ::setsockopt(m_fd, level, optname, optval, optlen);
+    }
+
+    int getsockopt(int level, int optname, void *optval, socklen_t *optlen) const {
+        return ::getsockopt(m_fd, level, optname, optval, optlen);
     }
 };
 

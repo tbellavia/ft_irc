@@ -38,25 +38,25 @@ int main()
         std::cout << "Server failed" << std::endl;
     }
 
-    server->sock_bind("", "3490");
+    server->bind("", "3490");
 
     while ( true ){
-        server->sock_listen(5);
-
         try {
-            Socket *new_sock = server->sock_accept();
+            server->listen(5);
 
-            std::cout << "New connection from : " << new_sock->get_storage() << std::endl;
+            Socket *new_sock = server->accept();
+
+            std::cout << "New connection from : " << new_sock->storage() << std::endl;
 
             // Receive content from peer
-            new_sock->sock_recv(stream);
+            new_sock->recv(stream);
             std::cout << "Received: " << stream.str() << std::endl;
 
             stream.str(std::string());
             // Send message to peer
-            new_sock->sock_send("pong\n\n");
+            new_sock->send("pong\n\n");
 
-            new_sock->sock_close();
+            new_sock->close();
             delete new_sock;
             new_sock = NULL;
         } catch ( std::exception &e ){

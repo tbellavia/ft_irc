@@ -20,7 +20,7 @@ namespace network {
             hints.ai_family = AF_UNSPEC;
             hints.ai_socktype = SOCK_STREAM;
             hints.ai_flags = AI_PASSIVE;
-            return getaddrinfo(node, service, &hints, res);
+            return ::getaddrinfo(node, service, &hints, res);
         }
 
         // TODO: Properly manage errors on call to getaddrinfo
@@ -41,7 +41,7 @@ namespace network {
             hints.ai_family = AF_UNSPEC;
             hints.ai_socktype = SOCK_DGRAM;
             hints.ai_flags = AI_PASSIVE;
-            return getaddrinfo(node, service, &hints, res);
+            return ::getaddrinfo(node, service, &hints, res);
         }
 
         struct addrinfo *getaddrinfo(const char *node, const char *service){
