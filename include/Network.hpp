@@ -33,7 +33,7 @@ namespace network {
         }
     }
 
-    namespace upd {
+    namespace udp {
         int getaddrinfo(const char *node, const char *service, struct addrinfo **res) {
             struct addrinfo hints;
 

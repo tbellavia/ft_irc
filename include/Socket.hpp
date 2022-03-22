@@ -12,6 +12,8 @@
 # include <sys/socket.h>
 # include <netdb.h>
 # include <arpa/inet.h>
+# include <fcntl.h>
+
 # include <stdexcept>
 # include <sstream>
 
@@ -141,6 +143,8 @@ public:
         m_fd = socket(m_domain, m_type, m_protocol);
         if ( m_fd == -1 )
             throw SocketException("socket failed exception");
+        if ( !blocking )
+            ::fcntl(m_fd, F_SETFL, O_NONBLOCK);
     }
 
     Socket(Socket const &other) :
@@ -175,9 +179,22 @@ public:
      * Get the underlying file descriptor
      */
     int fd() const { return m_fd; }
+    int family() const { return m_domain; }
+    int type() const { return m_type; }
+    int protocol() const { return m_protocol; }
 
     bool get_blocking() const { return m_blocking; }
-    void set_blocking(bool blocking) { m_blocking = blocking; }
+    void set_blocking(bool blocking) {
+        int opts = ::fcntl(m_fd, F_GETFL);
+
+        m_blocking = blocking;
+        if ( blocking && m_fd != FD_UNSET ){
+            ::fcntl(m_fd, opts & (~O_NONBLOCK));
+        }
+        if ( !blocking && m_fd != FD_UNSET ){
+            ::fcntl(m_fd, O_NONBLOCK);
+        }
+    }
 
     /**
      * Socket interface
@@ -242,18 +259,12 @@ public:
         return ::recv(m_fd, buf, len, flags);
     }
 
-    void recv(std::stringstream &s, int flags = 0) const {
+    void recv(std::string &s, int flags = 0) const {
         ssize_t bytes = 0;
         char buf[BUF_SIZE];
 
         while ( (bytes = ::recv(m_fd, buf, BUF_SIZE, flags)) > 0 ) {
-            buf[bytes] = '\0';
-
-            s << buf;
-            std::cout << s.str() << std::endl;
-//            s.write(buf, bytes);
-//            printf("Written %i : %s\n", bytes, buf);
-//            std::cout << "Write: " << s.str() << std::endl;
+            s.append(buf, bytes);
         }
         if ( bytes == -1 )
             throw SocketException("recv exception");
