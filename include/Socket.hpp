@@ -13,6 +13,7 @@
 # include <netdb.h>
 # include <arpa/inet.h>
 # include <stdexcept>
+# include <sstream>
 
 #include "Network.hpp"
 
@@ -21,6 +22,7 @@
 # include <cstdio>
 
 # define FD_UNSET -1
+# define BUF_SIZE 256
 
 void *get_in_addr(sockaddr *sa)
 {
@@ -108,23 +110,37 @@ private:
     int                 m_protocol;
     bool                m_blocking;
     int                 m_fd;
-    addrinfo            *m_addr;
+    addrinfo            m_addr;
     SocketStorage       m_storage;
-public:
-    Socket() : m_domain(), m_type(), m_protocol(), m_blocking(true), m_fd(FD_UNSET), m_addr(NULL), m_storage() { }
 
-    explicit Socket(int domain, int type, int protocol, bool blocking = true) :
+    Socket(Socket const &sock, int fd, SocketStorage const &storage) :
+        m_domain(sock.m_domain),
+        m_type(sock.m_type),
+        m_protocol(sock.m_protocol),
+        m_blocking(sock.m_blocking),
+        m_fd(fd),
+        m_addr(sock.m_addr),
+        m_storage(storage)
+    {
+        m_addr.ai_family = storage.storage.ss_family;
+        m_addr.ai_addr = (sockaddr*)&storage.storage;
+    }
+
+public:
+    Socket() : m_domain(), m_type(), m_protocol(), m_blocking(true), m_fd(FD_UNSET), m_addr(), m_storage() { }
+
+    explicit Socket(int domain, int type, int protocol = 0, bool blocking = true) :
         m_domain(domain),
         m_type(type),
         m_protocol(protocol),
         m_blocking(blocking),
         m_fd(FD_UNSET),
-        m_addr(NULL),
+        m_addr(),
         m_storage()
     {
         m_fd = socket(m_domain, m_type, m_protocol);
         if ( m_fd == -1 )
-            throw SocketException();
+            throw SocketException("socket failed exception");
     }
 
     Socket(Socket const &other) :
@@ -149,26 +165,34 @@ public:
         return *this;
     }
 
+    SocketStorage const &get_storage() const {
+        return m_storage;
+    }
+
     // TODO: Manage exception on bind failure
     void sock_bind(std::string const &host, std::string const &port)  {
         const char  *node = (host.length() == 0) ? NULL : host.c_str();
+        addrinfo    *infos;
 
-        int status = network::tcp::getaddrinfo(node, port.c_str(), &m_addr);
+        int status = network::tcp::getaddrinfo(node, port.c_str(), &infos);
         if ( status != 0 )
             throw SocketGaiException(status);
-        if ( bind(m_fd, m_addr->ai_addr, m_addr->ai_addrlen) == -1 )
-            throw SocketException();
+        m_addr = *infos;
+        if ( bind(m_fd, m_addr.ai_addr, m_addr.ai_addrlen) == -1 )
+            throw SocketException("bind exception");
     }
 
     // TODO: Manage exception on connect failure
     void sock_connect(std::string const &host, std::string const &port) {
         const char  *node = (host.length() == 0) ? NULL : host.c_str();
+        addrinfo    *infos;
 
-        int status = network::tcp::getaddrinfo(node, port.c_str(), &m_addr);
+        int status = network::tcp::getaddrinfo(node, port.c_str(), &infos);
         if ( status != 0 )
             throw SocketGaiException(status);
-        if ( connect(m_fd, m_addr->ai_addr, m_addr->ai_addrlen) == -1 )
-            throw SocketException();
+        m_addr = *infos;
+        if ( connect(m_fd, m_addr.ai_addr, m_addr.ai_addrlen) == -1 )
+            throw SocketException("connect exception");
     }
 
     // TODO: Manage exception on listen failure
@@ -177,21 +201,21 @@ public:
     }
 
     // TODO: Manage exception on accept failure
-    Socket sock_accept() const {
-        SocketStorage storage;
+    Socket *sock_accept() const {
+        SocketStorage   storage;
 
         int new_fd = accept(m_fd, (sockaddr*)&storage.storage, &storage.length);
         if ( new_fd == -1 )
-            throw std::exception();
-        return Socket(m_addr, new_fd, storage, m_blocking);
+            throw SocketException("accept exception");
+        return new Socket(*this, new_fd, storage);
     }
 
-    void sock_send(const void *buf, int len, int flags) const {
-        send(m_fd, buf, len, flags);
+    ssize_t sock_send(const void *buf, int len, int flags) const {
+        return send(m_fd, buf, len, flags);
     }
 
-    void sock_send(std::string const &msg, int flags = 0) const {
-        send(m_fd, msg.c_str(), msg.length(), flags);
+    ssize_t sock_send(std::string const &msg, int flags = 0) const {
+        return send(m_fd, msg.c_str(), msg.length(), flags);
     }
 
     /**
@@ -199,9 +223,26 @@ public:
      *
      * - Write the received packet into a `stream` like `stringstream` ?
      */
-//    int sock_recv() const{
-//
-//    }
+    ssize_t sock_recv(void *buf, size_t len, int flags = 0) const {
+        return recv(m_fd, buf, len, flags);
+    }
+
+    void sock_recv(std::stringstream &s, int flags = 0) const {
+        ssize_t bytes = 0;
+        char buf[BUF_SIZE];
+
+        while ( (bytes = recv(m_fd, buf, BUF_SIZE, flags)) > 0 ) {
+            buf[bytes] = '\0';
+
+            s << buf;
+            std::cout << s.str() << std::endl;
+//            s.write(buf, bytes);
+//            printf("Written %i : %s\n", bytes, buf);
+//            std::cout << "Write: " << s.str() << std::endl;
+        }
+        if ( bytes == -1 )
+            throw SocketException("recv exception");
+    }
 
     void sock_close() const {
         close(m_fd);

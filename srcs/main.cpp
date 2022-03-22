@@ -13,31 +13,55 @@
 #include <iostream>
 #include <cstdlib>
 #include <cstdio>
+#include <signal.h>
 #include "../include/Socket.hpp"
 #include "../include/Network.hpp"
 
+Socket *server = NULL;
+
+void sig_handler(int sig) {
+    (void)sig;
+    std::cout << "\nShutdown server\n";
+    server->sock_close();
+    delete server;
+}
+
 int main()
 {
-    const char *addr = "127.0.0.1";
-    const char *proto = "3490";
+    std::stringstream stream(std::ios::app);
 
-    std::cout << "Listening " << addr << ":" << proto << std::endl;
-    addrinfo *res = network::tcp::getaddrinfo(addr, proto);
-    Socket server(*res);
+    signal(SIGINT, sig_handler);
 
-    server.sock_bind();
-    server.sock_listen(5);
+    try {
+        server = new Socket(AF_INET, SOCK_STREAM);
+    } catch (std::exception &e){
+        std::cout << "Server failed" << std::endl;
+    }
+
+    server->sock_bind("", "3490");
+
     while ( true ){
-        try {
-            Socket client = server.sock_accept();
+        server->sock_listen(5);
 
-            std::cout << "Got connection from : " << client.get_storage() << std::endl;
-            client.sock_send("Pong\n");
-            client.sock_close();
+        try {
+            Socket *new_sock = server->sock_accept();
+
+            std::cout << "New connection from : " << new_sock->get_storage() << std::endl;
+
+            // Receive content from peer
+            new_sock->sock_recv(stream);
+            std::cout << "Received: " << stream.str() << std::endl;
+
+            stream.str(std::string());
+            // Send message to peer
+            new_sock->sock_send("pong\n\n");
+
+            new_sock->sock_close();
+            delete new_sock;
+            new_sock = NULL;
         } catch ( std::exception &e ){
-            std::cout << e.what() << std::endl;
+            break;
         }
     }
-    server.sock_close();
     return EXIT_SUCCESS;
 }
