@@ -259,6 +259,11 @@ public:
         return ::recv(m_fd, buf, len, flags);
     }
 
+    /**
+     * Recv wrapper.
+     *
+     * Recv wrapper that will aggregate into @s until @delim is found.
+     */
     ssize_t recv(std::string &s, std::string const &delim = "\n", int flags = 0) const {
         size_t                  pos;
         ssize_t                 bytes = 0;
