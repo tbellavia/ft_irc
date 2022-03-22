@@ -24,7 +24,7 @@
 # include <cstdio>
 
 # define FD_UNSET -1
-# define BUF_SIZE 256
+# define BUF_SIZE 2
 
 void *get_in_addr(sockaddr *sa)
 {
@@ -259,15 +259,21 @@ public:
         return ::recv(m_fd, buf, len, flags);
     }
 
-    void recv(std::string &s, int flags = 0) const {
-        ssize_t bytes = 0;
-        char buf[BUF_SIZE];
+    ssize_t recv(std::string &s, std::string const &delim = "\n", int flags = 0) const {
+        size_t                  pos;
+        ssize_t                 bytes = 0;
+        char                    buf[BUF_SIZE];
 
         while ( (bytes = ::recv(m_fd, buf, BUF_SIZE, flags)) > 0 ) {
             s.append(buf, bytes);
+
+            pos = s.find(delim);
+            if ( pos != std::string::npos )
+                return bytes;
         }
         if ( bytes == -1 )
             throw SocketException("recv exception");
+        return bytes;
     }
 
     void close() const {

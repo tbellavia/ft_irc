@@ -18,45 +18,45 @@
 #include "../include/Network.hpp"
 
 Socket *server = NULL;
+Socket *new_sock;
 
 void sig_handler(int sig) {
     (void)sig;
     std::cout << "\nShutdown server\n";
     server->close();
     delete server;
+
+    if ( new_sock != NULL ){
+        new_sock->close();
+        delete new_sock;
+    }
 }
 
 int main()
 {
-    std::string buffer;
-
     signal(SIGINT, sig_handler);
+    std::string     buffer;
+    std::pair<std::string, std::string> host("", "3490");
 
-    try {
-        server = new Socket(AF_INET, SOCK_STREAM);
-    } catch (std::exception &e){
-        std::cout << "Server failed" << std::endl;
-    }
 
+    server = new Socket(AF_INET, SOCK_STREAM);
     server->bind("", "3490");
-
     while ( true ){
         try {
             server->listen(5);
 
-            Socket *new_sock = server->accept();
+            new_sock = server->accept();
 
             std::cout << "New connection from : " << new_sock->storage() << std::endl;
 
             new_sock->recv(buffer);
             printf("Received: |%s| %i\n", buffer.c_str(), (int)buffer.size());
-            if ( buffer == "ping" ) {
-                new_sock->send("pong\n");
-            }
+
+            new_sock->send("pong\n");
             buffer.clear();
 
-
             new_sock->close();
+
             delete new_sock;
             new_sock = NULL;
         } catch ( std::exception &e ){
