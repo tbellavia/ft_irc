@@ -15,7 +15,7 @@
 # include <fcntl.h>
 
 # include <stdexcept>
-# include <sstream>
+# include <algorithm>
 
 #include "Network.hpp"
 
@@ -262,9 +262,9 @@ public:
     /**
      * Recv wrapper.
      *
-     * Recv wrapper that will aggregate into @s until @delim is found.
+     * Recv wrapper that will aggregate into @s until @seq is found.
      */
-    ssize_t recv(std::string &s, std::string const &delim = "\n", int flags = 0) const {
+    ssize_t recv(std::string &s, std::string const &seq = "\n", int flags = 0) const {
         size_t                  pos;
         ssize_t                 bytes = 0;
         char                    buf[BUF_SIZE];
@@ -272,7 +272,7 @@ public:
         while ( (bytes = ::recv(m_fd, buf, BUF_SIZE, flags)) > 0 ) {
             s.append(buf, bytes);
 
-            pos = s.find(delim);
+            pos = s.find(seq);
             if ( pos != std::string::npos )
                 return bytes;
         }

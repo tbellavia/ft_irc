@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/22 15:02:17 by lperson-          #+#    #+#             */
-/*   Updated: 2022/01/10 09:15:42 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/03/24 23:07:41 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,48 +20,62 @@
 Socket *server = NULL;
 Socket *new_sock;
 
-void sig_handler(int sig) {
-    (void)sig;
-    std::cout << "\nShutdown server\n";
-    server->close();
-    delete server;
+void release_socket(Socket **sock){
+    Socket *socket = *sock;
 
-    if ( new_sock != NULL ){
-        new_sock->close();
-        delete new_sock;
+    if ( socket != NULL ){
+        socket->close();
+        delete socket;
+        *sock = NULL;
     }
+}
+
+void sig_handler(__attribute__((unused)) int sig) {
+    std::cout << "\nShutdown server\n";
+
+    release_socket(&server);
+    release_socket(&new_sock);
 }
 
 int main()
 {
-    signal(SIGINT, sig_handler);
-    std::string     buffer;
-    std::pair<std::string, std::string> host("", "3490");
+    std::pair<std::string, std::string>     host("", "3490");
+    std::string                             buffer;
 
+    signal(SIGINT, sig_handler);
 
     server = new Socket(AF_INET, SOCK_STREAM);
-    server->bind("", "3490");
-    while ( true ){
-        try {
-            server->listen(5);
+    try {
+        server->bind(host.first, host.second);
 
-            new_sock = server->accept();
+        while ( true ) {
+            try {
+                server->listen(5);
+                new_sock = server->accept();
 
-            std::cout << "New connection from : " << new_sock->storage() << std::endl;
+                std::cout << "New connection from : " << new_sock->storage() << std::endl;
 
-            new_sock->recv(buffer);
-            printf("Received: |%s| %i\n", buffer.c_str(), (int)buffer.size());
+                while ( true ){
+                    new_sock->recv(buffer);
 
-            new_sock->send("pong\n");
-            buffer.clear();
+                    if (!buffer.empty())
+                        buffer.resize(buffer.size() - 1);
 
-            new_sock->close();
+                    if (buffer == "ping"){
+                        new_sock->send("pong\n");
+                        std::cout << "PONG" << std::endl;
+                        break;
+                    } else {
+                        new_sock->send("unknown command\n");
+                    }
+                }
 
-            delete new_sock;
-            new_sock = NULL;
-        } catch ( std::exception &e ){
-            break;
+                buffer.clear();
+                release_socket(&new_sock);
+            } catch (std::exception &e) { std::cout << e.what() << std::endl; break; }
         }
+    } catch ( std::exception &e ){
+        std::cout << e.what() << std::endl;
     }
     return EXIT_SUCCESS;
 }
