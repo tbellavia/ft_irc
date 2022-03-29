@@ -17,7 +17,8 @@
 # include <stdexcept>
 # include <algorithm>
 
-#include "Network.hpp"
+# include "Network.hpp"
+# include "Utils.hpp"
 
 
 // TODO: Remove this includes
@@ -265,15 +266,13 @@ public:
      * Recv wrapper that will aggregate into @s until @seq is found.
      */
     ssize_t recv(std::string &s, std::string const &seq = "\n", int flags = 0) const {
-        size_t                  pos;
         ssize_t                 bytes = 0;
         char                    buf[BUF_SIZE];
 
         while ( (bytes = ::recv(m_fd, buf, BUF_SIZE, flags)) > 0 ) {
             s.append(buf, bytes);
 
-            pos = s.find(seq);
-            if ( pos != std::string::npos )
+            if ( ft::ends_with(s, seq) )
                 return bytes;
         }
         if ( bytes == -1 )
