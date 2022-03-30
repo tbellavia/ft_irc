@@ -263,9 +263,24 @@ public:
     /**
      * Recv wrapper.
      *
+     * Recv wrapper that takes string buffer.
+     */
+    ssize_t recv(std::string &s, int flags = 0) const {
+        ssize_t                 bytes = 0;
+        char                    buf[BUF_SIZE];
+
+        if ( (bytes = ::recv(m_fd, buf, BUF_SIZE, flags)) == -1 )
+            throw SocketException("recv exception");
+        s.append(buf, bytes);
+        return bytes;
+    }
+
+    /**
+     * Recv wrapper.
+     *
      * Recv wrapper that will aggregate into @s until @seq is found.
      */
-    ssize_t recv(std::string &s, std::string const &seq = "\n", int flags = 0) const {
+    ssize_t recv(std::string &s, std::string const &seq, int flags = 0) const {
         ssize_t                 bytes = 0;
         char                    buf[BUF_SIZE];
 
