@@ -24,7 +24,6 @@
 // TODO: Remove this includes
 # include <cstdio>
 
-# define FD_UNSET -1
 # define BUF_SIZE 2
 
 void *get_in_addr(sockaddr *sa)
@@ -130,14 +129,14 @@ private:
     }
 
 public:
-    Socket() : m_domain(), m_type(), m_protocol(), m_blocking(true), m_fd(FD_UNSET), m_addr(), m_storage() { }
+    Socket() : m_domain(), m_type(), m_protocol(), m_blocking(true), m_fd(net::FD_UNSET), m_addr(), m_storage() { }
 
     explicit Socket(int domain, int type, int protocol = 0, bool blocking = true) :
         m_domain(domain),
         m_type(type),
         m_protocol(protocol),
         m_blocking(blocking),
-        m_fd(FD_UNSET),
+        m_fd(net::FD_UNSET),
         m_addr(),
         m_storage()
     {
@@ -189,10 +188,10 @@ public:
         int opts = ::fcntl(m_fd, F_GETFL);
 
         m_blocking = blocking;
-        if ( blocking && m_fd != FD_UNSET ){
+        if ( blocking && m_fd != net::FD_UNSET ){
             ::fcntl(m_fd, opts & (~O_NONBLOCK));
         }
-        if ( !blocking && m_fd != FD_UNSET ){
+        if ( !blocking && m_fd != net::FD_UNSET ){
             ::fcntl(m_fd, O_NONBLOCK);
         }
     }
@@ -206,7 +205,7 @@ public:
         const char  *node = (host.length() == 0) ? NULL : host.c_str();
         addrinfo    *infos;
 
-        int status = network::tcp::getaddrinfo(node, port.c_str(), &infos);
+        int status = net::tcp::getaddrinfo(node, port.c_str(), &infos);
         if ( status != 0 )
             throw SocketGaiException(status);
         m_addr = *infos;
@@ -219,7 +218,7 @@ public:
         const char  *node = (host.length() == 0) ? NULL : host.c_str();
         addrinfo    *infos;
 
-        int status = network::tcp::getaddrinfo(node, port.c_str(), &infos);
+        int status = net::tcp::getaddrinfo(node, port.c_str(), &infos);
         if ( status != 0 )
             throw SocketGaiException(status);
         m_addr = *infos;
@@ -311,6 +310,26 @@ public:
     int getsockopt(int level, int optname, void *optval, socklen_t *optlen) const {
         return ::getsockopt(m_fd, level, optname, optval, optlen);
     }
+
+    static void release(Socket **socket){
+        if ( *socket != NULL ){
+            (*socket)->close();
+            delete *socket;
+            *socket = NULL;
+        }
+    }
+
+    static Socket *create_tcp_socket() {
+        return new Socket(AF_INET, SOCK_STREAM);
+    }
 };
+
+bool operator==(Socket const &a, Socket const &b){
+    return a.fd() == b.fd();
+}
+
+bool operator!=(Socket const &a, Socket const &b){
+    return !(a == b);
+}
 
 #endif //FT_IRC_SOCKET_HPP

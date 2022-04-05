@@ -11,7 +11,9 @@
 #include <arpa/inet.h>
 #include <netinet/in.h>
 
-namespace network {
+namespace net {
+    const int FD_UNSET = -1;
+
     namespace tcp {
         int getaddrinfo(const char *node, const char *service, struct addrinfo **res) {
             struct addrinfo hints;
