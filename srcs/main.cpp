@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/22 15:02:17 by lperson-          #+#    #+#             */
-/*   Updated: 2022/04/06 01:33:32 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/06 01:50:59 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int main(int argc, char *argv[])
 	}
 	std::pair<Selector::ready_type, Selector::ready_type>	ready;
 	Selector::ready_type									ready_readers;
+	Selector::ready_type									ready_writers;
 	std::string 											host = argv[1];
 	std::string 											port = argv[2];
 	Socket													*server = Socket::create_tcp_socket();
@@ -46,6 +47,7 @@ int main(int argc, char *argv[])
 	while ( true ){
 		ready = selector.select();
 		ready_readers = ready.first;
+		ready_writers = ready.second;
 
 		std::for_each(ready_readers.begin(), ready_readers.end(), 
 			[&](Socket *current){
@@ -55,14 +57,12 @@ int main(int argc, char *argv[])
 					Socket *client = server->accept();
 
 					std::cout << "New connection from " << client->storage() << std::endl;
-					std::for_each(selector.begin(), selector.end(), 
-						[&](Selector::entries_value_type val){
-							Socket *client = val.second.get_socket();
 
-							if ( *client != *server )
-								client->send("A new user has join the server.\n");
-						});
-					selector.add(client, Selector::READ);
+					std::for_each(ready_writers.begin(), ready_writers.end(), [&](Socket *client){
+						client->send("A new user has join the server.\n");
+					});
+					
+					selector.add(client, Selector::READ | Selector::WRITE);
 				} else {
 					ssize_t bytes = 0;
 
@@ -70,27 +70,18 @@ int main(int argc, char *argv[])
 						// Connection has been closed, cleaning and removing
 						if ( bytes == 0 ){
 							std::cout << "Client has closed the connection." << std::endl;
-							std::for_each(selector.begin(), selector.end(), 
-								[&](Selector::entries_value_type val){
-									Socket *client = val.second.get_socket();
-
-									if ( *client != *current && *client != *server ){
-										client->send("User has quit the server.\n");
-									}
-								});
+							
+							std::for_each(ready_writers.begin(), ready_writers.end(), [&](Socket *client){
+								client->send("User has quit the server.\n");
+							});
 						}
 						selector.remove(current);
 						Socket::release(&current);
 					} else {
 						// Send received message to all users
-						std::for_each(selector.begin(), selector.end(), 
-								[&](Selector::entries_value_type val){
-									Socket *client = val.second.get_socket();
-									
-									if ( *client != *current && *client != *server ){
-										client->send(buffer);
-									}
-								});
+						std::for_each(ready_writers.begin(), ready_writers.end(), [&](Socket *client){
+							client->send(buffer);
+						});
 					}
 				}
 			});
