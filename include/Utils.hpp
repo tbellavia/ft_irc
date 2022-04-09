@@ -19,9 +19,11 @@
 
 # include <string>
 # include <algorithm>
+# include <vector>
 
 namespace ft {
     bool ends_with(std::string const &val, std::string const &ending);
+    std::vector<std::string> split(std::string const &s, std::string const &delim);
 }
 
 

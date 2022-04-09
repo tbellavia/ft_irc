@@ -21,7 +21,7 @@ PATHD = ${PATHB}/depends
 PATHI := include
 
 CXX := clang++
-CXXFLAGS := -Wall -Wextra -Werror -std=c++98 -g
+CXXFLAGS := -Wall -Wextra -Werror # -std=c++98 -g
 CXXFLAGS += ${addprefix -I , ${PATHI}}
 DFLAGS = -MMD -MT $@ -MF ${PATHD}/$*.d
 LD := clang++
@@ -30,7 +30,7 @@ LDFLAGS :=
 SRCS_DIR = ${shell find ${PATHS} -type d}
 vpath %.cpp ${foreach dir, ${SRCS_DIR}, ${dir}:}
 
-SRCS := IPAddress.cpp AddressInfo.cpp Utils.cpp main.cpp
+SRCS := Utils.cpp main.cpp
 
 OBJS = ${addprefix ${PATHB}/, ${SRCS:.cpp=.o}}
 DFILES = ${addprefix ${PATHD}/, ${SRCS:.cpp=.d}}

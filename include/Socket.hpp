@@ -36,7 +36,7 @@
 // TODO: Remove this includes
 # include <cstdio>
 
-# define BUF_SIZE 2
+# define BUF_SIZE 5
 
 void *get_in_addr(sockaddr *sa)
 {
@@ -281,7 +281,7 @@ public:
         char                    buf[BUF_SIZE];
 
         if ( (bytes = ::recv(m_fd, buf, BUF_SIZE, flags)) == -1 )
-            throw SocketException("recv exception");
+            return -1;
         s.append(buf, bytes);
         return bytes;
     }
@@ -301,8 +301,6 @@ public:
             if ( ft::ends_with(s, seq) )
                 return bytes;
         }
-        if ( bytes == -1 )
-            throw SocketException("recv exception");
         return bytes;
     }
 
