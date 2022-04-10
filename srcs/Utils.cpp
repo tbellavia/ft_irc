@@ -10,7 +10,7 @@ bool ft::ends_with(const std::string &val, const std::string &ending) {
     return std::equal(ending.rbegin(), ending.rend(), val.rbegin());
 }
 
-std::vector<std::string> ft::split(const std::string &s, const std::string &delim) {
+std::vector<std::string> ft::split(const std::string &s, const std::string &delim = " ") {
     std::vector<std::string>    strings;
     std::string                 rest;
     size_t                      pos;
