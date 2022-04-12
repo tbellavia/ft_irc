@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/22 15:02:17 by lperson-          #+#    #+#             */
-/*   Updated: 2022/04/06 18:33:33 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/12 02:58:41 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
 		std::cerr << "usage: server host port" << std::endl;
 		return EXIT_FAILURE;
 	}
-    IRCServer server(argv[1], argv[2], true);
+    IRC::Server server(argv[1], argv[2], true);
 
     server.serve_forever();
 	return EXIT_SUCCESS;
