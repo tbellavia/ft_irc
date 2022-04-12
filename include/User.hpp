@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 21:14:46 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/12 02:59:09 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/12 03:00:01 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 namespace IRC
 {
+	//  SEE: http://se.inf.ethz.ch/student_projects/fabian_gremper/Report.pdf
 	enum Role {
 		REGULAR,
 		OPERATOR,
