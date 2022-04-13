@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 18:31:32 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/12 19:33:27 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/13 18:17:22 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,310 +36,90 @@
 // TODO: Remove this includes
 # include <cstdio>
 
-# define BUF_SIZE 5
+# define BUF_SIZE 512
 
-void *get_in_addr(sockaddr *sa)
-{
-    if (sa->sa_family == AF_INET)
-        return &(((struct sockaddr_in*)sa)->sin_addr);
-    return &(((struct sockaddr_in6*)sa)->sin6_addr);
-}
+void *get_in_addr(sockaddr *sa);
 
 class Socket {
 public:
-    /* Internal implementation */
-    struct SocketStorage {
-        sockaddr_storage    storage;
-        socklen_t           length;
+	/* Internal implementation */
+	struct SocketStorage {
+		sockaddr_storage    storage;
+		socklen_t           length;
 
-        SocketStorage() : storage(), length(sizeof(sockaddr_storage)) { }
-        SocketStorage(sockaddr_storage const &storage_, socklen_t length_) : storage(storage_), length(length_) { }
-        SocketStorage(SocketStorage const &other) : storage(other.storage), length(other.length) { }
-        SocketStorage &operator=(SocketStorage const &other) {
-            if ( &other == this )
-                return *this;
-            storage = other.storage;
-            length = other.length;
-            return *this;
-        }
+		SocketStorage();
+		SocketStorage(sockaddr_storage storage_, socklen_t length_);
+		SocketStorage(SocketStorage const &other);
+		SocketStorage &operator=(SocketStorage const &other);
 
-        friend std::ostream &operator<<(std::ostream &os, SocketStorage const &s){
-            char addr[INET6_ADDRSTRLEN];
+		friend std::ostream &operator<<(std::ostream &os, SocketStorage const &s);
+	};
 
-            inet_ntop(s.storage.ss_family, get_in_addr((sockaddr*)&s.storage), addr, sizeof addr);
-            os << addr;
-            return os;
-        }
-    };
+	/**
+	 * A subclass of std::exception that represent a generic
+	 * exception that doesn't fit in `SocketGaiException` or
+	 * `SocketHostException`.
+	 */
+	struct SocketException : public std::exception {
+		char const *description;
 
-    /**
-     * A subclass of std::exception that represent a generic
-     * exception that doesn't fit in `SocketGaiException` or
-     * `SocketHostException`.
-     */
-    struct SocketException : public std::exception {
-        char const *description;
+		SocketException();
+		explicit SocketException(char const *desc);
+		virtual char const *what() const throw();
+	};
 
-        SocketException() : description("generic exception") { }
-        explicit SocketException(char const *desc) : std::exception(), description(desc) { }
+	/**
+	 * A subclass of SocketException, this exception is raised for
+	 * address-related errors by `getaddrinfo` and `getnameinfo()`.
+	 */
+	struct SocketGaiException : public SocketException {
+		int     gai_error;
 
-        virtual char const *what() const throw() {
-            return description;
-        }
-    };
-
-    /**
-     * A subclass of SocketException, this exception is raised for
-     * address-related errors by `getaddrinfo` and `getnameinfo()`.
-     */
-    struct SocketGaiException : public SocketException {
-        int     gai_error;
-
-        SocketGaiException() : SocketException(), gai_error(0) { }
-        explicit SocketGaiException(int error) : SocketException(), gai_error(error) { }
-
-        virtual char const *what() const throw() {
-            return "gai exception";
-        }
-    };
-
-    /**
-     * A subclass of SocketException, this exception is raised for
-     * address-related errors and for functions thar use h_errno,
-     * including `gethostbyname_ex()` and `gethostbyaddr()`.
-     */
-    struct SocketHostException : public SocketException {
-        int h_error;
-
-        SocketHostException() : SocketException(), h_error(0) { }
-        explicit SocketHostException(int error) : SocketException(), h_error(error) { }
-
-        virtual char const *what() const throw() {
-            return "host exception";
-        }
-    };
+		SocketGaiException();
+		explicit SocketGaiException(int error);
+		virtual char const *what() const throw();
+	};
 private:
-    int                 m_domain;
-    int                 m_type;
-    int                 m_protocol;
-    bool                m_blocking;
-    int                 m_fd;
-    addrinfo            m_addr;
-    SocketStorage       m_storage;
+	int                 m_domain;
+	int                 m_type;
+	int                 m_protocol;
+	bool                m_blocking;
+	int                 m_fd;
+	addrinfo            m_addr;
+	SocketStorage       m_storage;
 
-    Socket(Socket const &sock, int fd, SocketStorage const &storage) :
-        m_domain(sock.m_domain),
-        m_type(sock.m_type),
-        m_protocol(sock.m_protocol),
-        m_blocking(sock.m_blocking),
-        m_fd(fd),
-        m_addr(sock.m_addr),
-        m_storage(storage)
-    {
-        m_addr.ai_family = storage.storage.ss_family;
-        m_addr.ai_addr = (sockaddr*)&storage.storage;
-    }
-
+	Socket(Socket const &sock, int fd, SocketStorage const &storage);
 public:
-    Socket() : m_domain(), m_type(), m_protocol(), m_blocking(true), m_fd(net::FD_UNSET), m_addr(), m_storage() { }
+	Socket();
+	explicit Socket(int domain, int type, int protocol = 0, bool blocking = true);
+	Socket(Socket const &other);
+	Socket &operator=(Socket const &other);
+	~Socket();
 
-    explicit Socket(int domain, int type, int protocol = 0, bool blocking = true) :
-        m_domain(domain),
-        m_type(type),
-        m_protocol(protocol),
-        m_blocking(blocking),
-        m_fd(net::FD_UNSET),
-        m_addr(),
-        m_storage()
-    {
-        m_fd = socket(m_domain, m_type, m_protocol);
-        if ( m_fd == -1 )
-            throw SocketException("socket failed exception");
-        if ( !blocking )
-            ::fcntl(m_fd, F_SETFL, O_NONBLOCK);
-    }
 
-    Socket(Socket const &other) :
-        m_domain(other.m_domain),
-        m_type(other.m_type),
-        m_protocol(other.m_protocol),
-        m_blocking(other.m_blocking),
-        m_fd(other.m_fd),
-        m_addr(other.m_addr),
-        m_storage(other.m_storage) { }
+	int						fd() const;
+	void					set_blocking(bool blocking);
+	SocketStorage const		&storage() const;
 
-    Socket &operator=(Socket const &other) {
-        if ( &other == this )
-            return *this;
-        m_domain = other.m_domain;
-        m_type = other.m_type;
-        m_protocol = other.m_protocol;
-        m_blocking = other.m_blocking;
-        m_fd = other.m_fd;
-        m_addr = other.m_addr;
-        m_storage = other.m_storage;
-        return *this;
-    }
+	void					bind(std::string const &host, std::string const &port);
+	void					connect(std::string const &host, std::string const &port);
+	void					listen(int n) const;
+	Socket					*accept() const;
+	ssize_t					send(const void *buf, int len, int flags) const;
+	ssize_t					send(std::string const &msg, int flags = 0) const;
+	ssize_t					recv(void *buf, size_t len, int flags = 0) const;
+	ssize_t					recv(std::string &s, int flags = 0) const;
+	ssize_t					recv(std::string &s, std::string const &seq, int flags = 0) const;
+	void					close() const;
+	void					shutdown(int how) const;
+	int						setsockopt(int level, int optname, const void *optval, socklen_t optlen) const;
+	int						getsockopt(int level, int optname, void *optval, socklen_t *optlen) const;
 
-    /**
-     * Access functions
-     */
-
-    SocketStorage const &storage() const { return m_storage; }
-
-    /**
-     * Get the underlying file descriptor
-     */
-    int fd() const { return m_fd; }
-    int family() const { return m_domain; }
-    int type() const { return m_type; }
-    int protocol() const { return m_protocol; }
-
-    bool get_blocking() const { return m_blocking; }
-    void set_blocking(bool blocking) {
-        int opts = ::fcntl(m_fd, F_GETFL);
-
-        m_blocking = blocking;
-        if ( blocking && m_fd != net::FD_UNSET ){
-            ::fcntl(m_fd, opts & (~O_NONBLOCK));
-        }
-        if ( !blocking && m_fd != net::FD_UNSET ){
-            ::fcntl(m_fd, O_NONBLOCK);
-        }
-    }
-
-    /**
-     * Socket interface
-     */
-
-    // TODO: Manage exception on bind failure
-    void bind(std::string const &host, std::string const &port)  {
-        const char  *node = (host.length() == 0) ? NULL : host.c_str();
-        addrinfo    *infos;
-
-        int status = net::tcp::getaddrinfo(node, port.c_str(), &infos);
-        if ( status != 0 )
-            throw SocketGaiException(status);
-        m_addr = *infos;
-        if ( ::bind(m_fd, m_addr.ai_addr, m_addr.ai_addrlen) == -1 )
-            throw SocketException("bind exception");
-    }
-
-    // TODO: Manage exception on connect failure
-    void connect(std::string const &host, std::string const &port) {
-        const char  *node = (host.length() == 0) ? NULL : host.c_str();
-        addrinfo    *infos;
-
-        int status = net::tcp::getaddrinfo(node, port.c_str(), &infos);
-        if ( status != 0 )
-            throw SocketGaiException(status);
-        m_addr = *infos;
-        if ( ::connect(m_fd, m_addr.ai_addr, m_addr.ai_addrlen) == -1 )
-            throw SocketException("connect exception");
-    }
-
-    // TODO: Manage exception on listen failure
-    void listen(int n) const {
-        if ( ::listen(m_fd, n) == -1 )
-            throw SocketException("listen exception");
-    }
-
-    // TODO: Manage exception on accept failure
-    Socket *accept() const {
-        SocketStorage   storage;
-
-        int new_fd = ::accept(m_fd, (sockaddr*)&storage.storage, &storage.length);
-        if ( new_fd == -1 )
-            throw SocketException("accept exception");
-        return new Socket(*this, new_fd, storage);
-    }
-
-    ssize_t send(const void *buf, int len, int flags) const {
-        return ::send(m_fd, buf, len, flags);
-    }
-
-    ssize_t send(std::string const &msg, int flags = 0) const {
-        return ::send(m_fd, msg.c_str(), msg.length(), flags);
-    }
-
-    /**
-     * Ideas for recv method
-     *
-     * - Write the received packet into a `stream` like `stringstream` ?
-     */
-    ssize_t recv(void *buf, size_t len, int flags = 0) const {
-        return ::recv(m_fd, buf, len, flags);
-    }
-
-    /**
-     * Recv wrapper.
-     *
-     * Recv wrapper that takes string buffer.
-     */
-    ssize_t recv(std::string &s, int flags = 0) const {
-        ssize_t                 bytes = 0;
-        char                    buf[BUF_SIZE];
-
-        if ( (bytes = ::recv(m_fd, buf, BUF_SIZE, flags)) == -1 )
-            return -1;
-        s.append(buf, bytes);
-        return bytes;
-    }
-
-    /**
-     * Recv wrapper.
-     *
-     * Recv wrapper that will aggregate into @s until @seq is found.
-     */
-    ssize_t recv(std::string &s, std::string const &seq, int flags = 0) const {
-        ssize_t                 bytes = 0;
-        char                    buf[BUF_SIZE];
-
-        while ( (bytes = ::recv(m_fd, buf, BUF_SIZE, flags)) > 0 ) {
-            s.append(buf, bytes);
-
-            if ( ft::ends_with(s, seq) )
-                return bytes;
-        }
-        return bytes;
-    }
-
-    void close() const {
-        ::close(m_fd);
-    }
-
-    void shutdown(int how) const {
-        if ( ::shutdown(m_fd, how) == -1 )
-            throw SocketException();
-    }
-
-    int setsockopt(int level, int optname, const void *optval, socklen_t optlen) const {
-        return ::setsockopt(m_fd, level, optname, optval, optlen);
-    }
-
-    int getsockopt(int level, int optname, void *optval, socklen_t *optlen) const {
-        return ::getsockopt(m_fd, level, optname, optval, optlen);
-    }
-
-    static void release(Socket **socket){
-        if ( *socket != NULL ){
-            (*socket)->close();
-            delete *socket;
-            *socket = NULL;
-        }
-    }
-
-    static Socket *create_tcp_socket() {
-        return new Socket(AF_INET, SOCK_STREAM);
-    }
+	static void				release(Socket **socket);
+	static Socket			*create_tcp_socket();
 };
 
-bool operator==(Socket const &a, Socket const &b){
-    return a.fd() == b.fd();
-}
-
-bool operator!=(Socket const &a, Socket const &b){
-    return !(a == b);
-}
+bool operator==(Socket const &a, Socket const &b);
+bool operator!=(Socket const &a, Socket const &b);
 
 #endif //FT_IRC_SOCKET_HPP
