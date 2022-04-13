@@ -6,19 +6,23 @@
 #    By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/12 19:27:05 by bbellavi          #+#    #+#              #
-#    Updated: 2022/04/13 18:12:18 by bbellavi         ###   ########.fr        #
+#    Updated: 2022/04/13 18:51:50 by bbellavi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CXX			= c++
 CXXFLAGS	= -Wall -Werror -Wextra -std=c++98
 
-SRCS		=	main.cpp				\
-				srcs/Utils.cpp			\
-				srcs/Selector.cpp		\
-				srcs/SelectorValue.cpp	\
-				srcs/Socket.cpp			\
-				srcs/Network.cpp		\
+SRCS		=	main.cpp						\
+				srcs/Utils.cpp					\
+				srcs/network/Selector.cpp		\
+				srcs/network/SelectorValue.cpp	\
+				srcs/network/Socket.cpp			\
+				srcs/network/Network.cpp		\
+				srcs/irc/Server.cpp				\
+				srcs/irc/Channel.cpp			\
+				srcs/irc/Channels.cpp			\
+				srcs/irc/User.cpp				\
 
 HEADERS		=	include/irc/Channel.hpp				\
 				include/irc/User.hpp				\
