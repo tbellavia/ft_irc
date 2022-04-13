@@ -6,13 +6,13 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/22 15:02:17 by lperson-          #+#    #+#             */
-/*   Updated: 2022/04/12 02:58:41 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/13 00:12:32 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
 #include <cstdlib>
-#include "../include/IRCServer.hpp"
+#include "include/irc/Server.hpp"
 
 int main(int argc, char *argv[])
 {
