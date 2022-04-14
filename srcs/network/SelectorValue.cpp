@@ -6,11 +6,12 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 18:04:48 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/13 18:14:47 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/14 23:43:57 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "SelectorValue.hpp"
+#include <iostream>
 
 SelectorValue::SelectorValue() : m_socket(NULL), m_events(0), m_buffer() { }
 SelectorValue::SelectorValue(Socket *socket, int events) : m_socket(socket), m_events(events), m_buffer() { }
@@ -37,7 +38,7 @@ std::string const &SelectorValue::buffer() const {
 	return m_buffer;
 }
 
-bool SelectorValue::is_event_set(int event) const {
+bool SelectorValue::isset(int event) const {
 	return m_events & event;
 }
 
@@ -64,8 +65,8 @@ SelectorValue::full() const {
 }
 
 std::string 
-SelectorValue::flush() {
-	std::vector<std::string> strings = ft::split(m_buffer, CRLF);
+SelectorValue::pop() {
+	std::vector<std::string> strings = ft::split_one(m_buffer, CRLF);
 
 	if ( strings.size() > 1 ){
 		m_buffer = strings[1];

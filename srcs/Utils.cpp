@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 15:20:16 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/13 18:18:30 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/14 23:35:50 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,4 +34,19 @@ std::vector<std::string> ft::split(const std::string &s, const std::string &deli
 	}
 	strings.push_back(rest);
 	return strings;
+}
+
+std::vector<std::string>
+ft::split_one(std::string const &s, std::string const &delim) {
+	std::vector<std::string> res;
+	size_t pos;
+
+	pos = s.find(delim);
+	if ( pos == std::string::npos ) {
+		res.push_back(s);
+	} else {
+		res.push_back(s.substr(0, pos));
+		res.push_back(s.substr(pos + delim.length(), s.length()));
+	}
+	return res;
 }

@@ -40,9 +40,9 @@ void Selector::add(Socket *socket, int events) {
 		SelectorValue *val = new SelectorValue(socket, events);
 		int fd = socket->fd();
 
-		if ( val->is_event_set(READ) )
+		if ( val->isset(READ) )
 			FD_SET(fd, &m_read);
-		if ( val->is_event_set(WRITE) )
+		if ( val->isset(WRITE) )
 			FD_SET(fd, &m_write);
 		m_max_fd = std::max(m_max_fd, fd);
 		m_entries.insert(std::make_pair(fd, val));
@@ -57,9 +57,9 @@ void Selector::remove(Socket *socket) {
 		if ( found == m_entries.end() )
 			return ;
 		value = found->second;
-		if ( value->is_event_set(READ) )
+		if ( value->isset(READ) )
 			FD_CLR(socket->fd(), &m_read);
-		if ( value->is_event_set(WRITE) )
+		if ( value->isset(WRITE) )
 			FD_CLR(socket->fd(), &m_write);
 		m_entries.erase(found);
 		delete value;
@@ -83,9 +83,9 @@ Selector::select(int seconds, int useconds){
 		Socket  *socket = it->second->socket();
 		int     fd = socket->fd();
 
-		if ( it->second->is_event_set(READ) && FD_ISSET(fd, &read_set) )
+		if ( it->second->isset(READ) && FD_ISSET(fd, &read_set) )
 			ready_readers.push_back( it->second );
-		if ( it->second->is_event_set(WRITE) && FD_ISSET(fd, &write_set) )
+		if ( it->second->isset(WRITE) && FD_ISSET(fd, &write_set) )
 			ready_writers.push_back( it->second );
 	}
 	return std::make_pair( ready_readers, ready_writers );

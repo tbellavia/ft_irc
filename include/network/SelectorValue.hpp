@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 00:53:04 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/13 18:14:34 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/14 23:43:20 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,12 @@ public:
 	Socket				*socket();
 	std::string const	&buffer() const;
 	
-	bool				is_event_set(int event) const;
+	bool				isset(int event) const;
 	bool				has_terminator(std::string const &terminator = CRLF) const;
 	bool				full() const;
 
 	void				append(std::string const &s);
-	std::string 		flush();
+	std::string 		pop();
 	void				clear();
 };
 

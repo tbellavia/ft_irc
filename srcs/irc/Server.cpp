@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 18:47:47 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/13 18:52:04 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/14 23:46:03 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,9 +105,10 @@ void IRC::Server::serve_forever() {
 					select_value->append( buffer );
 
 					// End of packets
-					if ( select_value->has_terminator() ){
-						std::string raw = select_value->flush();
-						std::vector<std::string> args = ft::split(raw, " ");
+					// BOUCLE TANT QUE HAS TERMINATOR TRAITER REQUETES
+					while ( select_value->has_terminator() ){
+						std::string raw = select_value->pop();
+						std::vector<std::string> args = ft::split(raw);
 						std::string cmd = args[0];
 
 						if ( cmd == "NICK" ){
@@ -116,7 +117,7 @@ void IRC::Server::serve_forever() {
 						else if ( cmd == "CHANNEL" ) {
 							m_channels.add(args[1]);
 						}
-						std::cout << "Command: " << cmd << std::endl;
+						std::cout << "Buffer: " << raw << std::endl;
 					}
 				}
 			}
