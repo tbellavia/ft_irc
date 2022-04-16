@@ -23,7 +23,7 @@ Selector &Selector::operator=(Selector const &other) {
 }
 
 Selector::~Selector() {
-	std::map<int, SelectorValue*>::iterator it = m_entries.begin();
+	std::map<int, File*>::iterator it = m_entries.begin();
 
 	for ( ; it != m_entries.end() ; ++it ){
 		delete (*it).second;
@@ -31,13 +31,13 @@ Selector::~Selector() {
 }
 
 /* Getters / Setters */
-std::map<int, SelectorValue*> const &Selector::get_entries() const {
+std::map<int, File*> const &Selector::get_entries() const {
 	return m_entries;
 }
 
 void Selector::add(Socket *socket, int events) {
 	if ( socket != NULL ){
-		SelectorValue *val = new SelectorValue(socket, events);
+		File *val = new File(socket, events);
 		int fd = socket->fd();
 
 		if ( val->isset(READ) )
@@ -51,8 +51,8 @@ void Selector::add(Socket *socket, int events) {
 
 void Selector::remove(Socket *socket) {
 	if ( socket != NULL ){
-		SelectorValue								*value;
-		std::map<int, SelectorValue*>::iterator		found = m_entries.find(socket->fd());
+		File								*value;
+		std::map<int, File*>::iterator		found = m_entries.find(socket->fd());
 
 		if ( found == m_entries.end() )
 			return ;
@@ -66,7 +66,7 @@ void Selector::remove(Socket *socket) {
 	}
 }
 
-std::pair<std::vector<SelectorValue*>, std::vector<SelectorValue*> >
+std::pair<std::vector<File*>, std::vector<File*> >
 Selector::select(int seconds, int useconds){
 	ready_type  ready_readers;
 	ready_type  ready_writers;
@@ -79,7 +79,7 @@ Selector::select(int seconds, int useconds){
 	else
 		::select(m_max_fd + 1, &read_set, &write_set, NULL, &timeout );
 
-	for ( std::map<int, SelectorValue*>::iterator it = m_entries.begin() ; it != m_entries.end() ; ++it ){
+	for (std::map<int, File*>::iterator it = m_entries.begin() ; it != m_entries.end() ; ++it ){
 		Socket  *socket = it->second->socket();
 		int     fd = socket->fd();
 

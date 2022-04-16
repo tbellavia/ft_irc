@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   SelectorValue.hpp                                  :+:      :+:    :+:   */
+/*   File.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -14,31 +14,33 @@
 #define ISELECTORVALUE_HPP
 
 # include <string>
+# include <queue>
 # include "Socket.hpp"
 
 # define CRLF "\r\n"
 
-class SelectorValue {
-	Socket			*m_socket;
-	int				m_events;
-	std::string		m_buffer;
+class File {
+	Socket					*m_socket;
+	int						m_events;
+	std::string				m_buffer;
+	std::queue<std::string> m_requests;
 public:
-	SelectorValue();
-	SelectorValue(Socket *socket, int events);
-	SelectorValue(SelectorValue const &other);
-	SelectorValue &operator=(SelectorValue const &other);
-	virtual ~SelectorValue();
+	File();
+	File(Socket *socket, int events);
+	File(File const &other);
+	File &operator=(File const &other);
+	virtual ~File();
 
 	Socket				*socket();
 	std::string const	&buffer() const;
 	
 	bool				isset(int event) const;
-	bool				has_terminator(std::string const &terminator = CRLF) const;
-	bool				full() const;
-
-	void				append(std::string const &s);
-	std::string 		pop();
 	void				clear();
+
+	// Request Queue Interface
+	void				push(std::string const &req);
+	bool				available() const;
+	std::string			pop();
 };
 
 #endif

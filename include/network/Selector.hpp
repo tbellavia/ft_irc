@@ -22,7 +22,7 @@
 # include <map>
 # include "Socket.hpp"
 # include "Network.hpp"
-# include "SelectorValue.hpp"
+# include "File.hpp"
 
 class Selector {
 public:
@@ -32,11 +32,11 @@ public:
 		EXCEPT = 0x01 << 2,
 	};
 
-	typedef std::vector<SelectorValue*> ready_type;
+	typedef std::vector<File*> ready_type;
 private:
 	fd_set							m_read;
 	fd_set							m_write;
-	std::map<int, SelectorValue*>	m_entries;
+	std::map<int, File*>	        m_entries;
 	int								m_max_fd;
 public:
 	Selector();
@@ -44,7 +44,7 @@ public:
 	Selector &operator=(Selector const &other);
 	~Selector();
 
-	std::map<int, SelectorValue*> const &get_entries() const;
+	std::map<int, File*> const &get_entries() const;
 	void add(Socket *socket, int events);
 	void remove(Socket *socket);
 	std::pair<ready_type, ready_type> select(int seconds = -1, int useconds = -1);

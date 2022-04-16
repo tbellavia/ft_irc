@@ -20,8 +20,6 @@ namespace IRC
 		std::string					m_port;
 		Socket						*m_server;
 		Selector					m_selector;
-		Channels					m_channels;
-		std::map<Socket*, User*>	m_users;
 	public:
 		Server(std::string const &host, std::string const &port, bool bind_and_activate = false);
 		Server(Server const &other);

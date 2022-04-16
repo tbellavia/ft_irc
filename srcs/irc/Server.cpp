@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 18:47:47 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/14 23:46:03 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/16 23:28:22 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,7 @@ IRC::Server::Server(std::string const &host, std::string const &port, bool bind_
 	m_host(host), 
 	m_port(port), 
 	m_server(Socket::create_tcp_socket()), 
-	m_selector(),
-	m_channels()
+	m_selector()
 {
 	int enable = true;
 
@@ -33,8 +32,7 @@ IRC::Server::Server(IRC::Server const &other)
 	:	m_host(other.m_host), 
 		m_port(other.m_port), 
 		m_server(other.m_server), 
-		m_selector(other.m_selector),
-		m_channels(other.m_channels) { }
+		m_selector(other.m_selector){ }
 
 IRC::Server&
 IRC::Server::operator=(Server const &other) {
@@ -44,7 +42,6 @@ IRC::Server::operator=(Server const &other) {
 	m_port = other.m_port;
 	m_server = other.m_server;
 	m_selector = other.m_selector;
-	m_channels = other.m_channels;
 	return *this;
 }
 
@@ -58,12 +55,12 @@ void IRC::Server::bind() const {
 }
 
 void IRC::Server::serve_forever() {
-	std::pair<std::vector<SelectorValue*>,
-	std::vector<SelectorValue*> >			ready;
-	std::vector<SelectorValue*>				readers;
-	std::vector<SelectorValue*>				writers;
-	std::vector<SelectorValue*>::iterator	select_it;
-	ssize_t									bytes = 0;
+	std::pair<std::vector<File*>,
+	std::vector<File*> >			ready;
+	std::vector<File*>				readers;
+	std::vector<File*>				writers;
+	std::vector<File*>::iterator	select_it;
+	ssize_t							bytes = 0;
 
 	m_selector.add(m_server, Selector::READ);
 	while ( true ){
@@ -72,9 +69,9 @@ void IRC::Server::serve_forever() {
 		writers = ready.second;
 
 		for ( select_it = readers.begin() ; select_it != readers.end() ; ++select_it ){
-			SelectorValue	*select_value = *select_it;
-			Socket			*socket = select_value->socket();
-			std::string		buffer;
+			File *select_file = *select_it;
+			Socket *socket = select_file->socket();
+			std::string buffer;
 
 			if ( *socket == *m_server ){
 				Socket *client = m_server->accept();
@@ -82,42 +79,23 @@ void IRC::Server::serve_forever() {
 				std::cout << "New connection from " << client->storage() << std::endl;
 				client->set_blocking(false);
 				m_selector.add(client, Selector::READ | Selector::WRITE);
-				// Create and add new user
-				m_users.insert(std::make_pair(client, new User(client)));
 			} else {
-				std::map<Socket*, User*>::iterator found = m_users.find(socket);
-				User *user = found->second;
-
 				if ( (bytes = socket->recv(buffer)) <= 0 ){
 					// Connection shutdown
 					if ( bytes == 0 ){
 						std::cout << "Client has closed the connection" << std::endl;
 					}
-					// Errors 
 					m_selector.remove(socket);
-
-					delete user;
-					m_users.erase(found);
-
 					Socket::release(&socket);
 				} else {
 					// Received something
-					select_value->append( buffer );
+					select_file->push( buffer );
 
 					// End of packets
-					// BOUCLE TANT QUE HAS TERMINATOR TRAITER REQUETES
-					while ( select_value->has_terminator() ){
-						std::string raw = select_value->pop();
-						std::vector<std::string> args = ft::split(raw);
-						std::string cmd = args[0];
+					while ( select_file->available() ){
+						std::string request = select_file->pop();
 
-						if ( cmd == "NICK" ){
-							user->set_pseudo(args[1]);
-						}
-						else if ( cmd == "CHANNEL" ) {
-							m_channels.add(args[1]);
-						}
-						std::cout << "Buffer: " << raw << std::endl;
+						std::cout << "Request: " << request << std::endl;
 					}
 				}
 			}
