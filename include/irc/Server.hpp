@@ -7,29 +7,30 @@
 
 # include <string>
 # include <iostream>
-# include "../network/Socket.hpp"
-# include "../network/Selector.hpp"
-# include "Channels.hpp"
-# include "User.hpp"
+# include "Socket.hpp"
+# include "Selector.hpp"
+# include "IRCApi.hpp"
 
 namespace IRC
 {
 	class Server {
 		static const int	LISTEN_MAX = 10;
-		std::string					m_host;
-		std::string					m_port;
-		Socket						*m_server;
-		Selector					m_selector;
+		std::string			m_host;
+		std::string			m_port;
+		std::string			m_pass;
+		Socket				*m_server;
+		Selector			m_selector;
 	public:
-		Server(std::string const &host, std::string const &port, bool bind_and_activate = false);
+		Server();
+		Server(std::string const &host, std::string const &port, std::string const &pass, bool bind_and_activate = false);
 		Server(Server const &other);
 		Server &operator=(Server const &other);
 
 		void activate() const;
 		void bind() const;
-		void serve_forever();
+		void serve_forever(IRC::Api &api);
+		void process_request(IRC::Api &api, Socket *sender, std::string const &request);
 	};
-	
 }
 
 

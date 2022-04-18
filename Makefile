@@ -6,7 +6,7 @@
 #    By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/12 19:27:05 by bbellavi          #+#    #+#              #
-#    Updated: 2022/04/16 23:22:08 by bbellavi         ###   ########.fr        #
+#    Updated: 2022/04/18 14:12:17 by bbellavi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,14 +19,9 @@ SRCS		=	main.cpp						\
 				srcs/network/File.cpp			\
 				srcs/network/Socket.cpp			\
 				srcs/network/Network.cpp		\
-				srcs/irc/Server.cpp				\
-				srcs/irc/Channel.cpp			\
-				srcs/irc/Channels.cpp			\
-				srcs/irc/User.cpp				\
+				srcs/irc/Server.cpp				
 
-HEADERS		=	include/irc/Channel.hpp				\
-				include/irc/User.hpp				\
-				include/irc/Server.hpp				\
+HEADERS		=	include/irc/Server.hpp				\
 				include/network/Network.hpp			\
 				include/network/Selector.hpp		\
 				include/network/File.hpp			\

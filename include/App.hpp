@@ -1,36 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Channels.hpp                                       :+:      :+:    :+:   */
+/*   App.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/13 00:04:33 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/13 18:43:56 by bbellavi         ###   ########.fr       */
+/*   Created: 2022/04/18 14:07:03 by bbellavi          #+#    #+#             */
+/*   Updated: 2022/04/18 14:37:16 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CHANNELS_HPP
-#define CHANNELS_HPP
 
-# include <map>
-# include "Channel.hpp"
+#ifndef APP_HPP
+# define APP_HPP
 
-namespace IRC
-{
-	class Channels {
-		std::map<std::string, Channel*> m_channels;
-	public:
-		Channels();
-		Channels(Channels const &other);
-		Channels &operator=(Channels const &other);
-		~Channels();
+# include "Server.hpp"
+# include "IRCApi.hpp"
 
-		void add(std::string const &name);
-		void remove(std::string const &name);
-	};
-}
+struct App {
+    App();
 
-
+    void start(std::string const &port, std::string const &password) const;
+};
 
 #endif

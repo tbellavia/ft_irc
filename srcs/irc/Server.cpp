@@ -6,13 +6,20 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 18:47:47 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/16 23:28:22 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/18 17:49:50 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-IRC::Server::Server(std::string const &host, std::string const &port, bool bind_and_activate) : 
+IRC::Server::Server() : 
+	m_host(),
+	m_port(),
+	m_server(),
+	m_selector() { }
+
+IRC::Server::Server(std::string const &host, std::string const &port, 
+	std::string const &pass, bool bind_and_activate) : 
 	m_host(host), 
 	m_port(port), 
 	m_server(Socket::create_tcp_socket()), 
@@ -54,7 +61,7 @@ void IRC::Server::bind() const {
 	m_server->bind(m_host, m_port);
 }
 
-void IRC::Server::serve_forever() {
+void IRC::Server::serve_forever(IRC::Api &api) {
 	std::pair<std::vector<File*>,
 	std::vector<File*> >			ready;
 	std::vector<File*>				readers;
@@ -101,4 +108,11 @@ void IRC::Server::serve_forever() {
 			}
 		}
 	}
+}
+
+void
+Server::process_request(IRC::Api &api, Socket *sender, std::string const &request) {
+	(void)api;
+	(void)sender;
+	(void)request;
 }
