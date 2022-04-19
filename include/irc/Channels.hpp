@@ -1,35 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Users.hpp                                          :+:      :+:    :+:   */
+/*   Channels.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/19 15:22:18 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/19 23:05:01 by bbellavi         ###   ########.fr       */
+/*   Created: 2022/04/19 23:16:06 by bbellavi          #+#    #+#             */
+/*   Updated: 2022/04/19 23:52:30 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_USERS_HPP
-#define FT_USERS_HPP
+#ifndef CHANNELS_HPP
+#define CHANNELS_HPP
 
-# include <set>
-# include "User.hpp"
+# include "Channel.hpp"
+# include <vector>
+# include <map>
 
 namespace IRC
 {
-	class Users {
-		std::set<User*> m_users;
+	class Channels {
+		std::map<std::string, Channel> m_channels;
 	public:
-		Users();
-		Users(Users const &other);
-		Users &operator=(Users const &other);
-		~Users();
+		Channels();
+		~Channels();
 
-		void add(User *user);
-		void remove(User *user);
-		bool has(User *user);
-		void notify(std::string const &msg);
+		void add(std::string const &name, int mode);
+		void remove(std::string const &name);
+		bool has(std::string const &name);
+
+		std::vector<Channel> get_channels();
 	};
 }
 

@@ -1,34 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Users.hpp                                          :+:      :+:    :+:   */
+/*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/19 15:22:18 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/19 23:05:01 by bbellavi         ###   ########.fr       */
+/*   Created: 2022/04/19 22:34:06 by bbellavi          #+#    #+#             */
+/*   Updated: 2022/04/19 23:43:14 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_USERS_HPP
-#define FT_USERS_HPP
+#ifndef CHANNEL_HPP
+#define CHANNEL_HPP
 
-# include <set>
-# include "User.hpp"
+# include "Users.hpp"
 
 namespace IRC
 {
-	class Users {
-		std::set<User*> m_users;
+	class Channel {
+		Users		m_users;
+		std::string	m_name;
+		int			m_mode;
 	public:
-		Users();
-		Users(Users const &other);
-		Users &operator=(Users const &other);
-		~Users();
+		Channel();
+		Channel(std::string const &name, int mode);
+		Channel(Channel const &other);
+		Channel &operator=(Channel const &other);
+		~Channel();
 
-		void add(User *user);
-		void remove(User *user);
-		bool has(User *user);
+
+		void set_name(std::string const &name);
+		void set_mode(int mode);
+
+		std::string const &get_name() const;
+		int get_mode() const;
+
+		void subscribe(User *user);
+		void unsubscribe(User *user);
 		void notify(std::string const &msg);
 	};
 }
