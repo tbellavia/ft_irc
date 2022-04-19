@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 14:22:35 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/19 16:33:22 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/19 18:40:07 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ namespace IRC
         User(Socket *socket);
         User(User const &other);
         User &operator=(User const &other);
-        ~User();
+        virtual ~User();
 
         void set_pseudo(std::string const &pseudo);
         void set_nick(std::string const &nick);

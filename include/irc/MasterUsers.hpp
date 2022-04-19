@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 15:55:53 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/19 17:03:14 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/19 18:22:32 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,16 @@
 
 namespace IRC
 {
+    /**
+     * MasterUsers
+     * 
+     * 
+     * Create and manage user creation that will be passed to other objects
+     * as a procuration.
+     * MasterUsers manage the liftetime of a user, from the creation to
+     * the deletion.
+     * User objects will be passed as a reference to other objects.
+     */
     class MasterUsers {
         std::map<int, User*> m_users;
     public:
@@ -25,6 +35,8 @@ namespace IRC
         ~MasterUsers();
         
         User *create(Socket *socket);
+        void remove(Socket *socket);
+        User *find(Socket *socket);
     };
 }
 

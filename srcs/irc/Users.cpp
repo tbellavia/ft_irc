@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 15:43:00 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/19 15:46:39 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/19 18:46:49 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,16 +26,20 @@ IRC::Users &IRC::Users::operator=(Users const &other) {
 IRC::Users::~Users() { }
 
 void
-IRC::Users::add(User const &user) {
-    
+IRC::Users::add(User *user) {
+    if ( user != NULL ){
+        m_users.insert(user);
+    }
 }
 
 void
-IRC::Users::remove(User const &user) {
-
+IRC::Users::remove(User *user) {
+    if ( user != NULL ){
+        m_users.erase(user);
+    }
 }
 
-IRC::User&
-IRC::Users::search(int id) {
-    
+bool
+IRC::Users::has(User *user) {
+    return m_users.count(user) == 1;
 }
