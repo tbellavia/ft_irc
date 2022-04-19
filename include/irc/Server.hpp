@@ -21,7 +21,6 @@ namespace IRC
 		Socket				*m_server;
 		Selector			m_selector;
 	public:
-		Server();
 		Server(std::string const &host, std::string const &port, std::string const &pass, bool bind_and_activate = false);
 		Server(Server const &other);
 		Server &operator=(Server const &other);

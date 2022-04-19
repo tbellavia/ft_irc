@@ -6,22 +6,17 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 18:47:47 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/18 17:49:50 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/19 13:57:07 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-IRC::Server::Server() : 
-	m_host(),
-	m_port(),
-	m_server(),
-	m_selector() { }
-
 IRC::Server::Server(std::string const &host, std::string const &port, 
 	std::string const &pass, bool bind_and_activate) : 
 	m_host(host), 
-	m_port(port), 
+	m_port(port),
+	m_pass(pass),
 	m_server(Socket::create_tcp_socket()), 
 	m_selector()
 {
@@ -37,7 +32,8 @@ IRC::Server::Server(std::string const &host, std::string const &port,
 
 IRC::Server::Server(IRC::Server const &other)
 	:	m_host(other.m_host), 
-		m_port(other.m_port), 
+		m_port(other.m_port),
+		m_pass(other.m_pass),
 		m_server(other.m_server), 
 		m_selector(other.m_selector){ }
 
@@ -47,6 +43,7 @@ IRC::Server::operator=(Server const &other) {
 		return *this;
 	m_host = other.m_host;
 	m_port = other.m_port;
+	m_pass = other.m_pass;
 	m_server = other.m_server;
 	m_selector = other.m_selector;
 	return *this;
@@ -101,8 +98,7 @@ void IRC::Server::serve_forever(IRC::Api &api) {
 					// End of packets
 					while ( select_file->available() ){
 						std::string request = select_file->pop();
-
-						std::cout << "Request: " << request << std::endl;
+						this->process_request(api, socket, request);
 					}
 				}
 			}
@@ -111,7 +107,7 @@ void IRC::Server::serve_forever(IRC::Api &api) {
 }
 
 void
-Server::process_request(IRC::Api &api, Socket *sender, std::string const &request) {
+IRC::Server::process_request(IRC::Api &api, Socket *sender, std::string const &request) {
 	(void)api;
 	(void)sender;
 	(void)request;

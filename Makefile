@@ -6,7 +6,7 @@
 #    By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/12 19:27:05 by bbellavi          #+#    #+#              #
-#    Updated: 2022/04/18 14:12:17 by bbellavi         ###   ########.fr        #
+#    Updated: 2022/04/19 13:57:42 by bbellavi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,6 +15,7 @@ CXXFLAGS	= -Wall -Werror -Wextra -std=c++98
 
 SRCS		=	main.cpp						\
 				srcs/Utils.cpp					\
+				srcs/App.cpp					\
 				srcs/network/Selector.cpp		\
 				srcs/network/File.cpp			\
 				srcs/network/Socket.cpp			\
@@ -26,7 +27,8 @@ HEADERS		=	include/irc/Server.hpp				\
 				include/network/Selector.hpp		\
 				include/network/File.hpp			\
 				include/network/Socket.hpp			\
-				include/Utils.hpp
+				include/Utils.hpp					\
+				include/App.hpp
 
 INC_DIR			= include/
 INC_DIRS		= irc network
