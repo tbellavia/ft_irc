@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 18:47:47 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/20 04:18:50 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/20 04:22:16 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void IRC::Server::serve_forever(IRC::Api &api) {
 	std::vector<File*> >			ready;
 	std::vector<File*>				readers;
 	std::vector<File*>				writers;
-	std::vector<File*>::iterator	select_it;
+	std::vector<File*>::iterator	it;
 	ssize_t							bytes = 0;
 
 	m_selector.add(m_server, Selector::READ);
@@ -72,10 +72,10 @@ void IRC::Server::serve_forever(IRC::Api &api) {
 		readers = ready.first;
 		writers = ready.second;
 
-		for ( select_it = readers.begin() ; select_it != readers.end() ; ++select_it ){
-			File *select_file = *select_it;
-			Socket *socket = select_file->socket();
-			std::string buffer;
+		for ( it = readers.begin() ; it != readers.end() ; ++it ){
+			File		*file = *it;
+			Socket		*socket = file->socket();
+			std::string	buffer;
 
 			if ( *socket == *m_server ){
 				Socket *client = m_server->accept();
@@ -95,11 +95,11 @@ void IRC::Server::serve_forever(IRC::Api &api) {
 					Socket::release(&socket);
 				} else {
 					// Received something
-					select_file->push( buffer );
+					file->push( buffer );
 
 					// End of packets
-					while ( select_file->available() ){
-						std::string request = select_file->pop();
+					while ( file->available() ){
+						std::string request = file->pop();
 						this->process_request(api, socket, request);
 					}
 				}
