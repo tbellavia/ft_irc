@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 18:47:47 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/19 13:57:07 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/20 04:18:50 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,12 +83,14 @@ void IRC::Server::serve_forever(IRC::Api &api) {
 				std::cout << "New connection from " << client->storage() << std::endl;
 				client->set_blocking(false);
 				m_selector.add(client, Selector::READ | Selector::WRITE);
+				api.connect(client);
 			} else {
 				if ( (bytes = socket->recv(buffer)) <= 0 ){
 					// Connection shutdown
 					if ( bytes == 0 ){
 						std::cout << "Client has closed the connection" << std::endl;
 					}
+					api.disconnect(socket);
 					m_selector.remove(socket);
 					Socket::release(&socket);
 				} else {
