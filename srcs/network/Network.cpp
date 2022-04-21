@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 18:04:58 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/13 18:23:09 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/21 22:47:45 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,17 @@
 //
 
 # include "Network.hpp"
+
+
+/**
+ * ston
+ * 
+ * Takes a string @s and add a network terminator.
+ * Default is CR LF.
+ */
+std::string net::ston(std::string const &s, std::string const &terminator) {
+	return s + terminator;
+}
 
 int net::tcp::getaddrinfo(const char *node, const char *service, struct addrinfo **res) {
 	addrinfo hints;
