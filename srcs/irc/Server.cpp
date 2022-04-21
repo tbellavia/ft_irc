@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 18:47:47 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/20 04:22:16 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/21 22:03:03 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,18 +99,10 @@ void IRC::Server::serve_forever(IRC::Api &api) {
 
 					// End of packets
 					while ( file->available() ){
-						std::string request = file->pop();
-						this->process_request(api, socket, request);
+						api.process_request(socket, file->pop());
 					}
 				}
 			}
 		}
 	}
-}
-
-void
-IRC::Server::process_request(IRC::Api &api, Socket *sender, std::string const &request) {
-	(void)api;
-	(void)sender;
-	(void)request;
 }

@@ -1,22 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   App.cpp                                            :+:      :+:    :+:   */
+/*   CmdPING.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/18 14:13:48 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/20 22:56:42 by bbellavi         ###   ########.fr       */
+/*   Created: 2022/04/21 21:22:51 by bbellavi          #+#    #+#             */
+/*   Updated: 2022/04/21 21:59:18 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "App.hpp"
+# include "CmdPING.hpp"
+# include <iostream>
 
-App::App() { }
+IRC::CmdPING::CmdPING(CmdCtx &ctx, std::string const &request) : ACmd(ctx, request) { }
 
-void App::start(std::string const &port, std::string const &password) const {
-	IRC::Server server("127.0.0.1", port, password, true);
-	IRC::Api api(password);
+IRC::CmdPING::~CmdPING() { }
 
-	server.serve_forever(api);
+void
+IRC::CmdPING::execute() {
+	std::cout << "CmdPING: " << m_request << std::endl;
+	m_ctx.sender.update("PONG");
 }

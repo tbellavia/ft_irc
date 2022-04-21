@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 14:26:54 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/20 14:40:57 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/21 21:37:52 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,9 @@ namespace IRC
 		User &sender;
 		Channels &channels;
 		MasterUsers &users;
+		std::string &password;
 
-		CmdCtx(User &sender, Channels &channels, MasterUsers &users);
+		CmdCtx(User &sender, Channels &channels, MasterUsers &users, std::string &password);
 		CmdCtx(CmdCtx const &other);
 		CmdCtx &operator=(CmdCtx const &other);
 	};

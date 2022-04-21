@@ -1,22 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   App.cpp                                            :+:      :+:    :+:   */
+/*   ACmd.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/18 14:13:48 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/20 22:56:42 by bbellavi         ###   ########.fr       */
+/*   Created: 2022/04/21 21:55:45 by bbellavi          #+#    #+#             */
+/*   Updated: 2022/04/21 21:57:40 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "App.hpp"
+#include "ACmd.hpp"
 
-App::App() { }
+IRC::ACmd::ACmd(CmdCtx &ctx, std::string const &request) :
+	m_ctx(ctx), m_request(request) { }
 
-void App::start(std::string const &port, std::string const &password) const {
-	IRC::Server server("127.0.0.1", port, password, true);
-	IRC::Api api(password);
-
-	server.serve_forever(api);
-}
+IRC::ACmd::~ACmd() { }

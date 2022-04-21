@@ -1,22 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   App.cpp                                            :+:      :+:    :+:   */
+/*   CmdPASS.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/18 14:13:48 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/20 22:56:42 by bbellavi         ###   ########.fr       */
+/*   Created: 2022/04/20 14:52:12 by bbellavi          #+#    #+#             */
+/*   Updated: 2022/04/20 23:02:48 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "App.hpp"
+#ifndef CMDPASS_HPP
+#define CMDPASS_HPP
 
-App::App() { }
+# include "ACmd.hpp"
 
-void App::start(std::string const &port, std::string const &password) const {
-	IRC::Server server("127.0.0.1", port, password, true);
-	IRC::Api api(password);
+namespace IRC
+{
+	struct CmdPASS : public ACmd {
+		CmdPASS(CmdCtx &ctx, std::string const &request);
+		virtual ~CmdPASS();
 
-	server.serve_forever(api);
+		virtual void execute();
+	};
 }
+
+#endif

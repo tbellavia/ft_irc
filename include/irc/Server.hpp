@@ -28,7 +28,7 @@ namespace IRC
 		void activate() const;
 		void bind() const;
 		void serve_forever(IRC::Api &api);
-		void process_request(IRC::Api &api, Socket *sender, std::string const &request);
+		// void process_request(IRC::Api &api, Socket *sender, std::string const &request);
 	};
 }
 

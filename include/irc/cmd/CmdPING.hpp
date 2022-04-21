@@ -1,22 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   App.cpp                                            :+:      :+:    :+:   */
+/*   CmdPING.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/18 14:13:48 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/20 22:56:42 by bbellavi         ###   ########.fr       */
+/*   Created: 2022/04/21 21:20:39 by bbellavi          #+#    #+#             */
+/*   Updated: 2022/04/21 21:45:38 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "App.hpp"
+#ifndef CMDPONG_HPP
+#define CMDPONG_HPP
 
-App::App() { }
+# include "ACmd.hpp"
 
-void App::start(std::string const &port, std::string const &password) const {
-	IRC::Server server("127.0.0.1", port, password, true);
-	IRC::Api api(password);
+namespace IRC
+{
+	struct CmdPING : public ACmd {
+		CmdPING(CmdCtx &ctx, std::string const &request);
+		virtual ~CmdPING();
 
-	server.serve_forever(api);
+		virtual void execute();
+	};
 }
+
+
+#endif
