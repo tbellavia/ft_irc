@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 14:36:26 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/21 22:49:02 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/22 15:48:48 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 IRC::User::User() : 
 	m_pseudo(),
 	m_nickname(),
-	m_mode(MODE_REGULAR),
+	m_mode(MODE_ONBOARD),
 	m_socket(NULL) { }
 
 IRC::User::User(std::string const &pseudo, std::string const &nick, int mode, Socket *socket) : 
@@ -28,7 +28,7 @@ IRC::User::User(std::string const &pseudo, std::string const &nick, int mode, So
 IRC::User::User(Socket *socket) : 
 	m_pseudo(),
 	m_nickname(),
-	m_mode(MODE_REGULAR),
+	m_mode(MODE_ONBOARD),
 	m_socket(socket) { }
 
 IRC::User::User(IRC::User const &other) : 
@@ -87,6 +87,11 @@ IRC::User::get_mode() const {
 Socket*
 IRC::User::get_socket() {
 	return m_socket;
+}
+
+bool
+IRC::User::mode_isset(int mode){
+	return m_mode & mode;
 }
 
 void

@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 15:20:16 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/14 23:35:50 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/22 17:56:22 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 //
 
 #include "../include/Utils.hpp"
+#include <iostream>
 
 bool ft::ends_with(const std::string &val, const std::string &ending) {
 	if ( ending.size() > val.size() )
@@ -49,4 +50,9 @@ ft::split_one(std::string const &s, std::string const &delim) {
 		res.push_back(s.substr(pos + delim.length(), s.length()));
 	}
 	return res;
+}
+
+void
+ft::debug_notice(std::string const &msg){
+	std::cout << "NOTICE: " << msg << std::endl;
 }

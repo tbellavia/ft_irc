@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/22 15:02:17 by lperson-          #+#    #+#             */
-/*   Updated: 2022/04/19 13:52:20 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/22 15:45:13 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
 	}
 	std::string port = argv[1];
 	std::string pass = argv[2];
-    App app;
+	App app;
 
 	app.start(port, pass);
 	return EXIT_SUCCESS;
