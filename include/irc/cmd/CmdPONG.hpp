@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   CmdPING.hpp                                        :+:      :+:    :+:   */
+/*   CmdPONG.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 21:20:39 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/21 21:45:38 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/22 15:25:01 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@
 
 namespace IRC
 {
-	struct CmdPING : public ACmd {
-		CmdPING(CmdCtx &ctx, std::string const &request);
-		virtual ~CmdPING();
+	struct CmdPONG : public ACmd {
+		CmdPONG(CmdCtx &ctx, std::string const &request);
+		virtual ~CmdPONG();
 
 		virtual void execute();
 	};

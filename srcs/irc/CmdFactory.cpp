@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 23:07:36 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/21 21:51:28 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/22 15:31:05 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 IRC::CmdFactory::CmdFactory() : ICmdFactory(), m_callbacks() 
 {
 	m_callbacks.insert(std::make_pair("PASS", &CmdFactory::create_pass_cmd));
-	m_callbacks.insert(std::make_pair("PING", &CmdFactory::create_ping_cmd));
+	m_callbacks.insert(std::make_pair("PONG", &CmdFactory::create_pong_cmd));
 }
 
 IRC::CmdFactory::~CmdFactory() { }
@@ -39,6 +39,6 @@ IRC::CmdFactory::create_pass_cmd(CmdCtx &ctx, std::string const &request) {
 }
 
 IRC::ACmd*
-IRC::CmdFactory::create_ping_cmd(CmdCtx &ctx, std::string const &request) {
-	return new CmdPING(ctx, request);
+IRC::CmdFactory::create_pong_cmd(CmdCtx &ctx, std::string const &request) {
+	return new CmdPONG(ctx, request);
 }

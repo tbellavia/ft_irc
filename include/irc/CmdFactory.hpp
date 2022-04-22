@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 14:22:35 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/21 21:46:28 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/22 15:25:26 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include "ICmdFactory.hpp"
 
 # include "cmd/CmdPASS.hpp"
-# include "cmd/CmdPING.hpp"
+# include "cmd/CmdPONG.hpp"
 
 namespace IRC
 {
@@ -27,7 +27,7 @@ namespace IRC
 		std::map<std::string, callback_t> m_callbacks;
 
 		ACmd *create_pass_cmd(CmdCtx &ctx, std::string const &request);
-		ACmd *create_ping_cmd(CmdCtx &ctx, std::string const &request);
+		ACmd *create_pong_cmd(CmdCtx &ctx, std::string const &request);
 	public:
 		CmdFactory();
 		virtual ~CmdFactory();

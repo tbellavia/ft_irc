@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 04:11:43 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/21 22:03:39 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/22 15:30:27 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,10 @@ IRC::Api::process_request(Socket *socket, std::string const &request) {
 			CmdCtx ctx(*user, m_channels, m_users, m_password);
 
 			cmd = m_cmd_factory->create_cmd(ctx, request);
-			cmd->execute();
-			delete cmd;
+			if ( cmd != NULL ) {
+				cmd->execute();
+				delete cmd;
+			}
 		}
 	}
 }
