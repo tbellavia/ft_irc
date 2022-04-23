@@ -6,7 +6,7 @@
 #    By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/12 19:27:05 by bbellavi          #+#    #+#              #
-#    Updated: 2022/04/23 16:51:57 by bbellavi         ###   ########.fr        #
+#    Updated: 2022/04/23 23:21:14 by bbellavi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,10 +25,12 @@ SRCS		=	main.cpp						\
 				srcs/irc/CmdCtx.cpp				\
 				srcs/irc/ACmd.cpp				\
 				srcs/irc/Action.cpp				\
+				srcs/irc/Actions.cpp			\
 				srcs/irc/IRCApi.cpp				\
 				srcs/irc/cmd/CmdPONG.cpp		\
 				srcs/irc/cmd/CmdPASS.cpp		\
 				srcs/irc/cmd/CmdNICK.cpp		\
+				srcs/irc/cmd/CmdQUIT.cpp		\
 				srcs/irc/User.cpp				\
 				srcs/irc/Users.cpp				\
 				srcs/irc/Channels.cpp			\
@@ -44,11 +46,13 @@ HEADERS		=	include/irc/Server.hpp				\
 				include/irc/MasterUsers.hpp			\
 				include/irc/IRCApi.hpp				\
 				include/irc/Action.hpp				\
+				include/irc/Actions.hpp				\
 				include/irc/CmdFactory.hpp			\
 				include/irc/CmdCtx.hpp				\
 				include/irc/cmd/CmdPASS.hpp			\
 				include/irc/cmd/CmdPONG.hpp			\
 				include/irc/cmd/CmdNICK.hpp			\
+				include/irc/cmd/CmdQUIT.hpp			\
 				include/network/Network.hpp			\
 				include/network/Selector.hpp		\
 				include/network/File.hpp			\

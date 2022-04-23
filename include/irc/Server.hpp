@@ -25,6 +25,7 @@ namespace IRC
 		void disconnectall(Api &api, Action &action);
 		void disconnect(Api &api, Socket *socket);
 		void connect(Api &api, Socket *socket);
+		void process_actions(Api &api, Actions &actions);
 	public:
 		Server(std::string const &host, std::string const &port, std::string const &pass, bool bind_and_activate = false);
 		Server(Server const &other);

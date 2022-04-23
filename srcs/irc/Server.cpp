@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 18:47:47 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/23 21:26:49 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/23 23:28:37 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void IRC::Server::serve_forever(IRC::Api &api) {
 	std::vector<File*>				writers;
 	std::vector<File*>::iterator	it;
 	ssize_t							bytes = 0;
-	Action							action;
+	Actions							actions;
 
 	m_selector.add(m_server, Selector::READ);
 	while ( true ){
@@ -92,28 +92,38 @@ void IRC::Server::serve_forever(IRC::Api &api) {
 					file->push( buffer );
 
 					while ( file->available() ){
-						action = api.process_request(socket, file->pop());
-
-						switch (action.event())
-						{
-							case Event::SEND:
-								std::cout << "Event send" << std::endl;
-								this->sendall(action);
-								break;
-							case Event::DISCONNECT:
-								std::cout << "Disconnect" << std::endl;
-								this->disconnectall(api, action);
-								break;
-							case Event::BAN:
-								std::cout << "Ban" << std::endl;
-								break;
-							case Event::IDLE:
-								std::cout << "Idle" << std::endl;
-								break;
-						}
+						actions = api.process_request(socket, file->pop());
+						this->process_actions(api, actions);
 					}
 				}
 			}
+		}
+	}
+}
+
+void
+IRC::Server::process_actions(Api &api, Actions &actions){
+	Action action;
+
+	while ( !actions.empty() ){
+		action = actions.pop();
+		
+		switch (action.event())
+		{
+			case Event::SEND:
+				std::cout << "\tEvent send" << std::endl;
+				this->sendall(action);
+				break;
+			case Event::DISCONNECT:
+				std::cout << "\tEvent disconnect" << std::endl;
+				this->disconnectall(api, action);
+				break;
+			case Event::BAN:
+				std::cout << "\tEvent ban" << std::endl;
+				break;
+			case Event::IDLE:
+				std::cout << "\tEvent idle" << std::endl;
+				break;
 		}
 	}
 }

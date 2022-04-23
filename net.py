@@ -6,10 +6,15 @@ def recv(client):
     if response.decode() != "":
         print(f"Response: {response}")
 
+def ston(s):
+    return f"{s}\r\n".encode()
+
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client:
     client.connect(("127.0.0.1", 6697))
 
-    client.send(b"PASS ass\r\n")
+    #client.send(b"PASS pass\r\n")
+    # recv(client)
+    #client.send(b"PONG\r\n")
+    client.send(ston("QUIT :Going to poop"))
     recv(client)
-    client.send(b"PONG\r\n")
-    recv(client)
+

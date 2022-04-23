@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   CmdPONG.hpp                                        :+:      :+:    :+:   */
+/*   CmdQUIT.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/21 21:20:39 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/23 23:08:04 by bbellavi         ###   ########.fr       */
+/*   Created: 2022/04/23 21:44:03 by bbellavi          #+#    #+#             */
+/*   Updated: 2022/04/23 23:08:14 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CMDPONG_HPP
-#define CMDPONG_HPP
+#ifndef CMDQUIT_HPP
+#define CMDQUIT_HPP
 
 # include "ACmd.hpp"
 
 namespace IRC
 {
-	struct CmdPONG : public ACmd {
-		CmdPONG(CmdCtx &ctx, std::string const &request);
-		virtual ~CmdPONG();
+	struct CmdQUIT : public ACmd {
+		CmdQUIT(CmdCtx &ctx, std::string const &request);
+		virtual ~CmdQUIT();
 
 		virtual Actions execute();
 	};

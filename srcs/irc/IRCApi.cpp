@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 04:11:43 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/23 17:12:00 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/23 23:07:03 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ IRC::Api::disconnect(Socket *socket){
 	m_users.remove(socket);
 }
 
-IRC::Action
+IRC::Actions
 IRC::Api::process_request(Socket *socket, std::string const &request) {
 	ACmd *cmd;
 	User *user;
@@ -51,11 +51,11 @@ IRC::Api::process_request(Socket *socket, std::string const &request) {
 
 			cmd = m_cmd_factory->create_cmd(ctx, request);
 			if ( cmd != NULL ) {
-				Action action = cmd->execute();
+				Actions actions = cmd->execute();
 				delete cmd;
-				return action;
+				return actions;
 			}
 		}
 	}
-	return Action::idle();
+	return Actions::unique_idle();
 }

@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/18 14:08:41 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/23 16:25:21 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/23 23:19:34 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include "MasterUsers.hpp"
 # include "Channels.hpp"
 # include "ICmdFactory.hpp"
-# include "Action.hpp"
+# include "Actions.hpp"
 
 namespace IRC
 {
@@ -32,7 +32,7 @@ namespace IRC
 
 		void connect(Socket *socket);
 		void disconnect(Socket *socket);
-		Action process_request(Socket *socket, std::string const &request);
+		Actions process_request(Socket *socket, std::string const &request);
 	};
 }
 
