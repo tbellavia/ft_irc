@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 21:22:51 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/22 15:27:04 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/23 17:42:06 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,7 @@ IRC::CmdPONG::CmdPONG(CmdCtx &ctx, std::string const &request) : ACmd(ctx, reque
 
 IRC::CmdPONG::~CmdPONG() { }
 
-void
+IRC::Action
 IRC::CmdPONG::execute() {
-	std::cout << "CmdPING: " << m_request << std::endl;
-	m_ctx.sender.update("PING");
+	return Action::send(m_ctx.sender, "PING");
 }

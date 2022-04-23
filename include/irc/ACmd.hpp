@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 14:42:07 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/22 15:53:47 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/23 16:30:57 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #define ACMD_HPP
 
 # include "CmdCtx.hpp"
+# include "Action.hpp"
 
 namespace IRC
 {
@@ -25,7 +26,7 @@ namespace IRC
 		ACmd(CmdCtx &ctx, std::string const &request);
 		virtual ~ACmd();
 		
-		virtual void execute() = 0;
+		virtual Action execute() = 0;
 	};
 }
 

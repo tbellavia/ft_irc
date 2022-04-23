@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 18:47:47 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/22 18:01:37 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/23 21:26:49 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void IRC::Server::serve_forever(IRC::Api &api) {
 	std::vector<File*>				writers;
 	std::vector<File*>::iterator	it;
 	ssize_t							bytes = 0;
+	Action							action;
 
 	m_selector.add(m_server, Selector::READ);
 	while ( true ){
@@ -78,31 +79,79 @@ void IRC::Server::serve_forever(IRC::Api &api) {
 			std::string	buffer;
 
 			if ( *socket == *m_server ){
-				Socket *client = m_server->accept();
-
-				std::cout << "New connection from " << client->storage() << std::endl;
-				client->set_blocking(false);
-				m_selector.add(client, Selector::READ | Selector::WRITE);
-				api.connect(client);
+				std::cout << "New connection" << std::endl;
+				this->connect(api, m_server->accept());
 			} else {
 				if ( (bytes = socket->recv(buffer)) <= 0 ){
 					// Connection shutdown
 					if ( bytes == 0 ){
 						std::cout << "Client has closed the connection" << std::endl;
 					}
-					api.disconnect(socket);
-					m_selector.remove(socket);
-					Socket::release(&socket);
+					this->disconnect(api, socket);
 				} else {
-					// Received something
 					file->push( buffer );
 
-					// End of packets
 					while ( file->available() ){
-						api.process_request(socket, file->pop());
+						action = api.process_request(socket, file->pop());
+
+						switch (action.event())
+						{
+							case Event::SEND:
+								std::cout << "Event send" << std::endl;
+								this->sendall(action);
+								break;
+							case Event::DISCONNECT:
+								std::cout << "Disconnect" << std::endl;
+								this->disconnectall(api, action);
+								break;
+							case Event::BAN:
+								std::cout << "Ban" << std::endl;
+								break;
+							case Event::IDLE:
+								std::cout << "Idle" << std::endl;
+								break;
+						}
 					}
 				}
 			}
 		}
 	}
+}
+
+void
+IRC::Server::sendall(Action &action) {
+	std::vector<Socket*> sockets = action.sockets();
+	std::vector<Socket*>::iterator it = sockets.begin();
+
+	for ( ; it != sockets.end() ; ++it ) {
+		std::string response = net::ston(action.response());
+
+		(*it)->send(response);
+	}
+}
+
+void
+IRC::Server::disconnect(Api &api, Socket *socket){
+	if ( socket != NULL ){
+		api.disconnect(socket);
+		m_selector.remove(socket);
+		Socket::release(&socket);
+	}
+}
+
+void
+IRC::Server::connect(Api &api, Socket *socket){
+	if ( socket != NULL ){
+		socket->set_blocking(false);
+		m_selector.add(socket, Selector::READ | Selector::WRITE);
+		api.connect(socket);
+	}
+}
+
+void
+IRC::Server::disconnectall(Api &api, Action &action){
+	std::vector<Socket*> sockets = action.sockets();
+	
+	for ( std::vector<Socket*>::iterator it = sockets.begin() ; it != sockets.end() ; ++it )
+		this->disconnect(api, *it);
 }

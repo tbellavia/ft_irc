@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 23:00:36 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/23 01:38:37 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/23 17:42:59 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,23 +27,24 @@ IRC::CmdPASS::~CmdPASS() { }
  * If a user is in a MODE_ONBOARD state, it cannot do anything on
  * the server.
  */
-void
+IRC::Action
 IRC::CmdPASS::execute() {
-	User &user = m_ctx.sender;
+	User *user = m_ctx.sender;
 	std::vector<std::string> args = ft::split(m_request);
 	
 	std::cout << "CmdPASS: " << m_request << std::endl;
 	if ( args.size() != 2 ){
-		user.update("Wrong number of arguments");
+		return Action::send(user, "wrong number of arguments");
 	} else {
 		std::string password = args[1];
 		
 		// Switch user mode from onboard to REGULAR
 		// Implement state pattern ?
-		if ( user.mode_isset(MODE_ONBOARD) && password == m_ctx.password ){
-			user.set_mode(MODE_REGULAR);
+		if ( user->mode_isset(MODE_ONBOARD) && password == m_ctx.password ){
+			user->set_mode(MODE_REGULAR);
 		} else {
-			user.update("bad password");
+			return Action::send(user, "bad password");
 		}
 	}
+	return Action::idle();
 }

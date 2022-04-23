@@ -20,6 +20,11 @@ namespace IRC
 		std::string			m_pass;
 		Socket				*m_server;
 		Selector			m_selector;
+
+		void sendall(Action &action);
+		void disconnectall(Api &api, Action &action);
+		void disconnect(Api &api, Socket *socket);
+		void connect(Api &api, Socket *socket);
 	public:
 		Server(std::string const &host, std::string const &port, std::string const &pass, bool bind_and_activate = false);
 		Server(Server const &other);
@@ -28,7 +33,6 @@ namespace IRC
 		void activate() const;
 		void bind() const;
 		void serve_forever(IRC::Api &api);
-		// void process_request(IRC::Api &api, Socket *sender, std::string const &request);
 	};
 }
 

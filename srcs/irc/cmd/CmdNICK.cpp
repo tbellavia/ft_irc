@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 18:18:53 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/23 01:32:20 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/23 17:16:11 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,19 +23,20 @@ IRC::CmdNICK::~CmdNICK() { }
  * 
  * NICK <nickname>
  */
-void
+IRC::Action
 IRC::CmdNICK::execute() {
-	User &user = m_ctx.sender;
+	User *user = m_ctx.sender;
 	std::vector<std::string> args = ft::split(m_request);
 	
 	std::cout << "CmdNICK" << std::endl;
 	if ( args.size() != 2 ){
-		user.update("Wrong number of argument");
+		return Action::send(user, "wrong number of arguments");
 	} else {
 		std::string nick = args[1];
 
-		if ( !user.mode_isset(MODE_ONBOARD) ){
-			user.set_nick(nick);
+		if ( !user->mode_isset(MODE_ONBOARD) ){
+			user->set_nick(nick);
 		}
 	}
+	return Action::idle();
 }

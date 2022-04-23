@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 18:17:21 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/22 18:18:28 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/23 16:28:36 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ namespace IRC
 		CmdNICK(CmdCtx &ctx, std::string const &request);
 		virtual ~CmdNICK();
 
-		virtual void execute();
+		virtual Action execute();
 	};
 }
 
