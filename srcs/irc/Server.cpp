@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 18:47:47 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/23 23:28:37 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/25 16:06:07 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ void IRC::Server::serve_forever(IRC::Api &api) {
 			std::string	buffer;
 
 			if ( *socket == *m_server ){
-				std::cout << "New connection" << std::endl;
 				this->connect(api, m_server->accept());
 			} else {
 				if ( (bytes = socket->recv(buffer)) <= 0 ){
@@ -152,6 +151,7 @@ IRC::Server::disconnect(Api &api, Socket *socket){
 void
 IRC::Server::connect(Api &api, Socket *socket){
 	if ( socket != NULL ){
+		std::cout << "New connection from : " << socket->ip() << std::endl;
 		socket->set_blocking(false);
 		m_selector.add(socket, Selector::READ | Selector::WRITE);
 		api.connect(socket);
