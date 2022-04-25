@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 18:18:53 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/23 23:08:43 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/26 01:36:33 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <iostream>
 
 IRC::CmdNICK::CmdNICK(CmdCtx &ctx, std::string const &request) 
-	: ACmd(ctx, request) { }
+	: ACmd(ctx, request, "NICK") { }
 
 IRC::CmdNICK::~CmdNICK() { }
 

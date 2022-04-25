@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/23 16:03:00 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/23 17:32:25 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/24 17:36:48 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,12 @@ namespace IRC
 {
 	namespace Event
 	{
-			enum Event {
-				SEND,
-				DISCONNECT,
-				BAN,
-				IDLE
-			};
+		enum Event {
+			SEND,
+			DISCONNECT,
+			BAN,
+			IDLE
+		};
 	}
 	
 	class Action {

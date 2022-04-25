@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 23:00:36 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/23 23:11:17 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/26 01:37:33 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <iostream>
 
 IRC::CmdPASS::CmdPASS(CmdCtx &ctx, std::string const &request) 
-	: ACmd(ctx, request) { }
+	: ACmd(ctx, request, "PASS") { }
 
 IRC::CmdPASS::~CmdPASS() { }
 
@@ -30,6 +30,7 @@ IRC::CmdPASS::~CmdPASS() { }
 IRC::Actions
 IRC::CmdPASS::execute() {
 	User *user = m_ctx.sender;
+	ReplyBuilder reply("ft_irc", user);
 	std::vector<std::string> args = ft::split(m_request);
 	
 	std::cout << "CmdPASS: " << m_request << std::endl;
@@ -43,7 +44,9 @@ IRC::CmdPASS::execute() {
 		if ( user->mode_isset(MODE_ONBOARD) && password == m_ctx.password ){
 			user->set_mode(MODE_REGULAR);
 		} else {
-			return Actions::unique_send(user, "bad password");
+			// Bad password
+			return Actions::unique_send(user,
+				reply.error_need_more_params(m_name));
 		}
 	}
 	return Actions::unique_idle();
