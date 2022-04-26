@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 15:20:16 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/24 03:02:08 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/26 18:03:24 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,11 @@ ft::poplast(std::string const &s){
 	if ( s.length() == 0 )
 		return s;
 	return s.substr(0, s.length() - 1);
+}
+
+void
+ft::remove(std::vector<std::string> &v, std::string const &val){
+	v.erase(std::remove(v.begin(), v.end(), val), v.end());
 }
 
 void

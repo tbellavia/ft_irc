@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 18:31:44 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/24 03:01:40 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/26 18:02:34 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,10 @@ namespace ft {
 	std::vector<std::string>	split_one(std::string const &s, std::string const &delim = " ");
 	std::string					popfirst(std::string const &s);
 	std::string					poplast(std::string const &s);
+	void						remove(std::vector<std::string> &v, std::string const &val = "");
 
 	void						debug_notice(std::string const &msg);
 }
 
 
-#endif //FT_IRC_UTILS_HPP
+#endif

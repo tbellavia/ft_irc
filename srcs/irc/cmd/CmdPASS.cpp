@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 23:00:36 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/26 01:37:33 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/26 18:26:56 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,21 +33,20 @@ IRC::CmdPASS::execute() {
 	ReplyBuilder reply("ft_irc", user);
 	std::vector<std::string> args = ft::split(m_request);
 	
+	ft::remove(args);
 	std::cout << "CmdPASS: " << m_request << std::endl;
 	if ( args.size() != 2 ){
-		return Actions::unique_send(user, "wrong number of arguments");
+		return Actions::unique_send(user, reply.error_need_more_params(m_name));
 	} else {
 		std::string password = args[1];
 		
-		// Switch user mode from onboard to REGULAR
-		// Implement state pattern ?
-		if ( user->mode_isset(MODE_ONBOARD) && password == m_ctx.password ){
-			user->set_mode(MODE_REGULAR);
-		} else {
-			// Bad password
-			return Actions::unique_send(user,
-				reply.error_need_more_params(m_name));
+		if ( !user->mode_isset(MODE_ONBOARD) ){
+			return Actions::unique_send(user, reply.error_already_registered());
 		}
+		else if ( user->mode_isset(MODE_ONBOARD) && password == m_ctx.password ){
+			user->set_mode(MODE_REGULAR);
+		}
+		// If password is wrong, don't do anything
 	}
 	return Actions::unique_idle();
 }
