@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 23:00:36 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/26 18:26:56 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/26 19:08:31 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ IRC::CmdPASS::~CmdPASS() { }
  * Pass password
  * The pass command takes a password and change the user state from
  * MODE_ONBOARD to MODE_REGULAR.
- * If a user is in a MODE_ONBOARD state, it cannot do anything on
+ * If a user is in a MODE_ONBOARD state, it can't do anything on
  * the server.
  */
 IRC::Actions
