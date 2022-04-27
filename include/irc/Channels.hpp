@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:16:06 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/19 23:52:30 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/27 03:26:35 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ namespace IRC
 		void add(std::string const &name, int mode);
 		void remove(std::string const &name);
 		bool has(std::string const &name);
+
+		void remove_user(User *user);
 
 		std::vector<Channel> get_channels();
 	};

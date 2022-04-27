@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:19:21 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/19 23:52:31 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/27 03:30:32 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,14 @@ IRC::Channels::has(std::string const &name) {
 	return m_channels.count(name) == 1;
 }
 
+void
+IRC::Channels::remove_user(User *user){
+	std::map<std::string, Channel>::iterator it;
+
+	for ( ; it != m_channels.end() ; ++it ){
+		it->second.unsubscribe(user);
+	}
+}
 
 /**
  * Get channels
