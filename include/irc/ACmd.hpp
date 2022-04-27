@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 14:42:07 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/26 01:36:16 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/27 02:07:09 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@
 # include "Action.hpp"
 # include "Actions.hpp"
 # include "Replies.hpp"
+# include "Parse.hpp"
+
+# define SERVER_NAME "ft_irc.com"
 
 namespace IRC
 {
@@ -30,6 +33,12 @@ namespace IRC
 		virtual ~ACmd();
 		
 		virtual Actions execute() = 0;
+		virtual std::vector<std::string> get_arguments() const;
+
+		User		*sender();
+		Channels	&channels();
+		MasterUsers	&users();
+		std::string	const &password();
 	};
 }
 

@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/26 01:34:05 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/27 00:07:25 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,40 @@ IRC::ReplyBuilder::error_already_registered() {
 	return reply;
 }
 
+std::string IRC::ReplyBuilder::error_no_nickname_given(){
+	std::string reply = this->build_header_(NumericReplies::ERR_NONICKNAMEGIVEN);
+
+	reply.append(" :No nickname given");
+	return reply;
+}
+
+std::string IRC::ReplyBuilder::error_nickname_in_use(std::string const &nickname){
+	std::string reply = this->build_header_(NumericReplies::ERR_NICKNAMEINUSE);
+
+	reply.append(" ");
+	reply.append(nickname);
+	reply.append(" :Nickname is already in use");
+	return reply;
+}
+
+std::string IRC::ReplyBuilder::error_erroneus_nickname(std::string const &nickname){
+	std::string reply = this->build_header_(NumericReplies::ERR_ERRONEUSNICKNAME);
+
+	reply.append(" ");
+	reply.append(nickname);
+	reply.append(" :Erroneus nickname");
+	return reply;
+}
+
+std::string IRC::ReplyBuilder::error_nickname_collision(std::string const &nickname){
+	std::string reply = this->build_header_(NumericReplies::ERR_NICKCOLLISION);
+
+	reply.append(" ");
+	reply.append(nickname);
+	reply.append(" :Nickname collision KILL");
+	return reply;
+}
+
 std::string
 IRC::ReplyBuilder::build_header_(int code){
 	std::string s;
@@ -66,6 +100,8 @@ IRC::ReplyBuilder::build_header_(int code){
 		s.append(m_target->get_socket()->ip());
 	return s;
 }
+
+
 
 
 std::string

@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:16 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/26 01:31:08 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/27 00:07:29 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,11 @@ namespace IRC
 
 		std::string error_need_more_params(std::string const &command);
 		std::string error_already_registered();
+		
+		std::string error_no_nickname_given();
+		std::string error_nickname_in_use(std::string const &nickname);
+		std::string error_erroneus_nickname(std::string const &nickname);
+		std::string error_nickname_collision(std::string const &nickname);
 	};
 }
 

@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 14:33:03 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/23 17:11:31 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/27 02:19:29 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,4 +28,3 @@ IRC::CmdCtx &IRC::CmdCtx::operator=(CmdCtx const &other) {
 	password = other.password;
 	return *this;
 }
-

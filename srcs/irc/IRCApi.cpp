@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 04:11:43 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/23 23:07:03 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/27 02:15:39 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,22 @@ IRC::Api::Api(std::string const &password) :
 	m_channels(),
 	m_password(password),
 	m_cmd_factory(new CmdFactory) { }
+
+IRC::Api::Api(Api const &other) :
+	m_users(other.m_users),
+	m_channels(other.m_channels),
+	m_password(other.m_password),
+	m_cmd_factory(new CmdFactory) { }
+
+IRC::Api&
+IRC::Api::operator=(Api const &other){
+	if ( &other == this )
+		return *this;
+	m_users = other.m_users;
+	m_channels = other.m_channels;
+	m_password = other.m_password;
+	return *this;
+}
 
 IRC::Api::~Api() {
 	delete m_cmd_factory;

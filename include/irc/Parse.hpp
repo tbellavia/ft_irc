@@ -1,35 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   CmdCtx.hpp                                         :+:      :+:    :+:   */
+/*   Parse.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/20 14:26:54 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/27 02:15:59 by bbellavi         ###   ########.fr       */
+/*   Created: 2022/04/27 00:18:14 by bbellavi          #+#    #+#             */
+/*   Updated: 2022/04/27 00:27:37 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CMDCTX_HPP
-#define CMDCTX_HPP
+#ifndef PARSE_HPP
+#define PARSE_HPP
 
-# include "User.hpp"
-# include "Channels.hpp"
-# include "MasterUsers.hpp"
+#include <string>
 
 namespace IRC
 {
-	struct CmdCtx {
-		User *sender;
-		Channels &channels;
-		MasterUsers &users;
-		std::string &password;
-
-		CmdCtx();
-		CmdCtx(User *sender, Channels &channels, MasterUsers &users, std::string &password);
-		CmdCtx(CmdCtx const &other);
-		CmdCtx &operator=(CmdCtx const &other);
-	};
+	bool is_valid_nick(std::string const &nickname);
+	bool is_valid_nick_char(char c);
+	bool is_special_char(char c);
 }
 
 

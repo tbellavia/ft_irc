@@ -6,12 +6,12 @@
 #    By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/12 19:27:05 by bbellavi          #+#    #+#              #
-#    Updated: 2022/04/26 18:03:53 by bbellavi         ###   ########.fr        #
+#    Updated: 2022/04/27 00:48:07 by bbellavi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CXX			= c++
-CXXFLAGS	= -Wall -Werror -Wextra -std=c++98
+CXXFLAGS	= -Wall -Werror -Wextra # -std=c++98
 
 SRCS		=	main.cpp						\
 				srcs/Utils.cpp					\
@@ -28,6 +28,7 @@ SRCS		=	main.cpp						\
 				srcs/irc/Actions.cpp			\
 				srcs/irc/Replies.cpp			\
 				srcs/irc/IRCApi.cpp				\
+				srcs/irc/Parse.cpp				\
 				srcs/irc/cmd/CmdPONG.cpp		\
 				srcs/irc/cmd/CmdPASS.cpp		\
 				srcs/irc/cmd/CmdNICK.cpp		\
@@ -49,6 +50,7 @@ HEADERS		=	include/irc/Server.hpp				\
 				include/irc/Action.hpp				\
 				include/irc/Actions.hpp				\
 				include/irc/Replies.hpp				\
+				include/irc/Parse.hpp				\
 				include/irc/CmdFactory.hpp			\
 				include/irc/CmdCtx.hpp				\
 				include/irc/cmd/CmdPASS.hpp			\

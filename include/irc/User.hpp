@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 14:22:35 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/22 15:47:24 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/27 02:52:05 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ namespace IRC
 		void set_socket(Socket *socket);
 
 		bool mode_isset(int mode);
+		bool connected() const;
 
 		std::string const	&get_pseudo() const;
 		std::string const	&get_nick() const;
@@ -48,6 +49,66 @@ namespace IRC
 
 
 		virtual void update(std::string const &msg);
+
+		/**
+		 * Pseudo predicate
+		 * 
+		 * Check if pseudo is same than user passed in parameter.
+		 * Functor to be passed to first class functions.
+		 * 
+		 * See Users::contains and Users::select.
+		 */
+		class PseudoSelector {
+			std::string m_pseudo;
+		public:
+			PseudoSelector(std::string const &pseudo);
+			bool operator()(User *user);
+		};
+
+		/**
+		 * Nick predicate
+		 * 
+		 * Check if nickname is same than user passed in parameter.
+		 * Functor to be passed to first class functions.
+		 * 
+		 * See Users::contains and Users::select.
+		 */
+		class NickSelector {
+			std::string m_nickname;
+		public:
+			NickSelector(std::string const &nickname);
+			bool operator()(User *user);
+		};
+
+		/**
+		 * Mode predicate
+		 * 
+		 * Check if mode is same than user passed in parameter.
+		 * Functor to be passed to first class functions.
+		 * 
+		 * See Users::contains and Users::select.
+		 */
+		class ModeSelector {
+			int m_mode;
+		public:
+			ModeSelector(int mode);
+			bool operator()(User *user);
+		};
+
+		/**
+		 * Socket predicate
+		 * 
+		 * Check if socket is same than user passed in parameter.
+		 * Functor to be passed to first class functions.
+		 * 
+		 * See Users::contains and Users::select.
+		 */
+		class SocketSelector {
+			Socket *m_socket;
+		public:
+			SocketSelector(Socket *socket);
+			bool operator()(User *user);
+		};
 	};
 }
 

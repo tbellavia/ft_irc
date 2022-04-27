@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/18 14:08:41 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/23 23:19:34 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/27 02:15:25 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ namespace IRC
 		ICmdFactory *m_cmd_factory;
 	public:
 		Api(std::string const &password);
+		Api(Api const &other);
+		Api &operator=(Api const &other);
 		~Api();
 
 		void connect(Socket *socket);

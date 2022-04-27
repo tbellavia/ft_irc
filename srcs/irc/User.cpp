@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 14:36:26 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/22 15:48:48 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/27 02:53:00 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,44 @@ IRC::User::mode_isset(int mode){
 	return m_mode & mode;
 }
 
+bool
+IRC::User::connected() const {
+	return !(m_mode & MODE_ONBOARD);
+}
+
 void
 IRC::User::update(std::string const &msg) {
 	m_socket->send(net::ston(msg));
+}
+
+IRC::User::PseudoSelector::PseudoSelector(std::string const &pseudo) :
+	m_pseudo(pseudo) { }
+
+IRC::User::NickSelector::NickSelector(std::string const &nickname) :
+	m_nickname(nickname) { }
+
+IRC::User::ModeSelector::ModeSelector(int mode) :
+	m_mode(mode) { }
+
+IRC::User::SocketSelector::SocketSelector(Socket *socket) :
+	m_socket(socket) { }
+
+bool
+IRC::User::PseudoSelector::operator()(User *user){
+	return user->get_pseudo() == m_pseudo;
+}
+
+bool
+IRC::User::NickSelector::operator()(User *user){
+	return user->get_nick() == m_nickname;
+}
+
+bool
+IRC::User::ModeSelector::operator()(User *user){
+	return user->mode_isset(m_mode);
+}
+
+bool
+IRC::User::SocketSelector::operator()(User *user){
+	return user->get_socket() == m_socket;
 }

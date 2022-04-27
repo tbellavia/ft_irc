@@ -1,0 +1,111 @@
+from http.client import ResponseNotReady
+import socket
+import yaml
+from pprint import pprint
+
+class TestIRC:
+	BUFFSIZE = 510
+	CRLF = "\r\n"
+
+	def __init__(self, addr, port, password):
+		self.addr = addr
+		self.port = port
+		self.password = password
+		self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+		with open("replies.yaml", "r") as f:
+			replies = yaml.load(f.read(), yaml.BaseLoader)
+			self.errors = replies['ERROR_REPLIES']
+			self.response = replies['COMMAND_RESPONSES']
+
+	def _connect(self):
+		self.client.connect((self.addr, self.port))
+
+	def  _disconnect(self):
+		self.client.close()
+
+	def _ston(self, msg):
+		return f"{msg}{TestIRC.CRLF}".encode()
+
+	def _recv(self):
+		return self.client.recv(TestIRC.BUFFSIZE).decode()
+
+	def _send(self, msg):
+		self.client.send(self._ston(msg))
+
+	def _send_recv(self, msg):
+		self._send(msg)
+		return self._recv()
+
+	def _get_arguments(self, response):
+		args = {}
+
+		splitted = response.split(" ")
+		if len(splitted) < 5:
+			return args
+		args['code'] = splitted[1]
+		args['name'] = splitted[3]
+		args['message'] = response.split(":")[2].strip()
+		return args
+
+	def _check_reply(self, args):
+		if len(args) != 3:
+			return False
+		code = args['code']
+		name = args['name']
+		msg = args['message']
+
+		reply = self.errors[code]
+		print(reply)
+
+	def test_pass(self):
+		response = self._send_recv("PASS")
+		print(response)
+		response = self._send_recv("PASS pass pass")
+		print(response)
+		response = self._send_recv("PASS pass")
+		if response == "":
+			print("I have been disconnected!")
+
+	
+	def test_nick(self):
+		self._send(f"PASS {self.password}")
+
+		## No Nickname given
+		response = self._send_recv("NICK")
+		print(response)
+
+		## Invalid Nickname
+		response = self._send_recv("NICK p*u")
+		print(response)
+
+		## Good Nickname
+		self._send("NICK MielPops")
+
+		## Changing Nickname
+		self._send("NICK MielPops")
+		print(self._send_recv("NICK MielPops"))
+		
+
+
+	def launch_test(self):
+		"""
+			Launch all tests.
+
+			Check Command name
+			Check Reply CODE
+			Check Message
+		"""
+		self._connect()
+		# self.test_pass()
+		self.test_nick()
+		while True:
+			response = self._recv()
+
+			if response == "":
+				print("I have been disconnected!")
+				break
+		self._disconnect()
+
+tester = TestIRC("127.0.0.1", 6697, "pass")
+tester.launch_test()

@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 15:55:53 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/20 04:15:30 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/27 02:28:18 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,41 @@ namespace IRC
 		User *create(Socket *socket);
 		void remove(Socket *socket);
 		User *find(Socket *socket);
+
+		template<typename Pred>
+		bool contains(Pred pred);
+
+		template<typename Pred>
+		std::vector<User*> select(Pred pred);
 	};
+
+	template<typename Pred>
+	bool MasterUsers::contains(Pred pred){
+		std::map<int, User*>::iterator it;
+
+		for ( it = m_users.begin() ; it != m_users.end() ; ++it ){
+			User *user = it->second;
+
+			if ( pred(user) ){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	template<typename Pred>
+	std::vector<User*> MasterUsers::select(Pred pred){
+		std::vector<User*>			selected;
+		std::map<int, User*>::iterator	it; 
+
+		for ( it = m_users.begin() ; it != m_users.end() ; ++it ){
+			User *user = it->second;
+
+			if ( pred(user) )
+				selected.push_back(user);
+		}
+		return selected;
+	}
 }
 
 
