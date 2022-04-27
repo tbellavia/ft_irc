@@ -6,12 +6,15 @@
 #    By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/12 19:27:05 by bbellavi          #+#    #+#              #
-#    Updated: 2022/04/27 00:48:07 by bbellavi         ###   ########.fr        #
+#    Updated: 2022/04/27 19:49:50 by bbellavi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CXX			= c++
 CXXFLAGS	= -Wall -Werror -Wextra # -std=c++98
+
+SRC_DIR			= srcs
+INC_DIR			= include
 
 SRCS		=	main.cpp						\
 				srcs/Utils.cpp					\
@@ -64,10 +67,16 @@ HEADERS		=	include/irc/Server.hpp				\
 				include/Utils.hpp					\
 				include/App.hpp
 
-INC_DIR			= include/
-INC_DIRS		= irc network irc/cmd
-INCLUDE_DIRS	= $(addprefix $(INC_DIR),${INC_DIRS})
+SUBDIRS			= irc network irc/cmd
+
+INCLUDE_DIRS	= $(addprefix $(INC_DIR)/,${SUBDIRS})
+SRCDIRS			= $(SRC_DIR) $(addprefix $(SRC_DIR)/,${SUBDIRS})
 INCLUDE_DIRS	+= include/
+
+BUILD_DIR		= build
+OBJS			= $(addprefix $(BUILD_DIR)/,$(notdir $(SRCS:.cpp=.o)))
+
+vpath %.cpp $(SRCDIRS)
 
 .PHONY: re clean fclean
 
@@ -75,12 +84,24 @@ NAME = ft_irc
 
 all: $(NAME)
 
-$(NAME): $(SRCS) $(HEADERS)
-	$(CXX) $(CXXFLAGS) -o $(NAME) $(SRCS) $(addprefix -I ,$(INCLUDE_DIRS))
+$(NAME): $(OBJS)
+	@echo "Compiling: $(NAME)"
+	@$(CXX) $(CXXFLAGS) $^ -o $@ $(addprefix -I ,$(INCLUDE_DIRS))
+
+$(OBJS): | mkdir_build
+
+mkdir_build:
+	@mkdir -p $(BUILD_DIR)
+
+$(BUILD_DIR)/%.o: %.cpp
+	@printf "Build: %s\n" $<
+	@$(CXX) $(CXXFLAGS)  -c $< -o $@ $(addprefix -I ,$(INCLUDE_DIRS))
+
 
 re: fclean all
 
-clean: fclean
+clean:
+	rm -rf $(BUILD_DIR)
 
-fclean:
+fclean: clean
 	rm -f $(NAME)

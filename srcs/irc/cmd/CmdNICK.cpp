@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 18:18:53 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/27 03:32:09 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/27 15:08:13 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,9 @@ IRC::CmdNICK::execute() {
 				channels().remove_user(collided_users.front());
 
 				// Send error and disconnect all users
-				actions.push(Action::send(user, reply.error_nickname_collision(nickname)));
-				actions.push(Action::disconnectall(collided_users));
-				return actions;
+				return actions
+					.push(Action::send(user, reply.error_nickname_collision(nickname)))
+					.push(Action::disconnectall(collided_users));
 			}
 		} else {
 			std::cout << "> NICK SET TO " << nickname << std::endl;
