@@ -6,7 +6,7 @@
 #    By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/12 19:27:05 by bbellavi          #+#    #+#              #
-#    Updated: 2022/04/27 19:49:50 by bbellavi         ###   ########.fr        #
+#    Updated: 2022/04/28 02:17:10 by bbellavi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,10 +32,12 @@ SRCS		=	main.cpp						\
 				srcs/irc/Replies.cpp			\
 				srcs/irc/IRCApi.cpp				\
 				srcs/irc/Parse.cpp				\
-				srcs/irc/cmd/CmdPONG.cpp		\
+				srcs/irc/CmdParser.cpp			\
 				srcs/irc/cmd/CmdPASS.cpp		\
+				srcs/irc/cmd/CmdUSER.cpp		\
 				srcs/irc/cmd/CmdNICK.cpp		\
 				srcs/irc/cmd/CmdQUIT.cpp		\
+				srcs/irc/cmd/CmdPONG.cpp		\
 				srcs/irc/User.cpp				\
 				srcs/irc/Users.cpp				\
 				srcs/irc/Channels.cpp			\
@@ -54,11 +56,13 @@ HEADERS		=	include/irc/Server.hpp				\
 				include/irc/Actions.hpp				\
 				include/irc/Replies.hpp				\
 				include/irc/Parse.hpp				\
+				include/irc/CmdParser.hpp			\
 				include/irc/CmdFactory.hpp			\
 				include/irc/CmdCtx.hpp				\
 				include/irc/cmd/CmdPASS.hpp			\
-				include/irc/cmd/CmdPONG.hpp			\
 				include/irc/cmd/CmdNICK.hpp			\
+				include/irc/cmd/CmdUSER.hpp			\
+				include/irc/cmd/CmdPONG.hpp			\
 				include/irc/cmd/CmdQUIT.hpp			\
 				include/network/Network.hpp			\
 				include/network/Selector.hpp		\

@@ -58,6 +58,14 @@ class TestIRC:
 		reply = self.errors[code]
 		print(reply)
 
+	def _wait_reponse(self):
+		while True:
+			response = self._recv()
+
+			if response == "":
+				print("I have been disconnected!")
+				break
+
 	def test_pass(self):
 		response = self._send_recv("PASS")
 		print(response)
@@ -87,6 +95,8 @@ class TestIRC:
 		print(self._send_recv("NICK MielPops"))
 		
 
+	def test_user(self):
+		self._send("USER guest tolmoon tolsun :Ronnie Reagan")
 
 	def launch_test(self):
 		"""
@@ -98,13 +108,8 @@ class TestIRC:
 		"""
 		self._connect()
 		# self.test_pass()
-		self.test_nick()
-		while True:
-			response = self._recv()
-
-			if response == "":
-				print("I have been disconnected!")
-				break
+		# self.test_nick()
+		self.test_user()
 		self._disconnect()
 
 tester = TestIRC("127.0.0.1", 6697, "pass")

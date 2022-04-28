@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 23:07:36 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/23 22:01:30 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/28 02:10:35 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,9 @@
 IRC::CmdFactory::CmdFactory() : ICmdFactory(), m_callbacks() 
 {
 	m_callbacks.insert(std::make_pair("PASS", &CmdFactory::create_pass_cmd));
-	m_callbacks.insert(std::make_pair("PONG", &CmdFactory::create_pong_cmd));
 	m_callbacks.insert(std::make_pair("NICK", &CmdFactory::create_nick_cmd));
+	m_callbacks.insert(std::make_pair("USER", &CmdFactory::create_user_cmd));
+	m_callbacks.insert(std::make_pair("PONG", &CmdFactory::create_pong_cmd));
 	m_callbacks.insert(std::make_pair("QUIT", &CmdFactory::create_quit_cmd));
 }
 
@@ -42,14 +43,20 @@ IRC::CmdFactory::create_pass_cmd(CmdCtx &ctx, std::string const &request) {
 }
 
 IRC::ACmd*
+IRC::CmdFactory::create_nick_cmd(CmdCtx &ctx, std::string const &request) {
+	return new CmdNICK(ctx, request);
+}
+
+IRC::ACmd*
+IRC::CmdFactory::create_user_cmd(CmdCtx &ctx, std::string const &request) {
+	return new CmdUSER(ctx, request);
+}
+
+IRC::ACmd*
 IRC::CmdFactory::create_pong_cmd(CmdCtx &ctx, std::string const &request) {
 	return new CmdPONG(ctx, request);
 }
 
-IRC::ACmd*
-IRC::CmdFactory::create_nick_cmd(CmdCtx &ctx, std::string const &request) {
-	return new CmdNICK(ctx, request);
-}
 
 IRC::ACmd*
 IRC::CmdFactory::create_quit_cmd(CmdCtx &ctx, std::string const &request) {
