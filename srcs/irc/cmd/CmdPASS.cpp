@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 23:00:36 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/26 19:23:32 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/30 00:44:27 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,18 @@ IRC::Actions
 IRC::CmdPASS::execute() {
 	User *user = m_ctx.sender;
 	ReplyBuilder reply("ft_irc", user);
+	// std::vector<std::string> args = parse_cmd();
 	std::vector<std::string> args = ft::split(m_request);
 	
-	ft::remove(args, "");
+	for ( auto arg : args ){
+		std::cout << "'" << arg << "' ";
+	}
+	std::cout << std::endl;
+
 	std::cout << "CmdPASS: " << m_request << std::endl;
+	std::cout << "Size: " << args.size() << std::endl;
 	if ( args.size() != 2 ){
+		std::cout << "HEY" << std::endl;
 		return Actions::unique_send(user, reply.error_need_more_params(m_name));
 	} else {
 		std::string password = args[1];

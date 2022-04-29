@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 02:11:07 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/28 02:20:22 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/30 00:27:01 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 namespace IRC
 {
-	class CommandParser {
+	class CmdParser {
 		std::string				m_request;
 		std::string::size_type	m_start;
 		std::string::size_type	m_current;
@@ -31,7 +31,10 @@ namespace IRC
 		char		peek();
 		char		advance();
 	public:
-		CommandParser(std::string const &request);
+		CmdParser(std::string const &request);
+		CmdParser(CmdParser const &other);
+		CmdParser &operator=(CmdParser const &other);
+		~CmdParser();
 
 		std::vector<std::string> parse();
 	};

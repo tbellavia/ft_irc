@@ -67,8 +67,8 @@ class TestIRC:
 				break
 
 	def test_pass(self):
-		response = self._send_recv("PASS")
-		print(response)
+		# response = self._send_recv("PASS")
+		# print(response)
 		response = self._send_recv("PASS pass pass")
 		print(response)
 		response = self._send_recv("PASS pass")
@@ -107,9 +107,9 @@ class TestIRC:
 			Check Message
 		"""
 		self._connect()
-		# self.test_pass()
+		self.test_pass()
 		# self.test_nick()
-		self.test_user()
+		# self.test_user()
 		self._disconnect()
 
 tester = TestIRC("127.0.0.1", 6697, "pass")

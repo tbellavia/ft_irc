@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 14:42:07 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/27 02:07:09 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/30 00:44:03 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include "Actions.hpp"
 # include "Replies.hpp"
 # include "Parse.hpp"
+# include "CmdParser.hpp"
 
 # define SERVER_NAME "ft_irc.com"
 
