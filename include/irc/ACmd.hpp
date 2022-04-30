@@ -29,12 +29,14 @@ namespace IRC
 		CmdCtx		&m_ctx;
 		std::string m_request;
 		std::string m_name;
+		CmdParser	m_parser;
 	public:
 		ACmd(CmdCtx &ctx, std::string const &request, std::string const &name);
 		virtual ~ACmd();
 		
 		virtual Actions execute() = 0;
 		virtual std::vector<std::string> get_arguments() const;
+		virtual std::vector<std::string> parse();
 
 		User		*sender();
 		Channels	&channels();

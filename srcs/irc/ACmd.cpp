@@ -15,7 +15,8 @@
 IRC::ACmd::ACmd(CmdCtx &ctx, std::string const &request, std::string const &name) :
 	m_ctx(ctx),
 	m_request(request),
-	m_name(name) { }
+	m_name(name),
+	m_parser(request) { }
 
 IRC::ACmd::~ACmd() { }
 
@@ -29,6 +30,11 @@ IRC::ACmd::get_arguments() const {
 	args.erase(args.begin());
 	ft::remove(args, "");
 	return args;
+}
+
+std::vector<std::string> 
+IRC::ACmd::parse() {
+	return m_parser.parse();
 }
 
 IRC::User*

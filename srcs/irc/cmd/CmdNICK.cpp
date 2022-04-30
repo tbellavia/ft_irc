@@ -26,7 +26,7 @@ IRC::CmdNICK::~CmdNICK() { }
 IRC::Actions
 IRC::CmdNICK::execute() {
 	User						*user = this->sender();
-	std::vector<std::string>	args = this->get_arguments();
+	std::vector<std::string>	args = this->parse();
 	ReplyBuilder				reply(SERVER_NAME, user);
 	Actions						actions;
 	
@@ -37,11 +37,11 @@ IRC::CmdNICK::execute() {
 			std::cout << "> NICK not enough parameters" << std::endl;
 			return Actions::unique_send(user, reply.error_no_nickname_given());
 		}
-		if ( args.size() > 2 ){
+		if ( args.size() > 3 ){
 			// Do we have to send it ? Not indicated in RFC
 			return Actions::unique_send(user, reply.error_need_more_params(m_name));
 		}
-		std::string nickname = args[0];
+		std::string nickname = args[1];
 
 		// Check nickname validity
 		if ( !is_valid_nick(nickname) ){
