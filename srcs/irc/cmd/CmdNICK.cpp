@@ -31,9 +31,13 @@ IRC::CmdNICK::execute() {
 	Actions						actions;
 	
 	std::cout << "CmdNICK" << std::endl;
+	for ( auto arg : args ){
+		std::cout << "'" << arg << "' ";
+	}
+	std::cout << std::endl;
 	// Check if role not onboard
 	if ( !user->mode_isset(MODE_ONBOARD) ){
-		if ( args.empty() ){
+		if ( args.size() == 1 ){
 			std::cout << "> NICK not enough parameters" << std::endl;
 			return Actions::unique_send(user, reply.error_no_nickname_given());
 		}
