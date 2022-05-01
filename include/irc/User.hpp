@@ -6,14 +6,15 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 14:22:35 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/27 02:52:05 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/01 23:06:05 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_USER_HPP
-#define FT_USER_HPP
+#ifndef USER_HPP
+#define USER_HPP
 
 # include <string>
+# include "Role.hpp"
 # include "Mode.hpp"
 # include "ISubscriber.hpp"
 # include "Socket.hpp"
@@ -21,7 +22,7 @@
 namespace IRC
 {
 	class User : public ISubscriber {
-		std::string m_pseudo;
+		std::string m_username;
 		std::string m_nickname;
 		int			m_mode;
 		Socket		*m_socket;
@@ -34,15 +35,16 @@ namespace IRC
 		User &operator=(User const &other);
 		virtual ~User();
 
-		void set_pseudo(std::string const &pseudo);
-		void set_nick(std::string const &nick);
+		void set_username(std::string const &pseudo);
+		void set_nickname(std::string const &nick);
 		void set_mode(int mode);
 		void set_socket(Socket *socket);
 
+		bool role_isset(int role);
 		bool mode_isset(int mode);
 		bool connected() const;
 
-		std::string const	&get_pseudo() const;
+		std::string const	&get_username() const;
 		std::string const	&get_nick() const;
 		int					get_mode() const;
 		Socket				*get_socket();

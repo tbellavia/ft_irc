@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 14:42:07 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/01 19:21:23 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/01 19:34:11 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ namespace IRC
 		virtual ~ACmd();
 		
 		virtual Actions execute() = 0;
-		virtual std::vector<std::string> get_arguments() const;
 		virtual std::vector<std::string> parse();
 
 		User		*sender();

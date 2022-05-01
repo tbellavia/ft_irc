@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:38:55 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/19 23:19:16 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/01 20:18:31 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ IRC::Channel::set_name(std::string const &name) {
 }
 
 void
-IRC::Channel::set_mode(int mode) {
+IRC::Channel::set_role(int mode) {
 	m_mode = mode;
 }
 

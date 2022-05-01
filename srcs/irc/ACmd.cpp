@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 21:55:45 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/30 00:43:50 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/01 20:12:11 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,6 @@ IRC::ACmd::ACmd(CmdCtx &ctx, std::string const &request, std::string const &name
 	m_parser(request) { }
 
 IRC::ACmd::~ACmd() { }
-
-std::vector<std::string>
-IRC::ACmd::get_arguments() const {
-	std::vector<std::string> args = ft::split(m_request);
-
-	if ( args.size() < 2 ){
-		return std::vector<std::string>();
-	}
-	args.erase(args.begin());
-	ft::remove(args, "");
-	return args;
-}
 
 std::vector<std::string> 
 IRC::ACmd::parse() {

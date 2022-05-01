@@ -6,7 +6,7 @@
 #    By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/12 19:27:05 by bbellavi          #+#    #+#              #
-#    Updated: 2022/04/28 02:17:10 by bbellavi         ###   ########.fr        #
+#    Updated: 2022/05/01 20:22:49 by bbellavi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,6 +55,7 @@ HEADERS		=	include/irc/Server.hpp				\
 				include/irc/Action.hpp				\
 				include/irc/Actions.hpp				\
 				include/irc/Replies.hpp				\
+				include/irc/Role.hpp				\
 				include/irc/Parse.hpp				\
 				include/irc/CmdParser.hpp			\
 				include/irc/CmdFactory.hpp			\

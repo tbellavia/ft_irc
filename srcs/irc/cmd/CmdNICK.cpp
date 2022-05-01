@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 18:18:53 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/01 19:24:29 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/01 20:14:30 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ IRC::CmdNICK::execute() {
 	
 	std::cout << "CmdNICK" << std::endl;
 	// Check if role not onboard
-	if ( !user->mode_isset(MODE_ONBOARD) ){
+	if ( user->connected() ){
 		if ( args.size() == 1 ){
 			std::cout << "> NICK not enough parameters" << std::endl;
 			return Actions::unique_send(user, reply.error_no_nickname_given());
@@ -71,7 +71,7 @@ IRC::CmdNICK::execute() {
 			}
 		} else {
 			std::cout << "> NICK SET TO " << nickname << std::endl;
-			user->set_nick(nickname);
+			user->set_nickname(nickname);
 		}
 	}
 	return Actions::unique_idle();

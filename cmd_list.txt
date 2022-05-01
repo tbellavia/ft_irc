@@ -1,6 +1,6 @@
 [Connection]
-	- PASS []
-	- NICK [] 
+	- PASS [x]
+	- NICK [x] 
 	- USER []
 	- OPER []
 	- QUIT []

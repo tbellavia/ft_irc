@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:34:06 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/19 23:43:14 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/01 20:18:31 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ namespace IRC
 
 
 		void set_name(std::string const &name);
-		void set_mode(int mode);
+		void set_role(int mode);
 
 		std::string const &get_name() const;
 		int get_mode() const;
