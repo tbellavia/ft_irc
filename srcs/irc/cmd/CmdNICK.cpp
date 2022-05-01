@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 18:18:53 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/27 15:08:13 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/01 19:24:29 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,13 @@ IRC::CmdNICK::execute() {
 	Actions						actions;
 	
 	std::cout << "CmdNICK" << std::endl;
-	for ( auto arg : args ){
-		std::cout << "'" << arg << "' ";
-	}
-	std::cout << std::endl;
 	// Check if role not onboard
 	if ( !user->mode_isset(MODE_ONBOARD) ){
 		if ( args.size() == 1 ){
 			std::cout << "> NICK not enough parameters" << std::endl;
 			return Actions::unique_send(user, reply.error_no_nickname_given());
 		}
-		if ( args.size() > 3 ){
+		if ( args.size() > Expected_args(2) ){
 			// Do we have to send it ? Not indicated in RFC
 			return Actions::unique_send(user, reply.error_need_more_params(m_name));
 		}

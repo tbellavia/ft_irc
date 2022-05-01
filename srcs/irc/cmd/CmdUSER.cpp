@@ -6,12 +6,12 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 00:53:55 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/30 00:44:14 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/01 19:21:28 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "CmdUSER.hpp"
 #include <iostream>
+#include "CmdUSER.hpp"
 #include "CmdParser.hpp"
 
 IRC::CmdUSER::CmdUSER(CmdCtx &ctx, std::string const &request) : 

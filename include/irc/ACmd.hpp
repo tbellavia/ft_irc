@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 14:42:07 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/30 00:44:03 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/01 19:21:23 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include "CmdParser.hpp"
 
 # define SERVER_NAME "ft_irc.com"
+# define Expected_args(n) (n + 1)
 
 namespace IRC
 {

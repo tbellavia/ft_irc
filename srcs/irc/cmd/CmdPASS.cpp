@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 23:00:36 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/30 00:44:27 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/01 19:23:10 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ IRC::CmdPASS::execute() {
 	std::vector<std::string> args = this->parse();
 	
 	std::cout << "CmdPASS: " << m_request << std::endl;
-	if ( args.size() != 2 ){
+	if ( args.size() != Expected_args(1) ){
 		return Actions::unique_send(user, reply.error_need_more_params(m_name));
 	} else {
 		std::string password = args[1];
