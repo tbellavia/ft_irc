@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 14:22:35 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/01 23:06:05 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/02 20:11:08 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,11 @@ namespace IRC
 		void set_mode(int mode);
 		void set_socket(Socket *socket);
 
+		void unset_mode(int mode);
+
 		bool role_isset(int role);
 		bool mode_isset(int mode);
+
 		bool connected() const;
 
 		std::string const	&get_username() const;

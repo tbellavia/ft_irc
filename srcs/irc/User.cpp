@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 14:36:26 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/01 23:10:58 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/02 20:11:24 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,11 @@ IRC::User::set_mode(int mode) {
 void
 IRC::User::set_socket(Socket *socket) {
 	m_socket = socket;
+}
+
+void
+IRC::User::unset_mode(int mode) {
+	m_mode &= ~mode;
 }
 
 std::string const&

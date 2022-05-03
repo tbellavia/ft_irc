@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 23:00:36 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/01 23:11:37 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/02 20:39:46 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ IRC::CmdPASS::~CmdPASS() { }
 IRC::Actions
 IRC::CmdPASS::execute() {
 	User *user = m_ctx.sender;
-	ReplyBuilder reply("ft_irc", user);
+	ReplyBuilder reply(SERVER_NAME, user);
 	std::vector<std::string> args = this->parse();
 	
 	std::cout << "CmdPASS: " << m_request << std::endl;
@@ -43,7 +43,8 @@ IRC::CmdPASS::execute() {
 			return Actions::unique_send(user, reply.error_already_registered());
 		}
 		else if ( !user->connected() && password == m_ctx.password ){
-			user->set_role(ROLE_REGULAR);
+			user->set_mode(MODE_PASS_);
+			// user->set_role(ROLE_REGULAR);
 		}
 		// If password is wrong, don't do anything
 	}
