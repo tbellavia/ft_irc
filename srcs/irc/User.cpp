@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 14:36:26 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/02 20:11:24 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/04 15:21:10 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@ IRC::User::User() :
 	m_mode(MODE_RESTRICTED),
 	m_socket(NULL) { }
 
-IRC::User::User(std::string const &pseudo, std::string const &nick, int role, Socket *socket) : 
+IRC::User::User(std::string const &pseudo, std::string const &nick, int mode, Socket *socket) : 
 	m_username(pseudo),
 	m_nickname(nick),
-	m_mode(MODE_RESTRICTED),
+	m_mode(mode),
 	m_socket(socket) { }
 
 IRC::User::User(Socket *socket) : 
@@ -104,6 +104,11 @@ IRC::User::connected() const {
 	return !(m_mode & MODE_RESTRICTED);
 }
 
+bool
+IRC::User::pass_accepted() const {
+	return (m_mode & MODE_PASS_);
+}
+
 void
 IRC::User::update(std::string const &msg) {
 	m_socket->send(net::ston(msg));
@@ -133,7 +138,7 @@ IRC::User::NickSelector::operator()(User *user){
 
 bool
 IRC::User::ModeSelector::operator()(User *user){
-	return user->role_isset(m_mode);
+	return user->mode_isset(m_mode);
 }
 
 bool

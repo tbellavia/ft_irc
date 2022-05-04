@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 23:00:36 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/02 20:39:46 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/04 16:05:47 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,13 @@ IRC::CmdPASS::execute() {
 		return Actions::unique_send(user, reply.error_need_more_params(m_name));
 	} else {
 		std::string password = args[1];
-		
+
 		if ( user->connected() ){
 			return Actions::unique_send(user, reply.error_already_registered());
 		}
-		else if ( !user->connected() && password == m_ctx.password ){
+		else if ( !user->pass_accepted() && password == m_ctx.password ){
+			std::cout << "PASS ok!" << std::endl;
 			user->set_mode(MODE_PASS_);
-			// user->set_role(ROLE_REGULAR);
 		}
 		// If password is wrong, don't do anything
 	}

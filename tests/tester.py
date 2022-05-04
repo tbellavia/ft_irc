@@ -67,13 +67,11 @@ class TestIRC:
 				break
 
 	def test_pass(self):
-		# response = self._send_recv("PASS")
-		# print(response)
+		response = self._send_recv("PASS")
+		print(response)
 		response = self._send_recv("PASS pass pass")
 		print(response)
-		response = self._send_recv("PASS pass")
-		if response == "":
-			print("I have been disconnected!")
+		self._send("PASS pass")
 
 	
 	def test_nick(self):
@@ -91,8 +89,8 @@ class TestIRC:
 		self._send("NICK MielPops")
 
 		## Changing Nickname
-		self._send("NICK MielPops")
-		print(self._send_recv("NICK MielPops"))
+		self._send("NICK Tony")
+		print( self._send_recv("NICK Tony") )
 		
 
 	def test_user(self):
@@ -107,10 +105,10 @@ class TestIRC:
 			Check Message
 		"""
 		self._connect()
-		self.test_pass()
+		# self.test_pass()
 		# self.test_nick()
-		# self.test_user()
+		self.test_user()
 		self._disconnect()
 
-tester = TestIRC("127.0.0.1", 6697, "pass")
+tester = TestIRC("127.0.0.1", 6667, "pass")
 tester.launch_test()

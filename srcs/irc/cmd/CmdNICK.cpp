@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 18:18:53 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/04 00:30:48 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/04 16:15:00 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ IRC::CmdNICK::execute() {
 	
 	std::cout << "CmdNICK" << std::endl;
 	// Check if role not onboard
-	if ( user->connected() ){
+	if ( user->pass_accepted() || user->connected() ){
 		if ( args.size() == 1 ){
 			std::cout << "> NICK not enough parameters" << std::endl;
 			return Actions::unique_send(user, reply.error_no_nickname_given());
@@ -53,8 +53,7 @@ IRC::CmdNICK::execute() {
 		std::vector<User*> collided_users = this->users().select(User::NickSelector(nickname));
 		if ( !collided_users.empty() ){
 			if ( collided_users.front() == user ){
-				// User changing nickname
-				std::cout << "> NICK CHANGING" << std::endl;
+				// User changing his nickname with the same nickname
 				return Actions::unique_send(user, reply.error_nickname_in_use(nickname));
 			} else {
 				// Nickname collision, disconnect all users
@@ -69,10 +68,13 @@ IRC::CmdNICK::execute() {
 					.push(Action::send(user, reply.error_nickname_collision(nickname)))
 					.push(Action::disconnectall(collided_users));
 			}
-		} else {
+		} 
+		// No Collision occurred, change nickname
+		else {
 			std::cout << "> NICK SET TO " << nickname << std::endl;
 			user->set_nickname(nickname);
 		}
+		user->set_mode(MODE_NICK_);
 	}
 	return Actions::unique_idle();
 }
