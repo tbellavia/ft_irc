@@ -6,12 +6,12 @@
 #    By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/12 19:27:05 by bbellavi          #+#    #+#              #
-#    Updated: 2022/05/01 20:22:49 by bbellavi         ###   ########.fr        #
+#    Updated: 2022/05/04 19:28:07 by bbellavi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CXX			= c++
-CXXFLAGS	= -Wall -Werror -Wextra # -std=c++98
+CXXFLAGS	= -Wall -Werror -Wextra -std=c++98
 
 SRC_DIR			= srcs
 INC_DIR			= include
@@ -45,31 +45,31 @@ SRCS		=	main.cpp						\
 				srcs/irc/MasterUsers.cpp		\
 				srcs/irc/Server.cpp
 
-HEADERS		=	include/irc/Server.hpp				\
-				include/irc/User.hpp				\
-				include/irc/Users.hpp				\
-				include/irc/Channel.hpp				\
-				include/irc/Channels.hpp			\
-				include/irc/MasterUsers.hpp			\
-				include/irc/IRCApi.hpp				\
-				include/irc/Action.hpp				\
-				include/irc/Actions.hpp				\
-				include/irc/Replies.hpp				\
-				include/irc/Role.hpp				\
-				include/irc/Parse.hpp				\
-				include/irc/CmdParser.hpp			\
-				include/irc/CmdFactory.hpp			\
-				include/irc/CmdCtx.hpp				\
-				include/irc/cmd/CmdPASS.hpp			\
-				include/irc/cmd/CmdNICK.hpp			\
-				include/irc/cmd/CmdUSER.hpp			\
-				include/irc/cmd/CmdPONG.hpp			\
-				include/irc/cmd/CmdQUIT.hpp			\
-				include/network/Network.hpp			\
-				include/network/Selector.hpp		\
-				include/network/File.hpp			\
-				include/network/Socket.hpp			\
-				include/Utils.hpp					\
+HEADERS		=	include/irc/Server.hpp			\
+				include/irc/User.hpp			\
+				include/irc/Users.hpp			\
+				include/irc/Channel.hpp			\
+				include/irc/Channels.hpp		\
+				include/irc/MasterUsers.hpp		\
+				include/irc/IRCApi.hpp			\
+				include/irc/Action.hpp			\
+				include/irc/Actions.hpp			\
+				include/irc/Replies.hpp			\
+				include/irc/Role.hpp			\
+				include/irc/Parse.hpp			\
+				include/irc/CmdParser.hpp		\
+				include/irc/CmdFactory.hpp		\
+				include/irc/CmdCtx.hpp			\
+				include/irc/cmd/CmdPASS.hpp		\
+				include/irc/cmd/CmdNICK.hpp		\
+				include/irc/cmd/CmdUSER.hpp		\
+				include/irc/cmd/CmdPONG.hpp		\
+				include/irc/cmd/CmdQUIT.hpp		\
+				include/network/Network.hpp		\
+				include/network/Selector.hpp	\
+				include/network/File.hpp		\
+				include/network/Socket.hpp		\
+				include/Utils.hpp				\
 				include/App.hpp
 
 SUBDIRS			= irc network irc/cmd

@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 18:18:53 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/04 16:15:00 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/04 19:20:22 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,11 +70,14 @@ IRC::CmdNICK::execute() {
 			}
 		} 
 		// No Collision occurred, change nickname
-		else {
-			std::cout << "> NICK SET TO " << nickname << std::endl;
-			user->set_nickname(nickname);
-		}
+		std::cout << "> NICK SET TO " << nickname << std::endl;
+		user->set_nickname(nickname);
 		user->set_mode(MODE_NICK_);
+		
+		if ( user->connection_complete() ){
+			std::cout << "Connection completed!" << std::endl;
+			user->unset_mode(MODE_RESTRICTED);
+		}
 	}
 	return Actions::unique_idle();
 }

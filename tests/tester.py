@@ -94,7 +94,15 @@ class TestIRC:
 		
 
 	def test_user(self):
-		self._send("USER guest tolmoon tolsun :Ronnie Reagan")
+		self._send("PASS pass")
+		print(self._send_recv("USER"))
+		print(self._send_recv("USER a b c d e"))
+		self._send("USER Tony * 0 :Tony Tony")
+
+	def test_connection(self):
+		self._send("PASS pass")
+		self._send("NICK MielPops")
+		self._send("USER Tony * 0 :realname")
 
 	def launch_test(self):
 		"""
@@ -107,7 +115,10 @@ class TestIRC:
 		self._connect()
 		# self.test_pass()
 		# self.test_nick()
-		self.test_user()
+		# self.test_user()
+
+		self.test_connection()
+
 		self._disconnect()
 
 tester = TestIRC("127.0.0.1", 6667, "pass")

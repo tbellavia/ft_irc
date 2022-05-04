@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 14:22:35 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/04 15:21:01 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/04 19:07:48 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,13 @@ namespace IRC
 	class User : public ISubscriber {
 		std::string m_username;
 		std::string m_nickname;
+		std::string m_realname;
 		int			m_mode;
 		Socket		*m_socket;
 	public:
 		User();
 		User(std::string const &pseudo, std::string const &nick, 
-			int mode, Socket *socket);
+			std::string const &realname, int mode, Socket *socket);
 		User(Socket *socket);
 		User(User const &other);
 		User &operator=(User const &other);
@@ -37,17 +38,20 @@ namespace IRC
 
 		void set_username(std::string const &pseudo);
 		void set_nickname(std::string const &nick);
+		void set_realname(std::string const &realname);
 		void set_mode(int mode);
 		void set_socket(Socket *socket);
 
 		/* State relatives member functions */
 		void unset_mode(int mode);
-		bool mode_isset(int mode);
+		bool mode_isset(int mode) const;
 		bool connected() const;
+		bool connection_complete() const;
 		bool pass_accepted() const;
 
 		std::string const	&get_username() const;
 		std::string const	&get_nick() const;
+		std::string const	&get_realname() const;
 		int					get_mode() const;
 		Socket				*get_socket();
 

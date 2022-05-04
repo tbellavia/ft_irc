@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 14:36:26 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/04 15:21:10 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/04 19:24:20 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,24 +16,29 @@
 IRC::User::User() : 
 	m_username(),
 	m_nickname(),
+	m_realname(),
 	m_mode(MODE_RESTRICTED),
 	m_socket(NULL) { }
 
-IRC::User::User(std::string const &pseudo, std::string const &nick, int mode, Socket *socket) : 
+IRC::User::User(std::string const &pseudo, std::string const &nick, 
+	std::string const &realname, int mode, Socket *socket) : 
 	m_username(pseudo),
 	m_nickname(nick),
+	m_realname(realname),
 	m_mode(mode),
 	m_socket(socket) { }
 
 IRC::User::User(Socket *socket) : 
 	m_username(),
 	m_nickname(),
+	m_realname(),
 	m_mode(MODE_RESTRICTED),
 	m_socket(socket) { }
 
 IRC::User::User(IRC::User const &other) : 
 	m_username(other.m_username), 
 	m_nickname(other.m_nickname), 
+	m_realname(other.m_realname),
 	m_mode(other.m_mode), 
 	m_socket(other.m_socket) { }
 
@@ -42,6 +47,7 @@ IRC::User &IRC::User::operator=(IRC::User const &other) {
 		return *this;
 	m_username = other.m_username;
 	m_nickname = other.m_nickname;
+	m_realname = other.m_realname;
 	m_mode = other.m_mode;
 	m_socket = other.m_socket;
 	return *this;
@@ -57,6 +63,11 @@ IRC::User::set_username(std::string const &pseudo) {
 void
 IRC::User::set_nickname(std::string const &nick) {
 	m_nickname = nick;
+}
+
+void
+IRC::User::set_realname(std::string const &realname){
+	m_realname = realname;
 }
 
 void
@@ -84,6 +95,11 @@ IRC::User::get_nick() const {
 	return m_nickname;
 }
 
+std::string const&
+IRC::User::get_realname() const {
+	return m_realname;
+}
+
 int
 IRC::User::get_mode() const {
 	return m_mode;
@@ -95,18 +111,23 @@ IRC::User::get_socket() {
 }
 
 bool
-IRC::User::mode_isset(int mode){
+IRC::User::mode_isset(int mode) const {
 	return m_mode & mode;
 }
 
 bool
 IRC::User::connected() const {
-	return !(m_mode & MODE_RESTRICTED);
+	return !mode_isset(MODE_RESTRICTED);
+}
+
+bool
+IRC::User::connection_complete() const {
+	return mode_isset(MODE_PASS_) && mode_isset(MODE_NICK_) && mode_isset(MODE_USER_);
 }
 
 bool
 IRC::User::pass_accepted() const {
-	return (m_mode & MODE_PASS_);
+	return mode_isset(MODE_PASS_);
 }
 
 void
