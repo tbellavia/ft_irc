@@ -41,7 +41,8 @@ namespace IRC
 		User		*sender();
 		Channels	&channels();
 		MasterUsers	&users();
-		std::string	const &password();
+		std::string	const &server_pass();
+		std::string const &server_name();
 	};
 }
 

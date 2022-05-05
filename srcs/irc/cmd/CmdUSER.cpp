@@ -23,7 +23,7 @@ IRC::Actions
 IRC::CmdUSER::execute() {
 	User *user = m_ctx.sender;
 	std::vector<std::string> args = CmdParser(m_request).parse();
-	ReplyBuilder reply(SERVER_NAME, user);
+	ReplyBuilder reply(this->server_name(), user);
 
 	// USER: <username> <hostname> <servername> <realname>
 	// Example: 'USER' 'MielPops' '0' '*' ':realname' 

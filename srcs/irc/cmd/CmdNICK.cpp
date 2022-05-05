@@ -27,7 +27,7 @@ IRC::Actions
 IRC::CmdNICK::execute() {
 	User						*user = this->sender();
 	std::vector<std::string>	args = this->parse();
-	ReplyBuilder				reply(SERVER_NAME, user);
+	ReplyBuilder				reply(this->server_name(), user);
 	Actions						actions;
 	
 	std::cout << "CmdNICK" << std::endl;

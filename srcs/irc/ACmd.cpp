@@ -41,6 +41,11 @@ IRC::ACmd::users(){
 }
 
 std::string	const&
-IRC::ACmd::password(){
+IRC::ACmd::server_pass(){
 	return m_ctx.config.server_pass;
+}
+
+std::string const&
+IRC::ACmd::server_name(){
+	return m_ctx.config.server_name;
 }

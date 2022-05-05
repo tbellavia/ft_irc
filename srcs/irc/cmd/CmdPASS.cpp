@@ -30,7 +30,7 @@ IRC::CmdPASS::~CmdPASS() { }
 IRC::Actions
 IRC::CmdPASS::execute() {
 	User *user = m_ctx.sender;
-	ReplyBuilder reply(SERVER_NAME, user);
+	ReplyBuilder reply(this->server_name(), user);
 	std::vector<std::string> args = this->parse();
 	
 	std::cout << "CmdPASS: " << m_request << std::endl;
@@ -42,7 +42,7 @@ IRC::CmdPASS::execute() {
 	if ( user->connected() ){
 		return Actions::unique_send(user, reply.error_already_registered());
 	}
-	else if ( !user->pass_accepted() && password == this->password() ){
+	else if ( !user->pass_accepted() && password == this->server_pass() ){
 		std::cout << "PASS ok!" << std::endl;
 		user->set_mode(MODE_PASS_);
 	}
