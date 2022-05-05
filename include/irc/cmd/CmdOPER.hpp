@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 11:13:48 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/05 11:16:40 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/05 15:34:55 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@
 # include "ACmd.hpp"
 
 namespace IRC {
-    struct CmdOPER : ACmd {
-        CmdOPER(CmdCtx &ctx, std::string const &request);
-        virtual ~CmdOPER();
+	struct CmdOPER : ACmd {
+		CmdOPER(CmdCtx &ctx, std::string const &request);
+		virtual ~CmdOPER();
 
-        virtual Actions execute();
-    };
+		virtual Actions execute();
+	};
 }
 
 #endif

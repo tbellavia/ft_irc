@@ -6,6 +6,8 @@ from pprint import pprint
 class TestIRC:
 	BUFFSIZE = 510
 	CRLF = "\r\n"
+	OPER_USER = "ft_oper"
+	OPER_PASS = "ft_oper"
 
 	def __init__(self, addr, port, password):
 		self.addr = addr
@@ -28,7 +30,7 @@ class TestIRC:
 		return f"{msg}{TestIRC.CRLF}".encode()
 
 	def _recv(self):
-		return self.client.recv(TestIRC.BUFFSIZE).decode()
+		return self.client.recv(TestIRC.BUFFSIZE).decode().strip()
 
 	def _send(self, msg):
 		self.client.send(self._ston(msg))
@@ -106,6 +108,24 @@ class TestIRC:
 	
 	def test_oper(self):
 		self._send("PASS pass")
+		self._send("NICK MielPops")
+		self._send("USER Tony * 0 :realname")
+
+		def test_oper_not_enough_params():
+			self._send(f"OPER {self.OPER_USER}")
+			print(self._recv())
+
+		def test_oper_pass_mismatch():
+			self._send(f"OPER bad bad")
+			print(self._recv())
+
+		def test_oper_success():
+			self._send(f"OPER {self.OPER_USER} {self.OPER_PASS}")
+			print(self._recv())
+
+		test_oper_not_enough_params()
+		test_oper_pass_mismatch()
+		test_oper_success()
 
 	def launch_test(self):
 		"""
@@ -119,8 +139,8 @@ class TestIRC:
 		# self.test_pass()
 		# self.test_nick()
 		# self.test_user()
-
-		self.test_connection()
+		# self.test_connection()
+		self.test_oper()
 
 		self._disconnect()
 

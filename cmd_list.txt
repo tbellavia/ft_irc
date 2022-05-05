@@ -1,7 +1,7 @@
 [Connection]
 	- PASS [x]
 	- NICK [x] 
-	- USER []
+	- USER [x]
 	- OPER []
 	- QUIT []
 

@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 23:07:36 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/05 11:27:05 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/05 15:41:49 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ IRC::CmdFactory::CmdFactory() : ICmdFactory(), m_callbacks()
 	m_callbacks.insert(std::make_pair("PASS", &CmdFactory::create_pass_cmd));
 	m_callbacks.insert(std::make_pair("NICK", &CmdFactory::create_nick_cmd));
 	m_callbacks.insert(std::make_pair("USER", &CmdFactory::create_user_cmd));
+	m_callbacks.insert(std::make_pair("OPER", &CmdFactory::create_oper_cmd));
 	m_callbacks.insert(std::make_pair("PONG", &CmdFactory::create_pong_cmd));
 	m_callbacks.insert(std::make_pair("QUIT", &CmdFactory::create_quit_cmd));
 }
