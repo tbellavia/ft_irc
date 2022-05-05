@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 14:22:35 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/28 01:12:31 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/05 11:26:12 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,11 @@
 # include "ICmdFactory.hpp"
 
 # include "cmd/CmdPASS.hpp"
-# include "cmd/CmdPONG.hpp"
 # include "cmd/CmdNICK.hpp"
-# include "cmd/CmdQUIT.hpp"
 # include "cmd/CmdUSER.hpp"
+# include "cmd/CmdOPER.hpp"
+# include "cmd/CmdPONG.hpp"
+# include "cmd/CmdQUIT.hpp"
 
 namespace IRC
 {
@@ -32,6 +33,7 @@ namespace IRC
 		ACmd *create_pass_cmd(CmdCtx &ctx, std::string const &request);
 		ACmd *create_nick_cmd(CmdCtx &ctx, std::string const &request);
 		ACmd *create_user_cmd(CmdCtx &ctx, std::string const &request);
+		ACmd *create_oper_cmd(CmdCtx &ctx, std::string const &request);
 		ACmd *create_pong_cmd(CmdCtx &ctx, std::string const &request);
 		ACmd *create_quit_cmd(CmdCtx &ctx, std::string const &request);
 	public:

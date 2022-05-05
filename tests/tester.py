@@ -103,6 +103,9 @@ class TestIRC:
 		self._send("PASS pass")
 		self._send("NICK MielPops")
 		self._send("USER Tony * 0 :realname")
+	
+	def test_oper(self):
+		self._send("PASS pass")
 
 	def launch_test(self):
 		"""

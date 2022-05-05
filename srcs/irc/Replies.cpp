@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/27 00:07:25 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/05 11:36:55 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,30 @@ std::string IRC::ReplyBuilder::error_nickname_collision(std::string const &nickn
 }
 
 std::string
+IRC::ReplyBuilder::error_no_oper_host() {
+	std::string reply = this->build_header_(NumericReplies::ERR_NOOPERHOST);
+
+	reply.append(" :No O-lines for your host");
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::error_password_mismatch() {
+	std::string reply = this->build_header_(NumericReplies::ERR_PASSWDMISMATCH);
+
+	reply.append(" :Password incorrect");
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::reply_youre_oper() {
+	std::string reply = this->build_header_(NumericReplies::RPL_YOUREOPER);
+
+	reply.append(" :You are now an IRC operator");
+	return reply;
+}
+
+std::string
 IRC::ReplyBuilder::build_header_(int code){
 	std::string s;
 
@@ -100,9 +124,6 @@ IRC::ReplyBuilder::build_header_(int code){
 		s.append(m_target->get_socket()->ip());
 	return s;
 }
-
-
-
 
 std::string
 IRC::ReplyBuilder::code_to_string_(int digit){

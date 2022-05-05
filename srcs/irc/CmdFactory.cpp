@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 23:07:36 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/28 02:10:35 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/05 11:27:05 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,4 +61,9 @@ IRC::CmdFactory::create_pong_cmd(CmdCtx &ctx, std::string const &request) {
 IRC::ACmd*
 IRC::CmdFactory::create_quit_cmd(CmdCtx &ctx, std::string const &request) {
 	return new CmdQUIT(ctx, request);
+}
+
+IRC::ACmd*
+IRC::CmdFactory::create_oper_cmd(CmdCtx &ctx, std::string const &request) {
+	return new CmdOPER(ctx, request);
 }
