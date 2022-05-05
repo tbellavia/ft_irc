@@ -121,5 +121,5 @@ class TestIRC:
 
 		self._disconnect()
 
-tester = TestIRC("127.0.0.1", 6667, "pass")
+tester = TestIRC("127.0.0.1", 6697, "pass")
 tester.launch_test()

@@ -31,6 +31,7 @@ SRCS		=	main.cpp						\
 				srcs/irc/Actions.cpp			\
 				srcs/irc/Replies.cpp			\
 				srcs/irc/IRCApi.cpp				\
+				srcs/irc/Config.cpp				\
 				srcs/irc/Parse.cpp				\
 				srcs/irc/CmdParser.cpp			\
 				srcs/irc/cmd/CmdPASS.cpp		\
@@ -52,6 +53,7 @@ HEADERS		=	include/irc/Server.hpp			\
 				include/irc/Channels.hpp		\
 				include/irc/MasterUsers.hpp		\
 				include/irc/IRCApi.hpp			\
+				include/irc/Config.hpp			\
 				include/irc/Action.hpp			\
 				include/irc/Actions.hpp			\
 				include/irc/Replies.hpp			\

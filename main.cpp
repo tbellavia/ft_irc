@@ -17,13 +17,24 @@
 int main(int argc, char *argv[])
 {
 	if ( argc != 3 ){
-		std::cerr << "usage: server host port" << std::endl;
+		std::cerr << "usage: server port password" << std::endl;
 		return EXIT_FAILURE;
 	}
-	std::string port = argv[1];
-	std::string pass = argv[2];
 	App app;
 
-	app.start(port, pass);
+	std::string port = argv[1];
+	std::string pass = argv[2];
+
+	IRC::ConfigServer config(
+		pass, 
+		"127.0.0.1", 
+		"ft.irc.com", 
+		port, 
+		"ft_oper", 
+		"ft_oper", 
+		10
+	);
+
+	app.start(config);
 	return EXIT_SUCCESS;
 }

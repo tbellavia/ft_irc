@@ -42,7 +42,7 @@ IRC::CmdPASS::execute() {
 	if ( user->connected() ){
 		return Actions::unique_send(user, reply.error_already_registered());
 	}
-	else if ( !user->pass_accepted() && password == m_ctx.password ){
+	else if ( !user->pass_accepted() && password == this->password() ){
 		std::cout << "PASS ok!" << std::endl;
 		user->set_mode(MODE_PASS_);
 	}

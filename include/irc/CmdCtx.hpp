@@ -16,6 +16,7 @@
 # include "User.hpp"
 # include "Channels.hpp"
 # include "MasterUsers.hpp"
+# include "Config.hpp"
 
 namespace IRC
 {
@@ -23,10 +24,10 @@ namespace IRC
 		User *sender;
 		Channels &channels;
 		MasterUsers &users;
-		std::string &password;
+		ConfigServer &config;
 
 		CmdCtx();
-		CmdCtx(User *sender, Channels &channels, MasterUsers &users, std::string &password);
+		CmdCtx(User *sender, Channels &channels, MasterUsers &users, ConfigServer &config);
 		CmdCtx(CmdCtx const &other);
 		CmdCtx &operator=(CmdCtx const &other);
 	};

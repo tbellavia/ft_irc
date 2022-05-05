@@ -12,7 +12,7 @@
 
 #include "Server.hpp"
 
-IRC::Server::Server(ConfigServer conf, bool bind_and_activate) : 
+IRC::Server::Server(ConfigServer &conf, bool bind_and_activate) : 
 	m_config(conf),
 	m_server(Socket::create_tcp_socket()), 
 	m_selector()

@@ -42,5 +42,5 @@ IRC::ACmd::users(){
 
 std::string	const&
 IRC::ACmd::password(){
-	return m_ctx.password;
+	return m_ctx.config.server_pass;
 }

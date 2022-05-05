@@ -21,7 +21,7 @@
 struct App {
     App();
 
-    void start(std::string const &port, std::string const &password) const;
+    void start(IRC::ConfigServer &config) const;
 };
 
 #endif

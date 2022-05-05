@@ -18,16 +18,17 @@
 # include "Channels.hpp"
 # include "ICmdFactory.hpp"
 # include "Actions.hpp"
+# include "Config.hpp"
 
 namespace IRC
 {
 	class Api {
-		MasterUsers m_users;
-		Channels	m_channels;
-		std::string m_password;
-		ICmdFactory *m_cmd_factory;
+		MasterUsers 	m_users;
+		Channels		m_channels;
+		ConfigServer	&m_config;
+		ICmdFactory		*m_cmd_factory;
 	public:
-		Api(std::string const &password);
+		Api(ConfigServer &config);
 		Api(Api const &other);
 		Api &operator=(Api const &other);
 		~Api();

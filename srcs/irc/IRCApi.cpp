@@ -15,16 +15,16 @@
 # include "CmdFactory.hpp"
 # include <iostream>
 
-IRC::Api::Api(std::string const &password) : 
+IRC::Api::Api(ConfigServer &config) : 
 	m_users(),
 	m_channels(),
-	m_password(password),
+	m_config(config),
 	m_cmd_factory(new CmdFactory) { }
 
 IRC::Api::Api(Api const &other) :
 	m_users(other.m_users),
 	m_channels(other.m_channels),
-	m_password(other.m_password),
+	m_config(other.m_config),
 	m_cmd_factory(new CmdFactory) { }
 
 IRC::Api&
@@ -33,7 +33,7 @@ IRC::Api::operator=(Api const &other){
 		return *this;
 	m_users = other.m_users;
 	m_channels = other.m_channels;
-	m_password = other.m_password;
+	m_config = other.m_config;
 	return *this;
 }
 
@@ -63,7 +63,7 @@ IRC::Api::process_request(Socket *socket, std::string const &request) {
 		user = m_users.find(socket);
 
 		if ( user != NULL ) {
-			CmdCtx ctx(user, m_channels, m_users, m_password);
+			CmdCtx ctx(user, m_channels, m_users, m_config);
 
 			cmd = m_cmd_factory->create_cmd(ctx, request);
 			if ( cmd != NULL ) {

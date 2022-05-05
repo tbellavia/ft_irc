@@ -14,11 +14,9 @@
 
 App::App() { }
 
-void App::start(std::string const &port, std::string const &password) const {
-	IRC::ConfigServer config(
-		password, "127.0.0.1", "ft.irc.com", port, "ft_oper", "ft_oper", 10);
+void App::start(IRC::ConfigServer &config) const {
 	IRC::Server server(config, true);
-	IRC::Api api(password);
+	IRC::Api api(config);
 
 	server.serve_forever(api);
 }

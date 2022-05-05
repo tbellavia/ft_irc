@@ -13,11 +13,17 @@
 #include "CmdCtx.hpp"
 
 IRC::CmdCtx::CmdCtx(User *sender_, Channels &channels_, MasterUsers &users_, 
-	std::string &password_ ) :
-	sender(sender_), channels(channels_), users(users_), password(password_) { }
+ConfigServer &config_ ) :
+	sender(sender_), 
+	channels(channels_), 
+	users(users_), 
+	config(config_) { }
 
 IRC::CmdCtx::CmdCtx(CmdCtx const &other) :
-	sender(other.sender), channels(other.channels), users(other.users), password(other.password) { }
+	sender(other.sender), 
+	channels(other.channels), 
+	users(other.users), 
+	config(other.config) { }
 
 IRC::CmdCtx &IRC::CmdCtx::operator=(CmdCtx const &other) {
 	if ( &other == this )
@@ -25,6 +31,6 @@ IRC::CmdCtx &IRC::CmdCtx::operator=(CmdCtx const &other) {
 	sender = other.sender;
 	channels = other.channels;
 	users = other.users;
-	password = other.password;
+	config = other.config;
 	return *this;
 }
