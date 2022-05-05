@@ -10,14 +10,12 @@
 # include "Socket.hpp"
 # include "Selector.hpp"
 # include "IRCApi.hpp"
+# include "Config.hpp"
 
 namespace IRC
 {
 	class Server {
-		static const int	LISTEN_MAX = 10;
-		std::string			m_host;
-		std::string			m_port;
-		std::string			m_pass;
+		ConfigServer		m_config;
 		Socket				*m_server;
 		Selector			m_selector;
 
@@ -27,7 +25,8 @@ namespace IRC
 		void connect(Api &api, Socket *socket);
 		void process_actions(Api &api, Actions &actions);
 	public:
-		Server(std::string const &host, std::string const &port, std::string const &pass, bool bind_and_activate = false);
+		Server(ConfigServer conf, bool bind_and_activate = false);
+		// Server(std::string const &host, std::string const &port, std::string const &pass, bool bind_and_activate = false);
 		Server(Server const &other);
 		Server &operator=(Server const &other);
 

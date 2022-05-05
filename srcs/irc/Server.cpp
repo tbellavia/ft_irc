@@ -6,17 +6,14 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 18:47:47 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/04 16:05:32 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/04 23:50:30 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-IRC::Server::Server(std::string const &host, std::string const &port, 
-	std::string const &pass, bool bind_and_activate) : 
-	m_host(host), 
-	m_port(port),
-	m_pass(pass),
+IRC::Server::Server(ConfigServer conf, bool bind_and_activate) : 
+	m_config(conf),
 	m_server(Socket::create_tcp_socket()), 
 	m_selector()
 {
@@ -30,10 +27,8 @@ IRC::Server::Server(std::string const &host, std::string const &port,
 	}
 }
 
-IRC::Server::Server(IRC::Server const &other)
-	:	m_host(other.m_host), 
-		m_port(other.m_port),
-		m_pass(other.m_pass),
+IRC::Server::Server(IRC::Server const &other) :
+		m_config(other.m_config),
 		m_server(other.m_server), 
 		m_selector(other.m_selector){ }
 
@@ -41,21 +36,19 @@ IRC::Server&
 IRC::Server::operator=(Server const &other) {
 	if ( this == &other )
 		return *this;
-	m_host = other.m_host;
-	m_port = other.m_port;
-	m_pass = other.m_pass;
+	m_config = other.m_config;
 	m_server = other.m_server;
 	m_selector = other.m_selector;
 	return *this;
 }
 
 void IRC::Server::activate() const {
-	std::cout << "Listening on " << m_host << ":" << m_port << std::endl;
-	m_server->listen(Server::LISTEN_MAX);
+	std::cout << "Listening on " << m_config.server_host << ":" << m_config.server_port << std::endl;
+	m_server->listen(m_config.listen_max);
 }
 
 void IRC::Server::bind() const {
-	m_server->bind(m_host, m_port);
+	m_server->bind(m_config.server_host, m_config.server_port);
 }
 
 void IRC::Server::serve_forever(IRC::Api &api) {
