@@ -128,7 +128,8 @@ class TestIRC:
 		test_oper_success()
 
 	def test_join(self):
-		self._send("JOIN #first,#second key1,key2")
+		self._send("JOIN #first,#second,#third key1,key2")
+		self._send("JOIN #fir st,#second")
 
 	def launch_test(self):
 		"""

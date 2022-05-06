@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 22:51:33 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/05 22:53:06 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/07 00:20:00 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ namespace IRC
 		CmdJOIN(CmdCtx &ctx, std::string const &request);
 		virtual ~CmdJOIN();
 
+		Actions join_channel(std::string const &name, std::string const &pass);
+		Actions create_channel(std::string const &name, std::string const &pass);
 		virtual Actions execute();
 	};
 }

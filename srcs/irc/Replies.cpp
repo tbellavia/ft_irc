@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/05 11:36:55 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/07 00:41:53 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,73 @@ IRC::ReplyBuilder::reply_youre_oper() {
 	std::string reply = this->build_header_(NumericReplies::RPL_YOUREOPER);
 
 	reply.append(" :You are now an IRC operator");
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::error_no_such_channel(std::string const &channel){
+	std::string reply = this->build_header_(NumericReplies::ERR_NOSUCHCHANNEL);
+
+	reply.append(" ");
+	reply.append(channel);
+	reply.append(" :No such channel");
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::error_too_many_channels(std::string const &channel){
+	std::string reply = this->build_header_(NumericReplies::ERR_TOOMANYCHANNELS);
+
+	reply.append(" ");
+	reply.append(channel);
+	reply.append(" :You have joined too many channels");
+	return reply;
+}
+std::string
+IRC::ReplyBuilder::error_bad_channel_key(std::string const &channel){
+	std::string reply = this->build_header_(NumericReplies::ERR_BADCHANNELKEY);
+
+	reply.append(" ");
+	reply.append(channel);
+	reply.append(" :Cannot join channel (+k)");
+	return reply;
+}
+std::string
+IRC::ReplyBuilder::error_banned_from_channel(std::string const &channel){
+	std::string reply = this->build_header_(NumericReplies::ERR_BANNEDFROMCHAN);
+
+	reply.append(" ");
+	reply.append(channel);
+	reply.append(" :Cannot join channel (+b)");
+	return reply;
+}
+std::string
+IRC::ReplyBuilder::error_invite_only_channel(std::string const &channel){
+	std::string reply = this->build_header_(NumericReplies::ERR_INVITEONLYCHAN);
+
+	reply.append(" ");
+	reply.append(channel);
+	reply.append(" :Cannot join channel (+i)");
+	return reply;
+}
+std::string
+IRC::ReplyBuilder::error_channel_is_full(std::string const &channel){
+	std::string reply = this->build_header_(NumericReplies::ERR_CHANNELISFULL);
+
+	reply.append(" ");
+	reply.append(channel);
+	reply.append(" :Cannot join channel (+l)");
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::reply_topic(std::string const &channel, std::string const &topic){
+	std::string reply = this->build_header_(NumericReplies::RPL_TOPIC);
+
+	reply.append(" ");
+	reply.append(channel);
+	reply.append(" :");
+	reply.append(topic);
 	return reply;
 }
 

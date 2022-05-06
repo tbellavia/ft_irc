@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/01 20:24:52 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/06 18:54:01 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/07 00:47:18 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,14 @@ namespace IRC
 	};
 
 	enum ChannelMode {
-		CHAN_MODE_OPERATOR		= 0x01 << 0UL, // 'o'
-		CHAN_MODE_PRIVATE		= 0x01 << 1UL, // 'p'
-		CHAN_MODE_SECRET		= 0x01 << 2UL, // 's'
-		CHAN_MODE_INVITE		= 0x01 << 3UL, // 'i'
-		CHAN_MODE_TOPIC_BY_OP	= 0x01 << 4UL, // 't'
-		CHAN_MODE_MODERATED		= 0x01 << 5UL, // 'm'
-		CHAN_MODE_USER_LIMIT	= 0x01 << 6UL
+		CHAN_MODE_DEFAULT		= 0x01 << 0UL,
+		CHAN_MODE_OPERATOR		= 0x01 << 1UL, // 'o'
+		CHAN_MODE_PRIVATE		= 0x01 << 2UL, // 'p'
+		CHAN_MODE_SECRET		= 0x01 << 3UL, // 's'
+		CHAN_MODE_INVITE		= 0x01 << 4UL, // 'i'
+		CHAN_MODE_TOPIC_BY_OP	= 0x01 << 5UL, // 't'
+		CHAN_MODE_MODERATED		= 0x01 << 6UL, // 'm'
+		CHAN_MODE_USER_LIMIT	= 0x01 << 7UL
 	};
 }
 

@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:19:21 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/27 03:30:32 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/07 00:52:48 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,11 @@ IRC::Channels::~Channels() { }
  * Add a channel to the channels list.
  */
 void
-IRC::Channels::add(std::string const &name, int mode) {
-	m_channels.insert(std::make_pair(name, Channel(name, mode)));
+IRC::Channels::add(Channel const &channel) {
+	m_channels.insert(std::make_pair(
+		channel.get_name(),
+		channel
+	));
 }
 
 /**

@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:16:06 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/27 03:26:35 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/07 00:53:34 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ namespace IRC
 		Channels();
 		~Channels();
 
-		void add(std::string const &name, int mode);
+		void add(Channel const &channel);
 		void remove(std::string const &name);
 		bool has(std::string const &name);
 

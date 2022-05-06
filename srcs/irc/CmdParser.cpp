@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 02:13:43 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/05 23:24:43 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/06 23:54:58 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,9 @@ IRC::CmdParser::is_at_end() {
 
 std::string
 IRC::CmdParser::parse_single_token() {
-	while (!is_at_end() && !is_delim(peek()))
+	while (!is_at_end() && !isspace(peek()))
 		advance();
 	std::string token = m_request.substr(m_start, m_current - m_start);
-	if ( peek() == ',' )
-		advance();
 	m_start = m_current;
 	return token;
 }
