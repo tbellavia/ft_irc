@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 22:53:22 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/05 23:09:05 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/06 18:27:31 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,7 @@ IRC::CmdJOIN::execute() {
 		std::cout << arg << " | ";
 	}
 	std::cout << std::endl;
+
+	// TODO: Test if creating a channel with a password
 	return Actions::unique_idle();
 }

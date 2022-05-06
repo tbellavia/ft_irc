@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 15:43:00 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/27 01:37:53 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/06 18:22:10 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,7 @@ IRC::Users::has(User *user) {
 	return m_users.count(user) == 1;
 }
 
-void
+IRC::Action
 IRC::Users::notify(std::string const &msg) {
-	std::set<User*>::iterator it;
-
-	for ( it = m_users.begin() ; it != m_users.end() ; ++it ){
-		(*it)->update(msg);
-	}
+	return Action::sendall(std::vector<User*>(m_users.begin(), m_users.end()), msg);
 }

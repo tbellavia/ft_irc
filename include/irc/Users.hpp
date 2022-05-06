@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 15:22:18 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/27 02:26:01 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/06 18:17:08 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include <set>
 # include "User.hpp"
-
+# include "Action.hpp"
 namespace IRC
 {
 	class Users {
@@ -36,7 +36,7 @@ namespace IRC
 		template<typename Pred>
 		std::vector<User*> select(Pred pred);
 		
-		void notify(std::string const &msg);
+		Action notify(std::string const &msg);
 	};
 
 	template<typename Pred>

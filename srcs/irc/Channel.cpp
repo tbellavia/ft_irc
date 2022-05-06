@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:38:55 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/01 20:18:31 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/06 18:28:07 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,16 @@
 
 IRC::Channel::Channel() : m_users(), m_name(), m_mode() { }
 
-IRC::Channel::Channel(std::string const &name, int mode) : 
-	m_users(), 
+IRC::Channel::Channel(std::string const &name, std::string const &pass, int mode) :
+	m_users(),
 	m_name(name),
+	m_pass(pass),
 	m_mode(mode) { }
 
 IRC::Channel::Channel(Channel const &other) :
 	m_users(other.m_users),
 	m_name(other.m_name),
+	m_pass(other.m_pass),
 	m_mode(other.m_mode) { }
 
 IRC::Channel &IRC::Channel::operator=(IRC::Channel const &other) {
@@ -29,6 +31,7 @@ IRC::Channel &IRC::Channel::operator=(IRC::Channel const &other) {
 		return *this;
 	m_users = other.m_users;
 	m_name = other.m_name;
+	m_pass = other.m_pass;
 	m_mode = other.m_mode;
 	return *this;
 }
@@ -45,6 +48,11 @@ IRC::Channel::set_role(int mode) {
 	m_mode = mode;
 }
 
+void
+IRC::Channel::set_pass(std::string const &pass) {
+	m_pass = pass;
+}
+
 std::string const&
 IRC::Channel::get_name() const {
 	return m_name;
@@ -53,6 +61,11 @@ IRC::Channel::get_name() const {
 int
 IRC::Channel::get_mode() const {
 	return m_mode;
+}
+
+std::string const&
+IRC::Channel::get_pass() const {
+	return m_pass;
 }
 
 void
