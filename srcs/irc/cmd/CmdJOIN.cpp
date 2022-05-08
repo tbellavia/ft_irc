@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 22:53:22 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/08 14:41:08 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/08 22:33:52 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ IRC::CmdJOIN::execute() {
 					return Actions::unique_send(user, reply.error_banned_from_channel(name));
 				if ( channel->is_private() && !channel->equal_key(key) )
 					return Actions::unique_send(user, reply.error_bad_channel_key(name));
-				if ( channel->is_invite() && !channel->is_invite(user) )
+				if ( channel->is_invite() && !channel->is_invited(user) )
 					return Actions::unique_send(user, reply.error_invite_only_channel(name));
 				channel->subscribe(user);
 

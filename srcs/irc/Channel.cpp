@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:38:55 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/08 13:57:35 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/08 22:34:26 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ IRC::Channel::is_banned(User *user) const {
 }
 
 bool
-IRC::Channel::is_invite(User *user) const{
+IRC::Channel::is_invited(User *user) const{
 	return m_invites.has(user);
 }
 

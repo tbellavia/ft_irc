@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:34:06 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/08 12:54:42 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/08 22:34:05 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ namespace IRC
 		void set_topic(std::string const &topic);
 
 		bool is_banned(User *user) const;
-		bool is_invite(User *user) const;
+		bool is_invited(User *user) const;
 		bool is_operator(User *user) const;
 		bool is_voices(User *user) const;
 
