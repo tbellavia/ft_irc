@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 15:43:00 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/06 18:22:10 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/07 18:20:50 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ IRC::Users::remove(User *user) {
 }
 
 bool
-IRC::Users::has(User *user) {
+IRC::Users::has(User *user) const {
 	return m_users.count(user) == 1;
 }
 

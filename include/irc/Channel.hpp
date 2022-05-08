@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:34:06 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/07 00:48:15 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/07 18:30:57 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,30 +21,47 @@ namespace IRC
 {
 	class Channel {
 		Users		m_users;
+		Users		m_voices;
+		Users		m_bans;
+		Users		m_invites;
+		Users		m_operators;
+
+		User		*m_creator;
 		std::string	m_name;
-		std::string m_pass;
+		std::string m_key;
 		std::string m_topic;
 		int			m_mode;
 	public:
 		Channel();
-		Channel(std::string const &name, std::string const &pass, 
-			std::string const &topic = "", int mode = CHAN_MODE_DEFAULT);
+		Channel(std::string const &name, User *creator, int mode = CHAN_MODE_DEFAULT);
 		Channel(Channel const &other);
 		Channel &operator=(Channel const &other);
 		~Channel();
 
-
 		void set_name(std::string const &name);
-		void set_role(int mode);
-		void set_pass(std::string const &pass);
+		void set_mode(int mode);
+		void set_key(std::string const &pass);
 		void set_topic(std::string const &topic);
+
+		bool is_banned(User *user) const;
+		bool is_invite(User *user) const;
+		bool is_operator(User *user) const;
+		bool is_voices(User *user) const;
 
 		std::string const &get_name() const;
 		int get_mode() const;
-		std::string const &get_pass() const;
+		std::string const &get_key() const;
 		std::string const &get_topic() const;
 
-		bool subscribe(User *user, std::string const &pass = "");
+		bool equal_key(std::string const &key) const;
+
+		bool is_default() const;
+		bool is_private() const;
+		bool is_secret() const;
+		bool is_invite() const;
+		bool is_moderated() const;
+
+		void subscribe(User *user);
 		void unsubscribe(User *user);
 		Action notify(std::string const &msg);
 

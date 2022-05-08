@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 15:22:18 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/06 18:17:08 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/07 18:21:24 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,10 @@ namespace IRC
 
 		void add(User *user);
 		void remove(User *user);
-		bool has(User *user);
+		bool has(User *user) const;
 
 		template<typename Pred>
-		bool contains(Pred pred);
+		bool contains(Pred pred) const;
 
 		template<typename Pred>
 		std::vector<User*> select(Pred pred);
@@ -40,7 +40,7 @@ namespace IRC
 	};
 
 	template<typename Pred>
-	bool Users::contains(Pred pred){
+	bool Users::contains(Pred pred) const {
 		std::set<User*>::iterator it;
 
 		for ( it = m_users.begin() ; it != m_users.end() ; ++it ){

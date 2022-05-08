@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:19:21 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/07 00:52:48 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/07 16:06:27 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,21 @@ IRC::Channels::remove(std::string const &name) {
 bool
 IRC::Channels::has(std::string const &name) {
 	return m_channels.count(name) == 1;
+}
+
+
+/**
+ * Find
+ * 
+ * Find a channel by its name.
+ */
+IRC::Channel*
+IRC::Channels::find(std::string const &name) {
+	std::map<std::string, Channel>::iterator found = m_channels.find(name);
+
+	if ( found != m_channels.end() )
+		return &found->second;
+	return NULL;
 }
 
 void
