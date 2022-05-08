@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:38:55 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/07 18:31:17 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/08 13:57:35 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,11 @@ IRC::Channel::get_topic() const {
 	return m_topic;
 }
 
+IRC::Users::view_type
+IRC::Channel::get_users() {
+	return m_users.get_view();
+}
+
 bool
 IRC::Channel::is_banned(User *user) const {
 	return m_bans.has(user);
@@ -187,5 +192,5 @@ IRC::Channel::is_channel(std::string const &name) {
 
 bool
 IRC::Channel::is_valid(std::string const &name){
-	return !name.empty() && is_channel(name) && is_chstring(name);
+	return !name.empty() && name.size() < 200 && is_channel(name) && is_chstring(name);
 }

@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/07 00:41:53 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/08 15:31:55 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,6 +174,42 @@ IRC::ReplyBuilder::reply_topic(std::string const &channel, std::string const &to
 }
 
 std::string
+IRC::ReplyBuilder::reply_name_reply(Channel &channel){
+	std::string reply = this->build_header_(NumericReplies::RPL_NAMREPLY);
+	Users::view_type users = channel.get_users();
+
+	reply.append(" ");
+	reply.append(channel.get_name());
+	reply.append(" :");
+	for ( bool is_first = true ; users.first != users.second ; ++users.first, is_first = false ){
+		// `@` -> channel operator
+		// `+` -> channel voices
+		User *user = *users.first;
+
+		if ( !is_first )
+			reply.append(" ");
+		// TODO: Do correct symbol assignation
+		reply.append("@");
+		// if ( channel.is_voices(user) || channel.is_operator(user) )
+		// 	reply.append("@");
+		// else
+		// 	reply.append("+");
+		reply.append(user->get_nickname());
+	}
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::reply_end_of_names(std::string const &channel){
+	std::string reply = this->build_header_(NumericReplies::RPL_ENDOFNAMES);
+
+	reply.append(" ");
+	reply.append(channel);
+	reply.append(" :End of /NAMES list");
+	return reply;
+}
+
+std::string
 IRC::ReplyBuilder::build_header_(int code){
 	std::string s;
 
@@ -190,6 +226,24 @@ IRC::ReplyBuilder::build_header_(int code){
 		// the hostname ? 
 		s.append(m_target->get_socket()->ip());
 	return s;
+}
+
+std::string
+IRC::ReplyBuilder::reply_join(std::string const &channel){
+	// :<nick>!<user>@<host> JOIN <channel> * :realname
+	std::string reply;
+
+	reply 
+		= ":" 
+		+ m_target->get_nickname() 
+		+ "!" 
+		+ m_target->get_username() 
+		+ "@" 
+		+ m_target->get_socket()->hostname()
+		+ " JOIN "
+		+ channel
+		+ " * :realname";
+	return reply;
 }
 
 std::string

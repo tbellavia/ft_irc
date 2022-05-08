@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:34:06 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/07 18:30:57 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/08 12:54:42 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ namespace IRC
 		int get_mode() const;
 		std::string const &get_key() const;
 		std::string const &get_topic() const;
+
+		Users::view_type get_users();
 
 		bool equal_key(std::string const &key) const;
 

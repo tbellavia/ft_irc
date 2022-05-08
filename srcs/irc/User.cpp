@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 14:36:26 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/04 19:24:20 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/08 14:16:38 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ IRC::User::get_username() const {
 }
 
 std::string const&
-IRC::User::get_nick() const {
+IRC::User::get_nickname() const {
 	return m_nickname;
 }
 
@@ -108,6 +108,11 @@ IRC::User::get_mode() const {
 Socket*
 IRC::User::get_socket() {
 	return m_socket;
+}
+
+std::string
+IRC::User::get_hostname() {
+	return m_socket->hostname();
 }
 
 bool
@@ -154,7 +159,7 @@ IRC::User::PseudoSelector::operator()(User *user){
 
 bool
 IRC::User::NickSelector::operator()(User *user){
-	return user->get_nick() == m_nickname;
+	return user->get_nickname() == m_nickname;
 }
 
 bool

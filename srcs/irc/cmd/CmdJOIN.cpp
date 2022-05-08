@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 22:53:22 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/07 18:42:16 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/08 14:41:08 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,13 +61,17 @@ IRC::CmdJOIN::execute() {
 				if ( channel->is_invite() && !channel->is_invite(user) )
 					return Actions::unique_send(user, reply.error_invite_only_channel(name));
 				channel->subscribe(user);
-				actions.push(Action::send(user, reply.reply_topic(name, channel->get_topic())));
+
+				this->channel_joined_reply(reply, actions, *channel);
 				std::cout << "Join channel: " << name << std::endl;
 			} else {
 				// Create channel
+				Channel new_channel(name, user);
+				
 				std::cout << "Created channel: " << name << std::endl;
-				channels.add(Channel(name, user));
-				actions.push(Action::send(user, reply.reply_topic(name, "")));
+				channels.add(new_channel);
+				new_channel.subscribe(user);
+				this->channel_created_reply(reply, actions, new_channel);
 			}
 		} else {
 			return Actions::unique_send(user, reply.error_no_such_channel(name));
@@ -75,4 +79,30 @@ IRC::CmdJOIN::execute() {
 		++chan_it;
 	}
 	return actions;
+}
+
+void
+IRC::CmdJOIN::channel_created_reply(ReplyBuilder &reply, Actions &actions, Channel &channel){
+	std::string name = channel.get_name();
+	
+	// JOIN response
+	actions.push(Action::send(this->sender(), reply.reply_join(channel.get_name())));
+	// RPL_NAMEREPLY
+	actions.push(Action::send(this->sender(), reply.reply_name_reply(channel)));
+	// RPL_ENDOFNAMES
+	actions.push(Action::send(this->sender(), reply.reply_end_of_names(name)));
+}
+
+void
+IRC::CmdJOIN::channel_joined_reply(ReplyBuilder &reply, Actions &actions, Channel &channel){
+	std::string name = channel.get_name();
+	
+	// JOIN response
+	actions.push(Action::send(this->sender(), reply.reply_join(channel.get_name())));
+	// RPL_NAMEREPLY
+	actions.push(Action::send(this->sender(), reply.reply_name_reply(channel)));
+	// RPL_ENDOFNAMES
+	actions.push(Action::send(this->sender(), reply.reply_end_of_names(name)));
+	// RPL_TOPIC
+	actions.push(Action::send(this->sender(), reply.reply_topic(name, channel.get_topic())));
 }

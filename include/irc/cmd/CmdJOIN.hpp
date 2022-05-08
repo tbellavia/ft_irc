@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 22:51:33 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/07 16:20:18 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/08 14:32:12 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,9 @@ namespace IRC
 		virtual ~CmdJOIN();
 
 		virtual Actions execute();
+	private:
+		void channel_created_reply(ReplyBuilder &reply, Actions &actions, Channel &channel);
+		void channel_joined_reply(ReplyBuilder &reply, Actions &actions, Channel &channel);
 	};
 }
 
