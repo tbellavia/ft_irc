@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:38:55 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/09 12:44:04 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/09 12:48:45 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,16 +51,16 @@ IRC::Channel::Channel(Channel const &other) :
 IRC::Channel &IRC::Channel::operator=(IRC::Channel const &other) {
 	if ( &other == this )
 		return *this;
-	m_users = m_users;
-	m_voices = m_voices;
-	m_bans = m_bans;
-	m_invites = m_invites;
-	m_operators = m_operators;
-	m_creator = m_creator;
-	m_name = m_name;
-	m_key = m_key;
-	m_topic = m_topic;
-	m_mode = m_mode;
+	m_users = other.m_users;
+	m_voices = other.m_voices;
+	m_bans = other.m_bans;
+	m_invites = other.m_invites;
+	m_operators = other.m_operators;
+	m_creator = other.m_creator;
+	m_name = other.m_name;
+	m_key = other.m_key;
+	m_topic = other.m_topic;
+	m_mode = other.m_mode;
 	return *this;
 }
 
