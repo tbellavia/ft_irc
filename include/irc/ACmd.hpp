@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ACmd.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 14:42:07 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/23 23:07:43 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/09 09:40:01 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,12 @@ namespace IRC
 		std::string m_request;
 	public:
 		ACmd(CmdCtx &ctx, std::string const &request);
+		ACmd(ACmd const &copy);
 		virtual ~ACmd();
 		
 		virtual Actions execute() = 0;
+
+		ACmd &operator=(ACmd const &rhs);
 	};
 }
 
