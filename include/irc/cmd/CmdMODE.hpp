@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:54:08 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/09 12:29:47 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/09 13:14:33 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 namespace IRC {
 	class CmdMODE : public ACmd {
 	public:
-		CmdMODE(CmdCtx &ctx, std::string &request);
+		CmdMODE(CmdCtx &ctx, std::string const &request);
 		virtual ~CmdMODE();
 	
 		virtual Actions execute();

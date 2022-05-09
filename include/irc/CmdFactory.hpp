@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 14:22:35 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/09 12:30:21 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/09 13:12:13 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include "cmd/CmdJOIN.hpp"
 # include "cmd/CmdPONG.hpp"
 # include "cmd/CmdQUIT.hpp"
+# include "cmd/CmdMODE.hpp"
 
 namespace IRC
 {
@@ -38,6 +39,7 @@ namespace IRC
 		ACmd *create_join_cmd(CmdCtx &ctx, std::string const &request);
 		ACmd *create_pong_cmd(CmdCtx &ctx, std::string const &request);
 		ACmd *create_quit_cmd(CmdCtx &ctx, std::string const &request);
+		ACmd *create_mode_cmd(CmdCtx &ctx, std::string const &request);
 	public:
 		CmdFactory();
 		CmdFactory(CmdFactory const &copy);

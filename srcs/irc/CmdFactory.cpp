@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 23:07:36 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/09 12:30:24 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/09 13:47:33 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ IRC::CmdFactory::CmdFactory() : ICmdFactory(), m_callbacks()
 	m_callbacks.insert(std::make_pair("JOIN", &CmdFactory::create_join_cmd));
 	m_callbacks.insert(std::make_pair("PONG", &CmdFactory::create_pong_cmd));
 	m_callbacks.insert(std::make_pair("QUIT", &CmdFactory::create_quit_cmd));
+	m_callbacks.insert(std::make_pair("MODE", &CmdFactory::create_mode_cmd));
 }
 
 IRC::CmdFactory::CmdFactory(CmdFactory const &copy):
@@ -76,4 +77,9 @@ IRC::CmdFactory::create_oper_cmd(CmdCtx &ctx, std::string const &request) {
 IRC::ACmd*
 IRC::CmdFactory::create_join_cmd(CmdCtx &ctx, std::string const &request) {
 	return new CmdJOIN(ctx, request);
+}
+
+IRC::ACmd *
+IRC::CmdFactory::create_mode_cmd(CmdCtx &ctx, std::string const &request) {
+	return new CmdMODE(ctx, request);
 }
