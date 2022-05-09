@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   App.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/18 14:07:03 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/18 14:37:16 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/09 08:43:40 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,13 @@
 
 struct App {
     App();
+    ~App();
 
     void start(std::string const &port, std::string const &password) const;
+
+private:
+    App(App const &app);
+    App &operator=(App const &app);
 };
 
 #endif
