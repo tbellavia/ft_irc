@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+         #
+#    By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/12 19:27:05 by bbellavi          #+#    #+#              #
-#    Updated: 2022/05/05 22:58:09 by bbellavi         ###   ########.fr        #
+#    Updated: 2022/05/09 12:52:51 by lperson-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,6 +41,7 @@ SRCS		=	main.cpp						\
 				srcs/irc/cmd/CmdOPER.cpp		\
 				srcs/irc/cmd/CmdQUIT.cpp		\
 				srcs/irc/cmd/CmdPONG.cpp		\
+				srcs/irc/ISubscriber.cpp		\
 				srcs/irc/User.cpp				\
 				srcs/irc/Users.cpp				\
 				srcs/irc/Channels.cpp			\
