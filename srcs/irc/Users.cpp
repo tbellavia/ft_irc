@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 15:43:00 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/08 12:50:34 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/09 12:50:56 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,4 +67,44 @@ IRC::Users::has(User *user) const {
 IRC::Action
 IRC::Users::notify(std::string const &msg) {
 	return Action::sendall(std::vector<User*>(m_users.begin(), m_users.end()), msg);
+}
+
+IRC::Users::iterator
+IRC::Users::begin(){
+	return m_users.begin();
+}
+
+IRC::Users::iterator 
+IRC::Users::end(){
+	return m_users.end();
+}
+
+IRC::Users::const_iterator 
+IRC::Users::begin() const{
+	return m_users.begin();
+}
+
+IRC::Users::const_iterator 
+IRC::Users::end() const{
+	return m_users.end();
+}
+
+IRC::Users::reverse_iterator 
+IRC::Users::rbegin(){
+	return m_users.rbegin();
+}
+
+IRC::Users::reverse_iterator 
+IRC::Users::rend(){
+	return m_users.rend();
+}
+
+IRC::Users::const_reverse_iterator 
+IRC::Users::rbegin() const{
+	return m_users.rbegin();
+}
+
+IRC::Users::const_reverse_iterator 
+IRC::Users::rend() const{
+	return m_users.rend();
 }
