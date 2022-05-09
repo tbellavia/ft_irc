@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MasterUsers.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 17:59:46 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/19 23:09:11 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/09 09:07:35 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,23 @@
 IRC::MasterUsers::MasterUsers() :
 	m_users() { }
 
+IRC::MasterUsers::MasterUsers(MasterUsers const &copy):
+	m_users(copy.m_users) { }
+
 IRC::MasterUsers::~MasterUsers() {
 	std::map<int, User*>::iterator it;
 
 	for ( it = m_users.begin() ; it != m_users.end() ; ++it ) {
 		delete it->second;
 	}
+}
+
+IRC::MasterUsers &IRC::MasterUsers::operator=(MasterUsers const &rhs) {
+	if (this == &rhs)
+		return *this;
+
+	m_users = rhs.m_users;
+	return *this;
 }
 
 /**
