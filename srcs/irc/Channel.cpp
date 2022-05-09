@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:38:55 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/09 12:31:26 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/09 12:58:28 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,22 @@ IRC::Channel::Channel(Channel const &other) :
 	m_key(other.m_key),
 	m_topic(other.m_topic),
 	m_mode(other.m_mode) { }
+
+IRC::Channel &IRC::Channel::operator=(IRC::Channel const &other) {
+	if ( &other == this )
+		return *this;
+	m_users = other.m_users;
+	m_voices = other.m_voices;
+	m_bans = other.m_bans;
+	m_invites = other.m_invites;
+	m_operators = other.m_operators;
+	m_creator = other.m_creator;
+	m_name = other.m_name;
+	m_key = other.m_key;
+	m_topic = other.m_topic;
+	m_mode = other.m_mode;
+	return *this;
+}
 
 IRC::Channel::~Channel() { }
 
@@ -170,11 +186,12 @@ IRC::Channel::is_moderated() const {
 }
 
 bool
-IRC::Channel::is_channel(std::string const &name) {
+IRC::Channel::is_channel_name(std::string const &name) {
 	return !name.empty() && (name[0] == '#' || name[0] == '&');
 }
 
 bool
-IRC::Channel::is_valid(std::string const &name){
-	return !name.empty() && name.size() < 200 && is_channel(name) && is_chstring(name);
+IRC::Channel::is_valid_name(std::string const &name){
+	return !name.empty() && name.size() < 200 &&
+			is_channel_name(name) && is_chstring(name);
 }
