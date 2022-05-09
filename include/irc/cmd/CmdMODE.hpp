@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:54:08 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/09 13:14:33 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/09 14:01:48 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,9 @@ namespace IRC {
 		virtual ~CmdMODE();
 	
 		virtual Actions execute();
+
+	private:
+		
 	};
 }
 
