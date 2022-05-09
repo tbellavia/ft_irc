@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:52:41 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/09 14:22:09 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/09 14:26:40 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,6 @@ IRC::Actions IRC::CmdMODE::execute_channel_mode_(
 		return IRC::Actions::unique_send(
 			this->sender(), reply.error_no_such_channel(args[1])
 		);
-
-	
 
 	return Actions::unique_idle();
 }
