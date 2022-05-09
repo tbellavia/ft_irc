@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CmdCtx.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 14:33:03 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/23 17:11:31 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/09 09:22:00 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ IRC::CmdCtx::CmdCtx(User *sender_, Channels &channels_, MasterUsers &users_,
 IRC::CmdCtx::CmdCtx(CmdCtx const &other) :
 	sender(other.sender), channels(other.channels), users(other.users), password(other.password) { }
 
+IRC::CmdCtx::~CmdCtx() { }
+
 IRC::CmdCtx &IRC::CmdCtx::operator=(CmdCtx const &other) {
 	if ( &other == this )
 		return *this;
@@ -28,4 +30,3 @@ IRC::CmdCtx &IRC::CmdCtx::operator=(CmdCtx const &other) {
 	password = other.password;
 	return *this;
 }
-
