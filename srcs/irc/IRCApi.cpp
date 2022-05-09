@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   IRCApi.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 04:11:43 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/23 23:07:03 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/09 09:16:09 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,12 @@ IRC::Api::Api(std::string const &password) :
 	m_channels(),
 	m_password(password),
 	m_cmd_factory(new CmdFactory) { }
+
+IRC::Api::Api(Api const &copy):
+	m_users(copy.m_users),
+	m_channels(copy.m_channels),
+	m_password(copy.m_password),
+	m_cmd_factory(copy.m_cmd_factory) { }
 
 IRC::Api::~Api() {
 	delete m_cmd_factory;
@@ -58,4 +64,15 @@ IRC::Api::process_request(Socket *socket, std::string const &request) {
 		}
 	}
 	return Actions::unique_idle();
+}
+
+IRC::Api &IRC::Api::operator=(Api const &rhs) {
+	if (this == &rhs)
+		return *this;
+
+	m_users = rhs.m_users;
+	m_channels = rhs.m_channels;
+	m_password = rhs.m_password;
+	m_cmd_factory = rhs.m_cmd_factory;
+	return *this;
 }

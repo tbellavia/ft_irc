@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   IRCApi.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/18 14:08:41 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/23 23:19:34 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/09 09:16:21 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,10 @@ namespace IRC
 		void connect(Socket *socket);
 		void disconnect(Socket *socket);
 		Actions process_request(Socket *socket, std::string const &request);
+
+	private:
+		Api(Api const &copy);
+		Api &operator=(Api const &rhs);
 	};
 }
 
