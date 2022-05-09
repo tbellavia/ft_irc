@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:34:06 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/08 22:34:05 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/09 12:42:32 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,8 @@ namespace IRC
 		void unsubscribe(User *user);
 		Action notify(std::string const &msg);
 
-		static bool is_channel(std::string const &name);
-		static bool is_valid(std::string const &name);
+		static bool is_channel_name(std::string const &name);
+		static bool is_valid_name(std::string const &name);
 	};
 }
 

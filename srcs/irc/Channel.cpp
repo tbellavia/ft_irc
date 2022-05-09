@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:38:55 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/08 22:34:26 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/09 12:44:04 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,11 +186,12 @@ IRC::Channel::is_moderated() const {
 }
 
 bool
-IRC::Channel::is_channel(std::string const &name) {
+IRC::Channel::is_channel_name(std::string const &name) {
 	return !name.empty() && (name[0] == '#' || name[0] == '&');
 }
 
 bool
-IRC::Channel::is_valid(std::string const &name){
-	return !name.empty() && name.size() < 200 && is_channel(name) && is_chstring(name);
+IRC::Channel::is_valid_name(std::string const &name){
+	return !name.empty() && name.size() < 200 &&
+			is_channel_name(name) && is_chstring(name);
 }
