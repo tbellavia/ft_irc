@@ -6,12 +6,12 @@
 #    By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/12 19:27:05 by bbellavi          #+#    #+#              #
-#    Updated: 2022/05/09 12:58:00 by lperson-         ###   ########.fr        #
+#    Updated: 2022/05/09 13:03:04 by lperson-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CXX			= c++
-CXXFLAGS	= -Wall -Werror -Wextra # -std=c++98
+CXXFLAGS	= -Wall -Werror -Wextra -std=c++98
 
 SRC_DIR			= srcs
 INC_DIR			= include
