@@ -1,27 +1,15 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ISubscriber.hpp                                    :+:      :+:    :+:   */
+/*   ISubscriber.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/19 14:25:40 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/09 09:45:47 by lperson-         ###   ########.fr       */
+/*   Created: 2022/05/09 09:46:33 by lperson-          #+#    #+#             */
+/*   Updated: 2022/05/09 09:47:20 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_ISUBSCRIBER_HPP
-#define FT_ISUBSCRIBER_HPP
+#include "irc/ISubscriber.hpp"
 
-# include <string>
-
-namespace IRC
-{
-    struct ISubscriber {
-        virtual void update(std::string const &msg) = 0;
-        virtual ~ISubscriber();
-    };
-}
-
-
-#endif
+IRC::ISubscriber::~ISubscriber() { }
