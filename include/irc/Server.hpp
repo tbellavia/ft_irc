@@ -30,6 +30,7 @@ namespace IRC
 		Server(std::string const &host, std::string const &port, std::string const &pass, bool bind_and_activate = false);
 		Server(Server const &other);
 		Server &operator=(Server const &other);
+		~Server();
 
 		void activate() const;
 		void bind() const;

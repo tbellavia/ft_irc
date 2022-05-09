@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 18:47:47 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/23 23:28:37 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/09 08:59:54 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ IRC::Server::operator=(Server const &other) {
 	m_selector = other.m_selector;
 	return *this;
 }
+
+IRC::Server::~Server() { }
 
 void IRC::Server::activate() const {
 	std::cout << "Listening on " << m_host << ":" << m_port << std::endl;
@@ -91,6 +93,11 @@ void IRC::Server::serve_forever(IRC::Api &api) {
 				} else {
 					file->push( buffer );
 
+					/*
+					 * Process all request from client (file), beware that
+					 * this could block other clients if one has too many
+					 * requests.
+					*/
 					while ( file->available() ){
 						actions = api.process_request(socket, file->pop());
 						this->process_actions(api, actions);
@@ -102,7 +109,7 @@ void IRC::Server::serve_forever(IRC::Api &api) {
 }
 
 void
-IRC::Server::process_actions(Api &api, Actions &actions){
+IRC::Server::process_actions(Api &api, Actions &actions) {
 	Action action;
 
 	while ( !actions.empty() ){
