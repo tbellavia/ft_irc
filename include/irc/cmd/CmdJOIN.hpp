@@ -1,31 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Parse.hpp                                          :+:      :+:    :+:   */
+/*   CmdJOIN.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/27 00:18:14 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/06 23:52:10 by bbellavi         ###   ########.fr       */
+/*   Created: 2022/05/05 22:51:33 by bbellavi          #+#    #+#             */
+/*   Updated: 2022/05/08 14:32:12 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSE_HPP
-#define PARSE_HPP
+#ifndef CMDJOIN_HPP
+#define CMDJOIN_HPP
 
-#include <string>
+#include "ACmd.hpp"
 
 namespace IRC
 {
-	bool is_valid_nick(std::string const &nickname);
-	bool is_valid_user(std::string const &username);
+	struct CmdJOIN : public ACmd {
+		CmdJOIN(CmdCtx &ctx, std::string const &request);
+		virtual ~CmdJOIN();
 
-	bool is_valid_nick_char(char c);
-	bool is_special_char(char c);
-	bool is_nonwhite_char(char c);
-
-	bool is_ch(char c);
-	bool is_chstring(std::string const &chstring);
+		virtual Actions execute();
+	private:
+		void channel_created_reply(ReplyBuilder &reply, Actions &actions, Channel &channel);
+		void channel_joined_reply(ReplyBuilder &reply, Actions &actions, Channel &channel);
+	};
 }
 
 

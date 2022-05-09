@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channels.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:19:21 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/27 03:30:32 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/09 12:32:04 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,11 @@ IRC::Channels::~Channels() { }
  * Add a channel to the channels list.
  */
 void
-IRC::Channels::add(std::string const &name, int mode) {
-	m_channels.insert(std::make_pair(name, Channel(name, mode)));
+IRC::Channels::add(Channel const &channel) {
+	m_channels.insert(std::make_pair(
+		channel.get_name(),
+		channel
+	));
 }
 
 /**
@@ -48,6 +51,21 @@ IRC::Channels::remove(std::string const &name) {
 bool
 IRC::Channels::has(std::string const &name) {
 	return m_channels.count(name) == 1;
+}
+
+
+/**
+ * Find
+ * 
+ * Find a channel by its name.
+ */
+IRC::Channel*
+IRC::Channels::find(std::string const &name) {
+	std::map<std::string, Channel>::iterator found = m_channels.find(name);
+
+	if ( found != m_channels.end() )
+		return &found->second;
+	return NULL;
 }
 
 void

@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 23:07:36 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/09 11:35:47 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/09 12:30:24 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ IRC::CmdFactory::CmdFactory() : ICmdFactory(), m_callbacks()
 	m_callbacks.insert(std::make_pair("NICK", &CmdFactory::create_nick_cmd));
 	m_callbacks.insert(std::make_pair("USER", &CmdFactory::create_user_cmd));
 	m_callbacks.insert(std::make_pair("OPER", &CmdFactory::create_oper_cmd));
+	m_callbacks.insert(std::make_pair("JOIN", &CmdFactory::create_join_cmd));
 	m_callbacks.insert(std::make_pair("PONG", &CmdFactory::create_pong_cmd));
 	m_callbacks.insert(std::make_pair("QUIT", &CmdFactory::create_quit_cmd));
 }
@@ -70,4 +71,9 @@ IRC::CmdFactory::create_quit_cmd(CmdCtx &ctx, std::string const &request) {
 IRC::ACmd*
 IRC::CmdFactory::create_oper_cmd(CmdCtx &ctx, std::string const &request) {
 	return new CmdOPER(ctx, request);
+}
+
+IRC::ACmd*
+IRC::CmdFactory::create_join_cmd(CmdCtx &ctx, std::string const &request) {
+	return new CmdJOIN(ctx, request);
 }

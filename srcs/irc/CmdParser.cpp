@@ -6,12 +6,11 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 02:13:43 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/30 00:27:12 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/06 23:54:58 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "CmdParser.hpp"
-
 
 IRC::CmdParser::CmdParser(std::string const &request) : 
 	m_request(request),
@@ -64,8 +63,8 @@ IRC::CmdParser::is_at_end() {
 
 std::string
 IRC::CmdParser::parse_single_token() {
-	while (!isspace(peek()) && !is_at_end())
-			advance();
+	while (!is_at_end() && !isspace(peek()))
+		advance();
 	std::string token = m_request.substr(m_start, m_current - m_start);
 	m_start = m_current;
 	return token;
@@ -98,4 +97,9 @@ IRC::CmdParser::peek(){
 char
 IRC::CmdParser::advance() {
 	return m_request[m_current++];
+}
+
+bool
+IRC::CmdParser::is_delim(char c){
+	return isspace(c) || c == ',';
 }

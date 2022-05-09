@@ -6,12 +6,12 @@
 #    By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/12 19:27:05 by bbellavi          #+#    #+#              #
-#    Updated: 2022/05/09 11:41:29 by lperson-         ###   ########.fr        #
+#    Updated: 2022/05/09 12:30:29 by lperson-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CXX			= c++
-CXXFLAGS	= -Wall -Werror -Wextra -std=c++98
+CXXFLAGS	= -Wall -Werror -Wextra # -std=c++98
 
 SRC_DIR			= srcs
 INC_DIR			= include
@@ -37,6 +37,7 @@ SRCS		=	main.cpp						\
 				srcs/irc/cmd/CmdPASS.cpp		\
 				srcs/irc/cmd/CmdUSER.cpp		\
 				srcs/irc/cmd/CmdNICK.cpp		\
+				srcs/irc/cmd/CmdJOIN.cpp		\
 				srcs/irc/cmd/CmdOPER.cpp		\
 				srcs/irc/cmd/CmdQUIT.cpp		\
 				srcs/irc/cmd/CmdPONG.cpp		\
@@ -68,6 +69,7 @@ HEADERS		=	include/irc/Server.hpp			\
 				include/irc/cmd/CmdNICK.hpp		\
 				include/irc/cmd/CmdUSER.hpp		\
 				include/irc/cmd/CmdOPER.hpp		\
+				include/irc/cmd/CmdJOIN.hpp		\
 				include/irc/cmd/CmdPONG.hpp		\
 				include/irc/cmd/CmdQUIT.hpp		\
 				include/network/Network.hpp		\

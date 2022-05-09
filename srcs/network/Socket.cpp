@@ -74,6 +74,12 @@ int Socket::fd() const { return m_fd; }
 
 std::string Socket::ip() const { return m_storage.get_ip(); }
 
+std::string
+Socket::hostname() const {
+	// TODO: Implement hostname. If hostname not found, return ip representation.
+	return this->ip();
+}
+
 void Socket::set_blocking(bool blocking) {
 	int opts = ::fcntl(m_fd, F_GETFL);
 

@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 18:31:32 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/26 01:00:25 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/08 14:15:04 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ public:
 
 	int						fd() const;
 	std::string				ip() const;
+	std::string				hostname() const;
 	void					set_blocking(bool blocking);
 	SocketStorage const		&storage() const;
 

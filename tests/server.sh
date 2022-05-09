@@ -2,8 +2,8 @@
 
 
 launch(){
-	docker run --name inspircd -p 127.0.0.1:6667:6667 \
-	-e "INSP_CONNECT_PASSWORD=pass123" \
+	docker run -d --name inspircd -p 127.0.0.1:6667:6667 \
+	-e "INSP_CONNECT_PASSWORD=pass" \
 	-e "INSP_ENABLE_DNSBL=no" \
 	inspircd/inspircd-docker
 }

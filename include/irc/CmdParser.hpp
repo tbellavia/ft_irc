@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 02:11:07 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/30 00:27:01 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/05 23:11:44 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ namespace IRC
 		std::string	parse_single_token();
 		std::string parse_end_token();
 		bool		skip_space();
+		bool		is_delim(char c);
 		char		peek();
 		char		advance();
 	public:

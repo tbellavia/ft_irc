@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 15:43:00 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/27 01:37:53 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/08 12:50:34 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,32 @@ IRC::Users::remove(User *user) {
 	}
 }
 
+IRC::Users::view_type
+IRC::Users::get_view(){
+	return std::make_pair(m_users.begin(), m_users.end());
+}
+
+IRC::Users::const_view_type
+IRC::Users::get_view() const{
+	return std::make_pair(m_users.begin(), m_users.end());
+}
+
+IRC::Users::reverse_view_type
+IRC::Users::get_rview(){
+	return std::make_pair(m_users.rbegin(), m_users.rend());
+}
+
+IRC::Users::const_reverse_view_type
+IRC::Users::get_rview() const{
+	return std::make_pair(m_users.rbegin(), m_users.rend());
+}
+
 bool
-IRC::Users::has(User *user) {
+IRC::Users::has(User *user) const {
 	return m_users.count(user) == 1;
 }
 
-void
+IRC::Action
 IRC::Users::notify(std::string const &msg) {
-	std::set<User*>::iterator it;
-
-	for ( it = m_users.begin() ; it != m_users.end() ; ++it ){
-		(*it)->update(msg);
-	}
+	return Action::sendall(std::vector<User*>(m_users.begin(), m_users.end()), msg);
 }
