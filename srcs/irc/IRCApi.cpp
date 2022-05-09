@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 04:11:43 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/09 09:16:09 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/09 11:37:05 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,27 @@
 # include "CmdFactory.hpp"
 # include <iostream>
 
-IRC::Api::Api(std::string const &password) : 
+IRC::Api::Api(ConfigServer &config) : 
 	m_users(),
 	m_channels(),
-	m_password(password),
+	m_config(config),
 	m_cmd_factory(new CmdFactory) { }
 
-IRC::Api::Api(Api const &copy):
-	m_users(copy.m_users),
-	m_channels(copy.m_channels),
-	m_password(copy.m_password),
-	m_cmd_factory(copy.m_cmd_factory) { }
+IRC::Api::Api(Api const &other) :
+	m_users(other.m_users),
+	m_channels(other.m_channels),
+	m_config(other.m_config),
+	m_cmd_factory(new CmdFactory) { }
+
+IRC::Api&
+IRC::Api::operator=(Api const &other){
+	if ( &other == this )
+		return *this;
+	m_users = other.m_users;
+	m_channels = other.m_channels;
+	m_config = other.m_config;
+	return *this;
+}
 
 IRC::Api::~Api() {
 	delete m_cmd_factory;
@@ -53,7 +63,7 @@ IRC::Api::process_request(Socket *socket, std::string const &request) {
 		user = m_users.find(socket);
 
 		if ( user != NULL ) {
-			CmdCtx ctx(user, m_channels, m_users, m_password);
+			CmdCtx ctx(user, m_channels, m_users, m_config);
 
 			cmd = m_cmd_factory->create_cmd(ctx, request);
 			if ( cmd != NULL ) {
@@ -64,15 +74,4 @@ IRC::Api::process_request(Socket *socket, std::string const &request) {
 		}
 	}
 	return Actions::unique_idle();
-}
-
-IRC::Api &IRC::Api::operator=(Api const &rhs) {
-	if (this == &rhs)
-		return *this;
-
-	m_users = rhs.m_users;
-	m_channels = rhs.m_channels;
-	m_password = rhs.m_password;
-	m_cmd_factory = rhs.m_cmd_factory;
-	return *this;
 }

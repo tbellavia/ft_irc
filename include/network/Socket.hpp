@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 18:31:32 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/13 18:17:22 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/26 01:00:25 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,9 @@ public:
 		SocketStorage(sockaddr_storage storage_, socklen_t length_);
 		SocketStorage(SocketStorage const &other);
 		SocketStorage &operator=(SocketStorage const &other);
-
+		
+		std::string get_ip() const;
+		
 		friend std::ostream &operator<<(std::ostream &os, SocketStorage const &s);
 	};
 
@@ -98,6 +100,7 @@ public:
 
 
 	int						fd() const;
+	std::string				ip() const;
 	void					set_blocking(bool blocking);
 	SocketStorage const		&storage() const;
 

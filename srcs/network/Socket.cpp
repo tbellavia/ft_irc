@@ -72,6 +72,8 @@ Socket::SocketStorage const &Socket::storage() const { return m_storage; }
  */
 int Socket::fd() const { return m_fd; }
 
+std::string Socket::ip() const { return m_storage.get_ip(); }
+
 void Socket::set_blocking(bool blocking) {
 	int opts = ::fcntl(m_fd, F_GETFL);
 
@@ -217,10 +219,13 @@ void *get_in_addr(sockaddr *sa)
 }
 
 Socket::SocketStorage::SocketStorage() : storage(), length(sizeof(sockaddr_storage)) { }
+
 Socket::SocketStorage::SocketStorage(sockaddr_storage storage_, socklen_t length_)
 	: storage(storage_), length(length_) { }
+
 Socket::SocketStorage::SocketStorage(Socket::SocketStorage const &other)
 	: storage(other.storage), length(other.length) { }
+
 Socket::SocketStorage &Socket::SocketStorage::operator=(SocketStorage const &other) {
 	if ( &other == this )
 		return *this;
@@ -229,11 +234,19 @@ Socket::SocketStorage &Socket::SocketStorage::operator=(SocketStorage const &oth
 	return *this;
 }
 
-std::ostream &operator<<(std::ostream &os, Socket::SocketStorage const &s){
+std::string
+Socket::SocketStorage::get_ip() const {
 	char addr[INET6_ADDRSTRLEN];
 
-	inet_ntop(s.storage.ss_family, get_in_addr((sockaddr*)&s.storage), addr, sizeof addr);
-	os << std::string(addr);
+	const char *status = inet_ntop(storage.ss_family, get_in_addr((sockaddr*)&storage), addr, sizeof addr);
+
+	if ( status == NULL )
+		return "";
+	return addr;
+}
+
+std::ostream &operator<<(std::ostream &os, Socket::SocketStorage const &s){
+	os << s.get_ip();
 	return os;
 }
 

@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/18 14:07:03 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/09 08:43:40 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/09 11:39:22 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,13 @@
 
 # include "Server.hpp"
 # include "IRCApi.hpp"
+# include "Config.hpp"
 
 struct App {
     App();
     ~App();
 
-    void start(std::string const &port, std::string const &password) const;
-
-private:
-    App(App const &app);
-    App &operator=(App const &app);
+    void start(IRC::ConfigServer &config) const;
 };
 
 #endif

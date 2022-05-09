@@ -5,11 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/09 09:46:33 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/09 09:47:20 by lperson-         ###   ########.fr       */
+/*   Created: 2022/05/09 11:40:46 by lperson-          #+#    #+#             */
+/*   Updated: 2022/05/09 11:41:01 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "irc/ISubscriber.hpp"
+#include "ISubscriber.hpp"
 
 IRC::ISubscriber::~ISubscriber() { }

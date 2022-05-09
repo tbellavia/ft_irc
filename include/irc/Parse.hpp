@@ -1,33 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Mode.hpp                                           :+:      :+:    :+:   */
+/*   Parse.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/01 20:24:52 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/02 20:38:56 by bbellavi         ###   ########.fr       */
+/*   Created: 2022/04/27 00:18:14 by bbellavi          #+#    #+#             */
+/*   Updated: 2022/05/04 16:36:37 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MODE_HPP
-#define MODE_HPP
+#ifndef PARSE_HPP
+#define PARSE_HPP
+
+#include <string>
 
 namespace IRC
 {
-	enum Mode {
-		MODE_AWAY			= 0x01 << 0UL,
-		MODE_INVISIBLE		= 0x01 << 1UL,
-		MODE_WALLOPS		= 0x01 << 2UL,
-		MODE_RESTRICTED		= 0x01 << 3UL,
-		MODE_OPERATOR		= 0x01 << 4UL,
-		MODE_LOCAL_OPERATOR = 0x01 << 5UL,
-		MODE_RECEIPT		= 0x01 << 6UL,
-		/* Special private Mode for connection verification */
-		MODE_PASS_			= 0x01 << 7UL,
-		MODE_NICK_			= 0x01 << 8UL,
-		MODE_USER_			= 0x01 << 9UL
-	};
+	bool is_valid_nick(std::string const &nickname);
+	bool is_valid_user(std::string const &username);
+
+	bool is_valid_nick_char(char c);
+	bool is_special_char(char c);
+	bool is_nonwhite_char(char c);
 }
 
 

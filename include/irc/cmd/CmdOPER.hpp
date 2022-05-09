@@ -1,24 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   App.cpp                                            :+:      :+:    :+:   */
+/*   CmdOPER.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/18 14:13:48 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/09 11:39:34 by lperson-         ###   ########.fr       */
+/*   Created: 2022/05/05 11:13:48 by bbellavi          #+#    #+#             */
+/*   Updated: 2022/05/05 15:34:55 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "App.hpp"
+#ifndef FT_CMDOPER_HPP
+#define FT_CMDOPER_HPP
 
-App::App() { }
+# include "ACmd.hpp"
 
-App::~App() { }
+namespace IRC {
+	struct CmdOPER : ACmd {
+		CmdOPER(CmdCtx &ctx, std::string const &request);
+		virtual ~CmdOPER();
 
-void App::start(IRC::ConfigServer &config) const {
-	IRC::Server server(config, true);
-	IRC::Api api(config);
-
-	server.serve_forever(api);
+		virtual Actions execute();
+	};
 }
+
+#endif

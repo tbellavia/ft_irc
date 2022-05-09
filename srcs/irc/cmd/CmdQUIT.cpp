@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/23 21:57:08 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/23 23:32:24 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/04/26 01:36:25 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <iostream>
 
 IRC::CmdQUIT::CmdQUIT(CmdCtx &ctx, std::string const &request) 
-	: ACmd(ctx, request) { }
+	: ACmd(ctx, request, "QUIT") { }
 
 IRC::CmdQUIT::~CmdQUIT() { }
 
@@ -32,7 +32,7 @@ IRC::CmdQUIT::execute() {
 	std::cout << "CmdQUIT" << std::endl;
 	if ( args.size() >= 2 ){
 		std::string message = args[1];
-		
+
 		actions.push(Action::send(user, message));
 	}
 	actions.push(Action::disconnect(user));
