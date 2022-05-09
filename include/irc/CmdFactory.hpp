@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CmdFactory.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 14:22:35 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/23 22:01:42 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/09 09:36:52 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,12 @@ namespace IRC
 		ACmd *create_quit_cmd(CmdCtx &ctx, std::string const &request);
 	public:
 		CmdFactory();
+		CmdFactory(CmdFactory const &copy);
 		virtual ~CmdFactory();
 
 		ACmd *create_cmd(CmdCtx &ctx, std::string const &request);
+
+		CmdFactory &operator=(CmdFactory const &rhs);
 	};
 }
 

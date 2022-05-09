@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CmdFactory.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 23:07:36 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/23 22:01:30 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/09 09:37:33 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@ IRC::CmdFactory::CmdFactory() : ICmdFactory(), m_callbacks()
 	m_callbacks.insert(std::make_pair("NICK", &CmdFactory::create_nick_cmd));
 	m_callbacks.insert(std::make_pair("QUIT", &CmdFactory::create_quit_cmd));
 }
+
+IRC::CmdFactory::CmdFactory(CmdFactory const &copy):
+	m_callbacks(copy.m_callbacks) { }
 
 IRC::CmdFactory::~CmdFactory() { }
 
@@ -54,4 +57,12 @@ IRC::CmdFactory::create_nick_cmd(CmdCtx &ctx, std::string const &request) {
 IRC::ACmd*
 IRC::CmdFactory::create_quit_cmd(CmdCtx &ctx, std::string const &request) {
 	return new CmdQUIT(ctx, request);
+}
+
+IRC::CmdFactory &IRC::CmdFactory::operator=(CmdFactory const &rhs) {
+	if (this == &rhs)
+		return *this;
+
+	m_callbacks = rhs.m_callbacks;
+	return *this;
 }
