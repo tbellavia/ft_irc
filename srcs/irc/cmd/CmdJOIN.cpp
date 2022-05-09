@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CmdJOIN.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 22:53:22 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/08 22:33:52 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/09 12:49:32 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ IRC::CmdJOIN::execute() {
 			++keys_it;
 		}
 
-		if ( Channel::is_valid(name) ){
+		if ( Channel::is_valid_name(name) ){
 			Channel *channel = channels.find(name);
 
 			if ( channel != NULL ) {
