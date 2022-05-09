@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:34:06 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/09 12:42:32 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/09 14:29:22 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,10 @@ namespace IRC
 		void set_key(std::string const &pass);
 		void set_topic(std::string const &topic);
 
-		bool is_banned(User *user) const;
-		bool is_invited(User *user) const;
-		bool is_operator(User *user) const;
-		bool is_voices(User *user) const;
+		bool is_banned_user(User *user) const;
+		bool is_invited_user(User *user) const;
+		bool is_operator_user(User *user) const;
+		bool is_voices_user(User *user) const;
 
 		std::string const &get_name() const;
 		int get_mode() const;
