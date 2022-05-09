@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:54:08 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/09 14:01:48 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/09 14:08:04 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,9 @@ namespace IRC {
 		virtual Actions execute();
 
 	private:
-		
+		Actions execute_channel_mode_(
+			std::vector<std::string> const &args, ReplyBuilder &reply
+		);
 	};
 }
 
