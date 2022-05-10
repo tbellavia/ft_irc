@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:16 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/10 11:55:52 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/10 16:29:36 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ namespace IRC
 
 		// User errors (mode etc...)
 		std::string error_users_dont_match();
+		std::string error_u_mode_unknown_flag();
 
 		// User replies (infos etc...)
 		std::string reply_u_mode_is(

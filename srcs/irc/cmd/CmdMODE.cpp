@@ -6,12 +6,28 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:52:41 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/10 15:37:45 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/10 16:53:06 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc/cmd/CmdMODE.hpp"
+#include "irc/Mode.hpp"
 #include <iostream>
+
+/**
+ * @brief theses 2 static variables are helper to convert mode int to char mode
+ */
+
+int IRC::CmdMODE::m_modes[] = {
+	IRC::MODE_AWAY,
+	IRC::MODE_INVISIBLE,
+	IRC::MODE_WALLOPS,
+	IRC::MODE_RESTRICTED,
+	IRC::MODE_OPERATOR,
+	IRC::MODE_LOCAL_OPERATOR
+};
+
+char IRC::CmdMODE::m_char_modes[] = "aiwroO";
 
 IRC::CmdMODE::CmdMODE(CmdCtx &ctx, std::string const &request):
 	ACmd(ctx, request, "MODE") { }
@@ -60,6 +76,20 @@ IRC::Actions IRC::CmdMODE::execute_channel_mode_(
 	return Actions::unique_idle();
 }
 
+/**
+ * @brief Change users modes in IRC
+ * Checks:
+ *	if user targeted is the same that made the command,
+ *	if user set its mode: if no just display its currently modes
+ *	if modes are valids
+ *
+ * then change its modes if necessary and display its new modes
+ *
+ * @param args user target and modes to change
+ * @param reply the reply built previously
+ * @return IRC::Actions actions sent to the server
+ */
+
 IRC::Actions IRC::CmdMODE::execute_user_mode_(
 	std::vector<std::string> const &args, ReplyBuilder &reply
 ) {
@@ -80,20 +110,104 @@ IRC::Actions IRC::CmdMODE::execute_user_mode_(
 	}
 
 	std::vector<std::string> mode_list = parse_mode_string_(args[2]);
+	if ( !this->is_mode_users_valid_(mode_list) )
+		return Actions::unique_send(sender, reply.error_u_mode_unknown_flag());
+
 	for ( std::size_t i = 0; i < mode_list.size(); ++i ) {
-		std::cout << mode_list[i] << std::endl;
+		if ( mode_list[i][0] == '-' )
+			delete_mode_list_to_user_(sender, mode_list[i]);
+		else
+			add_mode_list_to_user_(sender, mode_list[i]);
 	}
 
-	return Actions::unique_idle();
+	return Actions::unique_send(
+		sender, reply.reply_u_mode_is(
+			sender->get_nickname(), sender->get_mode()
+		)
+	);
+}
+
+/**
+ * @brief Set modes for user
+ * 
+ * @param target user modified
+ * @param mode_list list of modes set in user
+ */
+
+void IRC::CmdMODE::add_mode_list_to_user_(
+	User *target, std::string const &mode_list
+) {
+	std::size_t i = mode_list[0] == '+' ? 1 : 0;
+	for ( ; i < mode_list.length(); ++i ) {
+		int *mode = this->char_to_mode_(mode_list[i]);
+		target->set_mode(*mode);
+	}
+}
+
+/**
+ * @brief Unset modes for user
+ * 
+ * @param target user modified
+ * @param mode_list list of modes unset in user
+ */
+
+void IRC::CmdMODE::delete_mode_list_to_user_(
+	User *target, std::string const &mode_list
+) {
+	for ( std::size_t i = 1; i < mode_list.length(); ++i ) {
+		int *mode = this->char_to_mode_(mode_list[i]);
+		target->unset_mode(*mode);
+	}
+}
+
+/**
+ * @brief Check if list of mode operations contains valid nodes
+ * 
+ * @param mode_lists the list of mode operations
+ * @return true if valid
+ * @return false if not valid (contains unknown mode)
+ */
+
+bool IRC::CmdMODE::is_mode_users_valid_(
+	std::vector<std::string> const &mode_lists
+) {
+	std::string delimiters = "+-";
+	for ( std::size_t i = 0; i < mode_lists.size(); ++i ) {
+		if ( mode_lists[i].length() == 1 )
+			return false;
+
+		std::size_t d = delimiters.find(mode_lists[i][0]) != std::string::npos ?
+			1 :
+			0;
+		for ( ; d < mode_lists[i].length(); ++d )
+			if ( !this->char_to_mode_(mode_lists[i][d]) )
+				return false;
+	}
+	return true;
+}
+
+/**
+ * @brief Character c to mode
+ * 
+ * @param c the character to converts
+ * @return int* pointer to the mode value or NULL if inexistant
+ */
+
+int *IRC::CmdMODE::char_to_mode_(char c) {
+	for ( std::size_t i = 0; i < sizeof(m_char_modes); ++i )
+		if ( m_char_modes[i] == c )
+			return m_modes + i;
+	return NULL;
 }
 
 /**
  * @brief Parse simple mode string into array of modes strings
  * Each strings in array will begin with '+' or '-' and a list of mods to modify
  *
- * @param mode_string 
- * @return std::vector<std::string> 
+ * @param mode_string the string with mode operations
+ * @return std::vector<std::string> the differents list of modes operations
  */
+
 std::vector<std::string> IRC::CmdMODE::parse_mode_string_(
 	std::string const &mode_string
 ) const {

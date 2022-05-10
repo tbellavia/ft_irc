@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/10 11:56:25 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/10 16:33:45 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,6 +193,16 @@ IRC::ReplyBuilder::error_users_dont_match() {
 	return reply;
 }
 
+std::string
+IRC::ReplyBuilder::error_u_mode_unknown_flag() {
+	std::string reply = this->build_header_(
+		NumericReplies::ERR_UMODEUNKNOWNFLAG
+	);
+
+	reply.append(" :Unknown MODE flag");
+	return reply;
+}
+
 // User replies (infos etc...)
 std::string
 IRC::ReplyBuilder::reply_u_mode_is(
@@ -205,7 +215,7 @@ IRC::ReplyBuilder::reply_u_mode_is(
 	reply.append(" :+");
 
 	char mode_literrals[] = "aiwroOs";
-	for (int i = 0; i < 5; ++i) {
+	for (int i = 0; i < 6; ++i) {
 		if ( user_mode & (0x01 << i) )
 			reply.push_back(mode_literrals[i]);
 	}
