@@ -127,6 +127,10 @@ class TestIRC:
 		test_oper_pass_mismatch()
 		test_oper_success()
 
+	def test_join(self):
+		self._send("JOIN #first,#second,#third key1,key2")
+		self._send("JOIN #fir st,#second")
+
 	def launch_test(self):
 		"""
 			Launch all tests.
@@ -140,7 +144,8 @@ class TestIRC:
 		# self.test_nick()
 		# self.test_user()
 		# self.test_connection()
-		self.test_oper()
+		# self.test_oper()
+		self.test_join()
 
 		self._disconnect()
 

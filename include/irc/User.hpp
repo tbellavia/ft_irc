@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 14:22:35 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/04 19:07:48 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/08 14:13:54 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,9 @@ namespace IRC
 		bool pass_accepted() const;
 
 		std::string const	&get_username() const;
-		std::string const	&get_nick() const;
+		std::string const	&get_nickname() const;
 		std::string const	&get_realname() const;
+		std::string			get_hostname();
 		int					get_mode() const;
 		Socket				*get_socket();
 
