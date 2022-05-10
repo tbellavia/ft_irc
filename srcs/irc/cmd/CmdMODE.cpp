@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:52:41 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/10 09:47:35 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/10 09:56:37 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,14 @@ IRC::Actions IRC::CmdMODE::execute_channel_mode_(
 	std::vector<std::string> const &args, ReplyBuilder &reply
 ) {
 	Channel *channel = this->channels().find(args[1]);
-	if (!channel)
+	if ( !channel )
 		return Actions::unique_send(
 			this->sender(), reply.error_no_such_channel(args[1])
+		);
+
+	if ( channel->find(this->sender()) == channel->end() )
+		return Actions::unique_send(
+			this->sender(), reply.error_not_on_channel(args[1])
 		);
 
 	return Actions::unique_idle();
