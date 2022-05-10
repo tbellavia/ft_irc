@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:38:55 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/10 08:55:24 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/10 09:00:54 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,8 +132,18 @@ IRC::Channel::equal_key(std::string const &key) const {
 }
 
 /**
- * Iterators to iterate through channel users
+ * Iterators and getters to iterate through channel users
 */
+
+IRC::Channel::iterator
+IRC::Channel::find(User *to_find) {
+	return m_users.find(to_find);
+}
+
+IRC::Channel::const_iterator
+IRC::Channel::find(User *to_find) const {
+	return m_users.find(to_find);
+}
 
 IRC::Channel::iterator
 IRC::Channel::begin() {
