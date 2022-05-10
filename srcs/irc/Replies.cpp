@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Replies.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/09 14:32:11 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/10 13:56:20 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,6 +210,47 @@ IRC::ReplyBuilder::reply_end_of_names(std::string const &channel){
 }
 
 std::string
+IRC::ReplyBuilder::reply_who_reply(Channel *channel, User *user) {
+	std::string reply = this->build_header_(NumericReplies::RPL_WHOREPLY);
+
+	// "<channel> <user> <host> <server> <nick> <H|G>[*][@|+] :<hopcount> <real name>"
+	reply.append(" ");
+	reply.append(channel->get_name());
+	reply.append(" ");
+	reply.append(user->get_username());
+	reply.append(" ");
+	reply.append(user->get_hostname());
+	reply.append(" ");
+	reply.append(m_sender);
+	reply.append(" ");
+	reply.append(user->get_nickname());
+	reply.append(" ");
+	if ( user->mode_isset(MODE_AWAY) )
+		reply.append("G");
+	else
+		reply.append("H");
+	reply.append(" ");
+	if ( channel != NULL ){
+		reply.append(get_user_mode_symbol_(channel, user));
+		reply.append(" ");
+	}
+	// We don't manage server to server, the hopcount is always 0
+	reply.append("0 :");
+	reply.append(user->get_realname());
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::reply_end_of_who(std::string const &name) {
+	std::string reply = this->build_header_(NumericReplies::RPL_ENDOFWHO);
+
+	reply.append(" ");
+	reply.append(name);
+	reply.append(" :End of /WHO list");
+	return reply;
+}
+
+std::string
 IRC::ReplyBuilder::build_header_(int code){
 	std::string s;
 
@@ -256,4 +297,17 @@ IRC::ReplyBuilder::code_to_string_(int digit){
 	digit /= 10;
 	c = TO_CHAR(digit);
 	return c + b + a;
+}
+
+/**
+ * Get user mode symbol
+ * 
+ * Returns `@' or `+' if user is a channel operator
+ * or has been allowed to talk on the channel, the
+ * symbol `@` is returned, otherwise the symbol
+ * `+' is returned.
+ */
+std::string
+IRC::ReplyBuilder::get_user_mode_symbol_(Channel *channel, User *user){
+	return (std::string[2]){"+", "@"}[(channel->is_operator_user(user) || channel->is_voices_user(user))];
 }

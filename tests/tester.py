@@ -131,6 +131,15 @@ class TestIRC:
 		self._send("JOIN #first,#second,#third key1,key2")
 		self._send("JOIN #fir st,#second")
 
+	def test_who(self):
+		self._send("PASS pass")
+		self._send("NICK MielPops")
+		self._send("USER Tony * 0 :realname")
+		self._send("JOIN #channel")
+		self._send("WHO #channel")
+		print(self._recv())
+		print(self._recv())
+
 	def launch_test(self):
 		"""
 			Launch all tests.
@@ -145,9 +154,10 @@ class TestIRC:
 		# self.test_user()
 		# self.test_connection()
 		# self.test_oper()
-		self.test_join()
+		# self.test_join()
+		self.test_who()
 
 		self._disconnect()
 
-tester = TestIRC("127.0.0.1", 6697, "pass")
+tester = TestIRC("127.0.0.1", 6667, "pass")
 tester.launch_test()

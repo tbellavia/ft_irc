@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:16 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/08 14:08:48 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/10 13:11:47 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ namespace IRC
 
 		std::string build_header_(int code);
 		std::string code_to_string_(int code);
+		std::string get_user_mode_symbol_(Channel *channel, User *user);
 	public:
 		ReplyBuilder(std::string const &sender, User *target = NULL);
 		ReplyBuilder(ReplyBuilder const &other);
@@ -54,9 +55,14 @@ namespace IRC
 		std::string reply_end_of_names(std::string const &channel);
 		std::string reply_join(std::string const &channel);
 
+		std::string reply_who_reply(Channel *channel, User *user);
+		std::string reply_end_of_who(std::string const &name);
+
+
 		std::string error_no_oper_host();
 		std::string error_password_mismatch();
 		std::string reply_youre_oper();
+
 	};
 }
 
