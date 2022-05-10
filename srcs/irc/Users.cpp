@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Users.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 15:43:00 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/09 12:50:56 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/10 08:41:33 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,11 @@ IRC::Users::get_rview() const{
 bool
 IRC::Users::has(User *user) const {
 	return m_users.count(user) == 1;
+}
+
+IRC::Users::iterator
+IRC::Users::find(User *to_find) {
+	return m_users.find(to_find);
 }
 
 IRC::Action
