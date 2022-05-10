@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 15:22:18 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/10 08:42:04 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/10 08:59:40 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,13 @@ namespace IRC
 		void add(User *user);
 		void remove(User *user);
 		bool has(User *user) const;
+
+		/**
+		 * Getters and iterators for user.
+		 */
+
 		iterator find(User *to_find);
+		const_iterator find(User *to_find) const;
 
 		view_type				get_view();
 		const_view_type			get_view() const;

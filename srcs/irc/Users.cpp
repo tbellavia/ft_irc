@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 15:43:00 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/10 08:41:33 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/10 08:59:45 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,11 @@ IRC::Users::has(User *user) const {
 
 IRC::Users::iterator
 IRC::Users::find(User *to_find) {
+	return m_users.find(to_find);
+}
+
+IRC::Users::const_iterator
+IRC::Users::find(User *to_find) const {
 	return m_users.find(to_find);
 }
 
