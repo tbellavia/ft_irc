@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:38:55 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/09 14:30:06 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/10 08:52:44 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,50 @@ IRC::Channel::is_voices_user(User *user) const{
 bool
 IRC::Channel::equal_key(std::string const &key) const {
 	return m_key == key;
+}
+
+/**
+ * Iterators to iterate through channel users
+*/
+
+IRC::Channel::iterator
+IRC::Channel::begin() {
+	return m_users.begin();
+}
+
+IRC::Channel::const_iterator
+IRC::Channel::begin() const {
+	return m_users.begin();
+}
+
+IRC::Channel::iterator
+IRC::Channel::end() {
+	return m_users.end();
+}
+
+IRC::Channel::const_iterator
+IRC::Channel::end() const {
+	return m_users.end();
+}
+
+IRC::Channel::reverse_iterator
+IRC::Channel::rbegin() {
+	return m_users.rbegin();
+}
+
+IRC::Channel::const_reverse_iterator
+IRC::Channel::rbegin() const {
+	return m_users.rbegin();
+}
+
+IRC::Channel::reverse_iterator
+IRC::Channel::rend() {
+	return m_users.rend();
+}
+
+IRC::Channel::const_reverse_iterator
+IRC::Channel::rend() const {
+	return m_users.rend();
 }
 
 /**
