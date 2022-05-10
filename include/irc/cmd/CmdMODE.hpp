@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:54:08 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/10 11:04:32 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/10 13:23:13 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,10 @@ namespace IRC {
 		Actions execute_user_mode_(
 			std::vector<std::string> const &args, ReplyBuilder &reply
 		);
+
+		std::vector<std::string> parse_mode_string_(
+			std::string const &mode_string
+		) const;
 	};
 }
 
