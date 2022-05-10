@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:16 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/10 11:19:05 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/10 11:55:52 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,13 @@ namespace IRC
 		std::string reply_end_of_names(std::string const &channel);
 		std::string reply_join(std::string const &channel);
 
-		//User errors (mode etc...)
+		// User errors (mode etc...)
 		std::string error_users_dont_match();
+
+		// User replies (infos etc...)
+		std::string reply_u_mode_is(
+			std::string const &user_name, int user_mode
+		);
 
 		std::string error_no_oper_host();
 		std::string error_password_mismatch();

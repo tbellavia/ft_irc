@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/10 11:20:41 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/10 11:56:25 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,6 +190,25 @@ IRC::ReplyBuilder::error_users_dont_match() {
 	std::string reply = this->build_header_(NumericReplies::ERR_USERSDONTMATCH);
 
 	reply.append(" :Can't change mode for other users");
+	return reply;
+}
+
+// User replies (infos etc...)
+std::string
+IRC::ReplyBuilder::reply_u_mode_is(
+	std::string const &user_name, int user_mode
+) {
+	std::string reply = this->build_header_(NumericReplies::RPL_UMODEIS);
+
+	reply.append(" ");
+	reply.append(user_name);
+	reply.append(" :+");
+
+	char mode_literrals[] = "aiwroOs";
+	for (int i = 0; i < 5; ++i) {
+		if ( user_mode & (0x01 << i) )
+			reply.push_back(mode_literrals[i]);
+	}
 	return reply;
 }
 

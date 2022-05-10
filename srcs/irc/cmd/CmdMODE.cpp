@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:52:41 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/10 11:24:14 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/10 11:58:26 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,14 @@ IRC::Actions IRC::CmdMODE::execute_user_mode_(
 		return Actions::unique_send(
 			sender, reply.error_users_dont_match()
 		);
+
+	if ( args.size() == Expected_args(1) ) {
+		return Actions::unique_send(
+			sender, reply.reply_u_mode_is(
+				sender->get_nickname(), sender->get_mode()
+			)
+		);
+	}
 
 	return Actions::unique_idle();
 }
