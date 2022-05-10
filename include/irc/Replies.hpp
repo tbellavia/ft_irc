@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:16 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/10 09:50:43 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/10 10:06:46 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,17 @@ namespace IRC
 		std::string error_erroneus_nickname(std::string const &nickname);
 		std::string error_nickname_collision(std::string const &nickname);
 
-		// Channel
+		// Channel errors
 		std::string error_no_such_channel(std::string const &channel);
 		std::string error_too_many_channels(std::string const &channel);
 		std::string error_bad_channel_key(std::string const &channel);
 		std::string error_banned_from_channel(std::string const &channel);
 		std::string error_invite_only_channel(std::string const &channel);
 		std::string error_channel_is_full(std::string const &channel);
+		std::string	error_not_on_channel(std::string const &channel_name);
+		std::string error_chan_o_privs_needed(std::string const &channel_name);
+
+		// Channel replies
 		std::string reply_topic(std::string const &channel, std::string const &topic);
 		std::string reply_name_reply(Channel &channel);
 		std::string reply_end_of_names(std::string const &channel);
@@ -58,7 +62,6 @@ namespace IRC
 		std::string error_password_mismatch();
 		std::string reply_youre_oper();
 
-		std::string	error_not_on_channel(std::string const &channel_name);
 	};
 }
 
