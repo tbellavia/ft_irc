@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Users.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 15:22:18 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/08 12:50:38 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/10 08:59:40 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,26 @@ namespace IRC
 		void remove(User *user);
 		bool has(User *user) const;
 
+		/**
+		 * Getters and iterators for user.
+		 */
+
+		iterator find(User *to_find);
+		const_iterator find(User *to_find) const;
+
 		view_type				get_view();
 		const_view_type			get_view() const;
 		reverse_view_type		get_rview();
 		const_reverse_view_type	get_rview() const;
+
+		iterator begin();
+		iterator end();
+		const_iterator begin() const;
+		const_iterator end() const;
+		reverse_iterator rbegin();
+		reverse_iterator rend();
+		const_reverse_iterator rbegin() const;
+		const_reverse_iterator rend() const;
 
 		template<typename Pred>
 		bool contains(Pred pred) const;

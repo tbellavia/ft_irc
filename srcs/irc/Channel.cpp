@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:38:55 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/09 12:58:28 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/10 09:02:58 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,34 +106,88 @@ IRC::Channel::get_topic() const {
 	return m_topic;
 }
 
-IRC::Users::view_type
-IRC::Channel::get_users() {
-	return m_users.get_view();
-}
-
 bool
-IRC::Channel::is_banned(User *user) const {
+IRC::Channel::is_banned_user(User *user) const {
 	return m_bans.has(user);
 }
 
 bool
-IRC::Channel::is_invited(User *user) const{
+IRC::Channel::is_invited_user(User *user) const{
 	return m_invites.has(user);
 }
 
 bool
-IRC::Channel::is_operator(User *user) const{
+IRC::Channel::is_operator_user(User *user) const{
 	return m_operators.has(user);
 }
 
 bool
-IRC::Channel::is_voices(User *user) const{
+IRC::Channel::is_voices_user(User *user) const{
 	return m_voices.has(user);
 }
 
 bool
 IRC::Channel::equal_key(std::string const &key) const {
 	return m_key == key;
+}
+
+/**
+ * Iterators and getters to iterate through channel users
+*/
+
+IRC::Channel::iterator
+IRC::Channel::find(User *to_find) {
+	return m_users.find(to_find);
+}
+
+IRC::Channel::const_iterator
+IRC::Channel::find(User *to_find) const {
+	return m_users.find(to_find);
+}
+
+IRC::Channel::iterator
+IRC::Channel::begin() {
+	return m_users.begin();
+}
+
+IRC::Channel::const_iterator
+IRC::Channel::begin() const {
+	return m_users.begin();
+}
+
+IRC::Channel::iterator
+IRC::Channel::end() {
+	return m_users.end();
+}
+
+IRC::Channel::const_iterator
+IRC::Channel::end() const {
+	return m_users.end();
+}
+
+IRC::Channel::reverse_iterator
+IRC::Channel::rbegin() {
+	return m_users.rbegin();
+}
+
+IRC::Channel::const_reverse_iterator
+IRC::Channel::rbegin() const {
+	return m_users.rbegin();
+}
+
+IRC::Channel::reverse_iterator
+IRC::Channel::rend() {
+	return m_users.rend();
+}
+
+IRC::Channel::const_reverse_iterator
+IRC::Channel::rend() const {
+	return m_users.rend();
+}
+
+IRC::Users::view_type
+IRC::Channel::get_users() {
+	return m_users.get_view();
 }
 
 /**

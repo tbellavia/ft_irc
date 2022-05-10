@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Users.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 15:43:00 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/08 12:50:34 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/10 08:59:45 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,57 @@ IRC::Users::has(User *user) const {
 	return m_users.count(user) == 1;
 }
 
+IRC::Users::iterator
+IRC::Users::find(User *to_find) {
+	return m_users.find(to_find);
+}
+
+IRC::Users::const_iterator
+IRC::Users::find(User *to_find) const {
+	return m_users.find(to_find);
+}
+
 IRC::Action
 IRC::Users::notify(std::string const &msg) {
 	return Action::sendall(std::vector<User*>(m_users.begin(), m_users.end()), msg);
+}
+
+IRC::Users::iterator
+IRC::Users::begin(){
+	return m_users.begin();
+}
+
+IRC::Users::iterator 
+IRC::Users::end(){
+	return m_users.end();
+}
+
+IRC::Users::const_iterator 
+IRC::Users::begin() const{
+	return m_users.begin();
+}
+
+IRC::Users::const_iterator 
+IRC::Users::end() const{
+	return m_users.end();
+}
+
+IRC::Users::reverse_iterator 
+IRC::Users::rbegin(){
+	return m_users.rbegin();
+}
+
+IRC::Users::reverse_iterator 
+IRC::Users::rend(){
+	return m_users.rend();
+}
+
+IRC::Users::const_reverse_iterator 
+IRC::Users::rbegin() const{
+	return m_users.rbegin();
+}
+
+IRC::Users::const_reverse_iterator 
+IRC::Users::rend() const{
+	return m_users.rend();
 }

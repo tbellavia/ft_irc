@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Replies.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/08 15:31:55 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/09 14:32:11 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,7 +190,7 @@ IRC::ReplyBuilder::reply_name_reply(Channel &channel){
 			reply.append(" ");
 		// TODO: Do correct symbol assignation
 		reply.append("@");
-		// if ( channel.is_voices(user) || channel.is_operator(user) )
+		// if ( channel.is_voices_user(user) || channel.is_operator_user(user) )
 		// 	reply.append("@");
 		// else
 		// 	reply.append("+");
