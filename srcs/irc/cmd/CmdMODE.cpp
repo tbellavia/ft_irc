@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:52:41 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/10 10:10:35 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/10 11:24:14 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ IRC::Actions IRC::CmdMODE::execute() {
 		return this->execute_channel_mode_(args, reply);
 
 	std::cout << std::endl;
-	return Actions::unique_idle();
+	return this->execute_user_mode_(args, reply);
 }
 
 IRC::Actions IRC::CmdMODE::execute_channel_mode_(
@@ -55,6 +55,20 @@ IRC::Actions IRC::CmdMODE::execute_channel_mode_(
 	if ( !channel->is_operator_user(sender) )
 		return Actions::unique_send(
 			sender, reply.error_chan_o_privs_needed(channel_name)
+		);
+
+	return Actions::unique_idle();
+}
+
+IRC::Actions IRC::CmdMODE::execute_user_mode_(
+	std::vector<std::string> const &args, ReplyBuilder &reply
+) {
+	User *sender = this->sender();
+	std::string const target_name = args[1];
+
+	if ( sender->get_nickname() != target_name )
+		return Actions::unique_send(
+			sender, reply.error_users_dont_match()
 		);
 
 	return Actions::unique_idle();
