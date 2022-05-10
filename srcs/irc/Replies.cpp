@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/10 13:56:20 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/10 16:02:23 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,11 +229,10 @@ IRC::ReplyBuilder::reply_who_reply(Channel *channel, User *user) {
 		reply.append("G");
 	else
 		reply.append("H");
-	reply.append(" ");
 	if ( channel != NULL ){
 		reply.append(get_user_mode_symbol_(channel, user));
-		reply.append(" ");
 	}
+	reply.append(" ");
 	// We don't manage server to server, the hopcount is always 0
 	reply.append("0 :");
 	reply.append(user->get_realname());

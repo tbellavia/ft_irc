@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 22:53:22 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/10 12:17:02 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/10 15:45:37 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,8 @@ IRC::CmdJOIN::execute() {
 				Channel new_channel(name, user);
 				
 				std::cout << "Created channel: " << name << std::endl;
-				channels.add(new_channel);
 				new_channel.subscribe(user);
+				channels.add(new_channel);
 				this->channel_created_reply(reply, actions, new_channel);
 			}
 		} else {
