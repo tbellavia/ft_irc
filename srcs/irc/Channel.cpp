@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:38:55 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/10 08:52:44 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/10 08:55:24 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,11 +106,6 @@ IRC::Channel::get_topic() const {
 	return m_topic;
 }
 
-IRC::Users::view_type
-IRC::Channel::get_users() {
-	return m_users.get_view();
-}
-
 bool
 IRC::Channel::is_banned_user(User *user) const {
 	return m_bans.has(user);
@@ -178,6 +173,11 @@ IRC::Channel::rend() {
 IRC::Channel::const_reverse_iterator
 IRC::Channel::rend() const {
 	return m_users.rend();
+}
+
+IRC::Users::view_type
+IRC::Channel::get_users() {
+	return m_users.get_view();
 }
 
 /**
