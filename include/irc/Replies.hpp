@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Replies.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:16 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/08 14:08:48 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/10 09:50:43 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ namespace IRC
 		std::string error_no_oper_host();
 		std::string error_password_mismatch();
 		std::string reply_youre_oper();
+
+		std::string	error_not_on_channel(std::string const &channel_name);
 	};
 }
 
