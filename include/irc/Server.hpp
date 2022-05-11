@@ -29,6 +29,7 @@ namespace IRC
 		Server(ConfigServer &conf, bool bind_and_activate = false);
 		Server(Server const &other);
 		Server &operator=(Server const &other);
+		~Server();
 
 		void activate() const;
 		void bind() const;

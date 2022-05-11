@@ -6,7 +6,7 @@
 #    By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/12 19:27:05 by bbellavi          #+#    #+#              #
-#    Updated: 2022/05/10 13:42:40 by bbellavi         ###   ########.fr        #
+#    Updated: 2022/05/11 22:08:37 by bbellavi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,6 +42,7 @@ SRCS		=	main.cpp						\
 				srcs/irc/cmd/CmdOPER.cpp		\
 				srcs/irc/cmd/CmdQUIT.cpp		\
 				srcs/irc/cmd/CmdPONG.cpp		\
+				srcs/irc/cmd/CmdMODE.cpp		\
 				srcs/irc/ISubscriber.cpp		\
 				srcs/irc/User.cpp				\
 				srcs/irc/Users.cpp				\
@@ -74,6 +75,7 @@ HEADERS		=	include/irc/Server.hpp			\
 				include/irc/cmd/CmdWHO.hpp		\
 				include/irc/cmd/CmdPONG.hpp		\
 				include/irc/cmd/CmdQUIT.hpp		\
+				srcs/irc/cmd/CmdMODE.hpp		\
 				include/network/Network.hpp		\
 				include/network/Selector.hpp	\
 				include/network/File.hpp		\

@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:16 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/10 13:11:47 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/11 22:06:47 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,17 @@ namespace IRC
 		std::string error_erroneus_nickname(std::string const &nickname);
 		std::string error_nickname_collision(std::string const &nickname);
 
-		// Channel
+		// Channel errors
 		std::string error_no_such_channel(std::string const &channel);
 		std::string error_too_many_channels(std::string const &channel);
 		std::string error_bad_channel_key(std::string const &channel);
 		std::string error_banned_from_channel(std::string const &channel);
 		std::string error_invite_only_channel(std::string const &channel);
 		std::string error_channel_is_full(std::string const &channel);
+		std::string	error_not_on_channel(std::string const &channel_name);
+		std::string error_chan_o_privs_needed(std::string const &channel_name);
+
+		// Channel replies
 		std::string reply_topic(std::string const &channel, std::string const &topic);
 		std::string reply_name_reply(Channel &channel);
 		std::string reply_end_of_names(std::string const &channel);
@@ -58,6 +62,14 @@ namespace IRC
 		std::string reply_who_reply(Channel *channel, User *user);
 		std::string reply_end_of_who(std::string const &name);
 
+		// User errors (mode etc...)
+		std::string error_users_dont_match();
+		std::string error_u_mode_unknown_flag();
+
+		// User replies (infos etc...)
+		std::string reply_u_mode_is(
+			std::string const &user_name, int user_mode
+		);
 
 		std::string error_no_oper_host();
 		std::string error_password_mismatch();

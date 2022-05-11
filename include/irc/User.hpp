@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   User.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 14:22:35 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/08 14:13:54 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/11 13:29:09 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ namespace IRC
 		std::string m_realname;
 		int			m_mode;
 		Socket		*m_socket;
+
+		void update_full_name_();
 	public:
 		User();
 		User(std::string const &pseudo, std::string const &nick, 
@@ -52,7 +54,8 @@ namespace IRC
 		std::string const	&get_username() const;
 		std::string const	&get_nickname() const;
 		std::string const	&get_realname() const;
-		std::string			get_hostname();
+		std::string			get_fullname() const;
+		std::string			get_hostname() const;
 		int					get_mode() const;
 		Socket				*get_socket();
 

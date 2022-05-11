@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 18:47:47 by bbellavi          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2022/05/10 18:03:59 by bbellavi         ###   ########.fr       */
+=======
+/*   Updated: 2022/05/09 11:35:59 by lperson-         ###   ########.fr       */
+>>>>>>> dev
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +45,8 @@ IRC::Server::operator=(Server const &other) {
 	m_selector = other.m_selector;
 	return *this;
 }
+
+IRC::Server::~Server() { }
 
 void IRC::Server::activate() const {
 	std::cout << "Listening on " << m_config.server_host << ":" << m_config.server_port << std::endl;
@@ -83,8 +89,13 @@ void IRC::Server::serve_forever(IRC::Api &api) {
 				} else {
 					file->push_request( buffer );
 
-					while ( file->available_request() ){
-						actions = api.process_request(socket, file->pop_request());
+					/*
+					 * Process all request from client (file), beware that
+					 * this could block other clients if one has too many
+					 * requests.
+					*/
+					while ( file->available() ){
+						actions = api.process_request(socket, file->pop());
 						this->process_actions(api, actions);
 						std::cout << "============================================" << std::endl;
 					}
@@ -109,7 +120,7 @@ void IRC::Server::serve_forever(IRC::Api &api) {
 }
 
 void
-IRC::Server::process_actions(Api &api, Actions &actions){
+IRC::Server::process_actions(Api &api, Actions &actions) {
 	Action action;
 
 	while ( !actions.empty() ){

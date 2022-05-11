@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/10 16:02:23 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/11 22:07:38 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,6 +159,66 @@ IRC::ReplyBuilder::error_channel_is_full(std::string const &channel){
 	reply.append(" ");
 	reply.append(channel);
 	reply.append(" :Cannot join channel (+l)");
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::error_not_on_channel(std::string const &channel_name) {
+	std::string reply = this->build_header_(NumericReplies::ERR_NOTONCHANNEL);
+
+	reply.append(" ");
+	reply.append(channel_name);
+	reply.append(" :You're not on that channel");
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::error_chan_o_privs_needed(std::string const &channel_name) {
+	std::string reply = this->build_header_(
+		NumericReplies::ERR_CHANOPRIVSNEEDED
+	);
+
+	reply.append(" ");
+	reply.append(channel_name);
+	reply.append(" :You're not channel operator");
+	return reply;
+}
+
+// User errors (mode etc...)
+std::string
+IRC::ReplyBuilder::error_users_dont_match() {
+	std::string reply = this->build_header_(NumericReplies::ERR_USERSDONTMATCH);
+
+	reply.append(" :Can't change mode for other users");
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::error_u_mode_unknown_flag() {
+	std::string reply = this->build_header_(
+		NumericReplies::ERR_UMODEUNKNOWNFLAG
+	);
+
+	reply.append(" :Unknown MODE flag");
+	return reply;
+}
+
+// User replies (infos etc...)
+std::string
+IRC::ReplyBuilder::reply_u_mode_is(
+	std::string const &user_name, int user_mode
+) {
+	std::string reply = this->build_header_(NumericReplies::RPL_UMODEIS);
+
+	reply.append(" ");
+	reply.append(user_name);
+	reply.append(" :+");
+
+	char mode_literrals[] = "aiwroOs";
+	for (int i = 0; i < 6; ++i) {
+		if ( user_mode & (0x01 << i) )
+			reply.push_back(mode_literrals[i]);
+	}
 	return reply;
 }
 
