@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ISELECTORVALUE_HPP
-#define ISELECTORVALUE_HPP
+#ifndef FILE_HPP
+#define FILE_HPP
 
 # include <string>
 # include <queue>
@@ -24,6 +24,7 @@ class File {
 	int						m_events;
 	std::string				m_buffer;
 	std::queue<std::string> m_requests;
+	std::queue<std::string> m_responses;
 public:
 	File();
 	File(Socket *socket, int events);
@@ -38,9 +39,14 @@ public:
 	void				clear();
 
 	// Request Queue Interface
-	void				push(std::string const &req);
-	bool				available() const;
-	std::string			pop();
+	void				push_request(std::string const &requests);
+	void				push_response(std::string const &response);
+
+	bool				available_request() const;
+	bool				available_response() const;
+
+	std::string						pop_request();
+	std::pair<bool, std::string>	pop_response();
 };
 
 #endif

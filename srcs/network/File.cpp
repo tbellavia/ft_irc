@@ -64,7 +64,7 @@ bool File::isset(int event) const {
  * an internal request queue.
  */
 void
-File::push(std::string const &req){
+File::push_request(std::string const &req){
 	std::vector<std::string> parts;
 	size_t pos;
 
@@ -92,7 +92,7 @@ File::push(std::string const &req){
  * whether there are requests to retrieve.
  */
 std::string
-File::pop() {
+File::pop_request() {
 	std::string front = m_requests.front();
 
 	m_requests.pop();
@@ -107,7 +107,7 @@ File::pop() {
  * False.
  */
 bool
-File::available() const {
+File::available_request() const {
 	return !m_requests.empty();
 }
 
@@ -115,3 +115,30 @@ void
 File::clear() {
 	m_buffer.clear();
  }
+
+void
+File::push_response(std::string const &response){
+	m_responses.push(response);
+}
+
+std::pair<bool, std::string>
+File::pop_response() {
+	std::string ret;
+	std::string curr = m_responses.front();
+	bool available = true;
+
+	if ( curr.size() > BUF_SIZE) {
+		ret = curr.substr(0, BUF_SIZE);
+		m_responses.front() = curr.substr(BUF_SIZE, curr.size());
+	} else {
+		ret = curr;
+		m_responses.pop();
+		available = false;
+	}
+	return std::make_pair(available, ret);
+}
+
+bool
+File::available_response() const {
+	return !m_responses.empty();
+}

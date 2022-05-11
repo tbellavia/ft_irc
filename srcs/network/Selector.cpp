@@ -90,3 +90,15 @@ Selector::select(int seconds, int useconds){
 	}
 	return std::make_pair( ready_readers, ready_writers );
 }
+
+File*
+Selector::find(Socket *socket){
+	std::map<int, File*>::iterator found;
+
+	if ( socket == NULL )
+		return NULL;
+	found = m_entries.find(socket->fd());
+	if ( found == m_entries.end() )
+		return NULL;
+	return found->second;
+}

@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 18:47:47 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/04 23:50:30 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/10 18:03:59 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,14 +81,28 @@ void IRC::Server::serve_forever(IRC::Api &api) {
 					}
 					this->disconnect(api, socket);
 				} else {
-					file->push( buffer );
+					file->push_request( buffer );
 
-					while ( file->available() ){
-						actions = api.process_request(socket, file->pop());
+					while ( file->available_request() ){
+						actions = api.process_request(socket, file->pop_request());
 						this->process_actions(api, actions);
 						std::cout << "============================================" << std::endl;
 					}
 				}
+			}
+		}
+		for ( it = writers.begin() ; it != writers.end() ; ++it ){
+			File *file = *it;
+			std::pair<bool, std::string> ret;
+
+			if ( file->available_response() ){
+				
+				ret = file->pop_response();
+				while ( ret.first ){
+					file->socket()->send(ret.second);
+					ret = file->pop_response();
+				}
+				file->socket()->send(net::ston(ret.second));
 			}
 		}
 	}
@@ -122,14 +136,26 @@ IRC::Server::process_actions(Api &api, Actions &actions){
 }
 
 void
+IRC::Server::send(Socket *socket, std::string const &response) {
+	if ( socket != NULL ){
+		File *file = m_selector.find(socket);
+
+		if ( file != NULL ){
+			file->push_response(response);
+		}
+	}
+}
+
+void
 IRC::Server::sendall(Action &action) {
 	std::vector<Socket*> sockets = action.sockets();
 	std::vector<Socket*>::iterator it = sockets.begin();
 
 	for ( ; it != sockets.end() ; ++it ) {
-		std::string response = net::ston(action.response());
+		this->send(*it, action.response());
+		// std::string response = net::ston(action.response());
 
-		(*it)->send(response);
+		// (*it)->send(response);
 	}
 }
 

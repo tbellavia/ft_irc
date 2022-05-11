@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 18:31:22 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/13 16:57:54 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/10 17:38:53 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ public:
 	~Selector();
 
 	std::map<int, File*> const &get_entries() const;
+	File *find(Socket *socket);
 	void add(Socket *socket, int events);
 	void remove(Socket *socket);
 	std::pair<ready_type, ready_type> select(int seconds = -1, int useconds = -1);

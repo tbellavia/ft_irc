@@ -20,6 +20,7 @@ namespace IRC
 		Selector			m_selector;
 
 		void sendall(Action &action);
+		void send(Socket *socket, std::string const &response);
 		void disconnectall(Api &api, Action &action);
 		void disconnect(Api &api, Socket *socket);
 		void connect(Api &api, Socket *socket);
