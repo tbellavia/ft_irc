@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 18:47:47 by bbellavi          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2022/05/10 18:03:59 by bbellavi         ###   ########.fr       */
-=======
-/*   Updated: 2022/05/09 11:35:59 by lperson-         ###   ########.fr       */
->>>>>>> dev
+/*   Updated: 2022/05/11 22:11:45 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +90,8 @@ void IRC::Server::serve_forever(IRC::Api &api) {
 					 * this could block other clients if one has too many
 					 * requests.
 					*/
-					while ( file->available() ){
-						actions = api.process_request(socket, file->pop());
+					while ( file->available_request() ){
+						actions = api.process_request(socket, file->pop_request());
 						this->process_actions(api, actions);
 						std::cout << "============================================" << std::endl;
 					}
