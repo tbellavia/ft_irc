@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CmdFactory.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 23:07:36 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/09 13:47:33 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/11 02:47:35 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ IRC::CmdFactory::CmdFactory() : ICmdFactory(), m_callbacks()
 	m_callbacks.insert(std::make_pair("MODE", &CmdFactory::create_mode_cmd));
 }
 
-IRC::CmdFactory::CmdFactory(CmdFactory const &copy):
-	m_callbacks(copy.m_callbacks) { }
+IRC::CmdFactory::CmdFactory(CmdFactory const &copy) :
+	ICmdFactory(), m_callbacks(copy.m_callbacks) { }
 
 IRC::CmdFactory::~CmdFactory() { }
 
