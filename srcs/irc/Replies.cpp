@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/12 11:59:04 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/12 13:20:21 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,7 +191,7 @@ IRC::ReplyBuilder::reply_channel_mode_is(Channel &channel) {
 
 	reply.append(" ");
 	reply.append(channel.get_name());
-	reply.append(" ");
+	reply.append(" :");
 
 	int channel_mode = channel.get_mode();
 	char const string_channel_modes[] = "opsitnlbvk";

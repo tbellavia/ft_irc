@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:38:55 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/10 09:02:58 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/12 12:15:56 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ IRC::Channel::is_invited_user(User *user) const{
 
 bool
 IRC::Channel::is_operator_user(User *user) const{
-	return m_operators.has(user);
+	return m_operators.has(user) || user == m_creator;
 }
 
 bool
