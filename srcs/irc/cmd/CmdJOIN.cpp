@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 22:53:22 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/09 14:31:14 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/12 13:47:29 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,8 @@ IRC::CmdJOIN::execute() {
 				Channel new_channel(name, user);
 				
 				std::cout << "Created channel: " << name << std::endl;
-				channels.add(new_channel);
 				new_channel.subscribe(user);
+				channels.add(new_channel);
 				this->channel_created_reply(reply, actions, new_channel);
 			}
 		} else {
