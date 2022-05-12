@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 18:31:32 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/10 17:00:33 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/12 15:59:41 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@
 // TODO: Remove this includes
 # include <cstdio>
 
-# define BUF_SIZE 510
+# define BUF_SIZE 512
 
 void *get_in_addr(sockaddr *sa);
 
