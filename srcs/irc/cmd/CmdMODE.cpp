@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:52:41 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/12 12:01:50 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/12 15:19:28 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <iostream>
 
 /**
- * @brief theses 2 static variables are helper to convert mode int to char mode
+ * @brief theses 4 static variables are helper to convert mode int to char mode
  */
 
 int IRC::CmdMODE::m_modes[] = {
@@ -28,6 +28,18 @@ int IRC::CmdMODE::m_modes[] = {
 };
 
 char IRC::CmdMODE::m_char_modes[] = "aiwroO";
+
+int IRC::CmdMODE::m_channel_modes[] = {
+	IRC::CHAN_MODE_OPERATOR,
+	IRC::CHAN_MODE_PRIVATE,
+	IRC::CHAN_MODE_SECRET,
+	IRC::CHAN_MODE_INVITE,
+	IRC::CHAN_MODE_TOPIC_BY_OP,
+	IRC::CHAN_MODE_MODERATED,
+	IRC::CHAN_MODE_USER_LIMIT
+};
+
+char IRC::CmdMODE::m_channel_char_modes[] = "opsitnlbvk";
 
 IRC::CmdMODE::CmdMODE(CmdCtx &ctx, std::string const &request):
 	ACmd(ctx, request, "MODE") { }
@@ -82,7 +94,39 @@ IRC::Actions IRC::CmdMODE::execute_channel_mode_(
 			sender, reply.error_chan_o_privs_needed(channel_name)
 		);
 
+	if ( args.size() == Expected_args(1) )
+		return channel->notify(reply.reply_channel_mode_is(*channel));
+
+	std::vector<std::string> mode_list = this->parse_mode_string_(args[2]);
+	char mode = this->is_channel_modes_valid_(mode_list);
+	if ( mode != '\0' )
+		return Actions::unique_send(sender, reply.error_unknown_mode(mode));
+
 	return channel->notify(reply.reply_channel_mode_is(*channel));
+}
+
+char IRC::CmdMODE::is_channel_modes_valid_(
+	std::vector<std::string> const &mode_list
+) {
+	for ( std::size_t i = 0; i < mode_list.size(); ++i ) {
+		std::size_t j = 0;
+		if (mode_list[i][j] == '+' || mode_list[i][j] == '-')
+			++j;
+		for ( ; j < mode_list[0].length(); ++j ) {
+			if ( !char_to_channel_mode_(mode_list[i][j]) ) {
+				return mode_list[i][j];
+			}
+		}
+	}
+	return '\0';
+}
+
+int *IRC::CmdMODE::char_to_channel_mode_(char c) {
+	for ( std::size_t i = 0; i < sizeof(m_channel_char_modes); ++i ) {
+		if ( m_channel_char_modes[i] == c )
+			return &m_channel_modes[i];
+	}
+	return NULL;
 }
 
 /**

@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:16 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/12 11:51:49 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/12 15:00:15 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ namespace IRC
 		std::string error_channel_is_full(std::string const &channel);
 		std::string	error_not_on_channel(std::string const &channel_name);
 		std::string error_chan_o_privs_needed(std::string const &channel_name);
+		std::string error_unknown_mode(char mode);
 
 		// Channel replies
 		std::string reply_topic(std::string const &channel, std::string const &topic);

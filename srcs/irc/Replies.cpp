@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/12 13:51:06 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/12 15:04:19 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ IRC::ReplyBuilder::reply_youre_oper() {
 	return reply;
 }
 
+// Channels error
 std::string
 IRC::ReplyBuilder::error_no_such_channel(std::string const &channel){
 	std::string reply = this->build_header_(NumericReplies::ERR_NOSUCHCHANNEL);
@@ -181,6 +182,16 @@ IRC::ReplyBuilder::error_chan_o_privs_needed(std::string const &channel_name) {
 	reply.append(" ");
 	reply.append(channel_name);
 	reply.append(" :You're not channel operator");
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::error_unknown_mode(char mode) {
+	std::string reply = this->build_header_(NumericReplies::ERR_UNKNOWNMODE);
+
+	reply.append(" ");
+	reply.push_back(mode);
+	reply.append(" :is unknown mode char to me");
 	return reply;
 }
 
