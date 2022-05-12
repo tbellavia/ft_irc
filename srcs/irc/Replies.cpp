@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/10 16:33:45 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/12 11:59:04 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,6 +181,24 @@ IRC::ReplyBuilder::error_chan_o_privs_needed(std::string const &channel_name) {
 	reply.append(" ");
 	reply.append(channel_name);
 	reply.append(" :You're not channel operator");
+	return reply;
+}
+
+// Channel replies
+std::string
+IRC::ReplyBuilder::reply_channel_mode_is(Channel &channel) {
+	std::string reply = this->build_header_(NumericReplies::RPL_CHANNELMODEIS);
+
+	reply.append(" ");
+	reply.append(channel.get_name());
+	reply.append(" ");
+
+	int channel_mode = channel.get_mode();
+	char const string_channel_modes[] = "opsitnlbvk";
+	for ( std::size_t i = 0; i < sizeof(string_channel_modes); ++i ) {
+		if ( channel_mode & (0 << i) )
+			reply.push_back(string_channel_modes[i]);
+	}
 	return reply;
 }
 

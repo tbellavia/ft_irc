@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:52:41 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/10 16:53:06 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/12 12:01:50 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,15 @@ IRC::Actions IRC::CmdMODE::execute() {
 	return this->execute_user_mode_(args, reply);
 }
 
+
+/**
+ * @brief Change channel options and mode in IRC
+ *
+ * @param args channel target and modes to change with their parameters
+ * @param reply reply previously built
+ * @return IRC::Actions actions to perform by the server
+ */
+
 IRC::Actions IRC::CmdMODE::execute_channel_mode_(
 	std::vector<std::string> const &args, ReplyBuilder &reply
 ) {
@@ -73,7 +82,7 @@ IRC::Actions IRC::CmdMODE::execute_channel_mode_(
 			sender, reply.error_chan_o_privs_needed(channel_name)
 		);
 
-	return Actions::unique_idle();
+	return channel->notify(reply.reply_channel_mode_is(*channel));
 }
 
 /**
