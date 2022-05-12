@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:52:41 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/12 15:19:28 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/12 17:23:46 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,29 +97,22 @@ IRC::Actions IRC::CmdMODE::execute_channel_mode_(
 	if ( args.size() == Expected_args(1) )
 		return channel->notify(reply.reply_channel_mode_is(*channel));
 
-	std::vector<std::string> mode_list = this->parse_mode_string_(args[2]);
-	char mode = this->is_channel_modes_valid_(mode_list);
-	if ( mode != '\0' )
-		return Actions::unique_send(sender, reply.error_unknown_mode(mode));
+	char is_valid;
+	is_valid = this->is_mode_string_valid_(args[2], m_channel_char_modes);
+	if ( is_valid >= 0 )
+		return Actions::unique_send(sender, reply.error_unknown_mode(is_valid));
+
+	// std::vector<std::string> mode_list = this->parse_mode_string_(args[2]);
 
 	return channel->notify(reply.reply_channel_mode_is(*channel));
 }
 
-char IRC::CmdMODE::is_channel_modes_valid_(
-	std::vector<std::string> const &mode_list
-) {
-	for ( std::size_t i = 0; i < mode_list.size(); ++i ) {
-		std::size_t j = 0;
-		if (mode_list[i][j] == '+' || mode_list[i][j] == '-')
-			++j;
-		for ( ; j < mode_list[0].length(); ++j ) {
-			if ( !char_to_channel_mode_(mode_list[i][j]) ) {
-				return mode_list[i][j];
-			}
-		}
-	}
-	return '\0';
-}
+/**
+ * @brief Try to convert character mode to int mode
+ *
+ * @param c character mode
+ * @return int* address of int mode, NULL if conversion is impossible
+ */
 
 int *IRC::CmdMODE::char_to_channel_mode_(char c) {
 	for ( std::size_t i = 0; i < sizeof(m_channel_char_modes); ++i ) {
@@ -162,10 +155,10 @@ IRC::Actions IRC::CmdMODE::execute_user_mode_(
 		);
 	}
 
-	std::vector<std::string> mode_list = parse_mode_string_(args[2]);
-	if ( !this->is_mode_users_valid_(mode_list) )
+	if ( this->is_mode_string_valid_(args[2], m_char_modes) >= 0 )
 		return Actions::unique_send(sender, reply.error_u_mode_unknown_flag());
 
+	std::vector<std::string> mode_list = parse_mode_string_(args[2]);
 	for ( std::size_t i = 0; i < mode_list.size(); ++i ) {
 		if ( mode_list[i][0] == '-' )
 			delete_mode_list_to_user_(sender, mode_list[i]);
@@ -214,32 +207,6 @@ void IRC::CmdMODE::delete_mode_list_to_user_(
 }
 
 /**
- * @brief Check if list of mode operations contains valid nodes
- * 
- * @param mode_lists the list of mode operations
- * @return true if valid
- * @return false if not valid (contains unknown mode)
- */
-
-bool IRC::CmdMODE::is_mode_users_valid_(
-	std::vector<std::string> const &mode_lists
-) {
-	std::string delimiters = "+-";
-	for ( std::size_t i = 0; i < mode_lists.size(); ++i ) {
-		if ( mode_lists[i].length() == 1 )
-			return false;
-
-		std::size_t d = delimiters.find(mode_lists[i][0]) != std::string::npos ?
-			1 :
-			0;
-		for ( ; d < mode_lists[i].length(); ++d )
-			if ( !this->char_to_mode_(mode_lists[i][d]) )
-				return false;
-	}
-	return true;
-}
-
-/**
  * @brief Character c to mode
  * 
  * @param c the character to converts
@@ -251,6 +218,28 @@ int *IRC::CmdMODE::char_to_mode_(char c) {
 		if ( m_char_modes[i] == c )
 			return m_modes + i;
 	return NULL;
+}
+
+/**
+ * @brief Check if string contains valid modes or not
+ * 
+ * @param mode_string the mode string
+ * @param valid_modes the valid modes
+ * @return char the invalid mode or -1 if all valids
+ */
+
+char IRC::CmdMODE::is_mode_string_valid_(
+	std::string const &mode_string, std::string const &valid_modes
+) {
+	std::string const &delimiters = "+-";
+	for ( std::size_t i = 0; i < mode_string.length(); ++i ) {
+		if ( delimiters.find(mode_string[i]) != std::string::npos )
+			++i;
+
+		if ( valid_modes.find(mode_string[i]) == std::string::npos )
+			return mode_string[i];
+	}
+	return -1;
 }
 
 /**
