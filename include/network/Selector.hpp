@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 18:31:22 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/15 01:08:27 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/15 01:30:26 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,10 @@ public:
 	};
 
 private:
-	fd_set							m_read;
-	fd_set							m_write;
-	std::map<int, File*>	        m_entries;
-	int								m_max_fd;
+	fd_set					m_read;
+	fd_set					m_write;
+	std::map<int, File*>	m_entries;
+	int						m_max_fd;
 public:
 	Selector();
 	Selector(Selector const &other);

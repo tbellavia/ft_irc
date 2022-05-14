@@ -15,16 +15,22 @@
 namespace IRC
 {
 	class Server {
-		ConfigServer		&m_config;
-		Socket				*m_server;
-		Selector			m_selector;
+		ConfigServer			&m_config;
+		Socket					*m_server;
+		Selector				m_selector;
+		std::pair<
+			std::set<File*>,
+			std::set<File*> >	m_ready;
+		std::set<File*>			m_writers;
+		std::set<File*>			m_readers;
 
-		void sendall(Action &action);
-		void send(Socket *socket, std::string const &response);
-		void disconnectall(Api &api, Action &action);
-		void disconnect(Api &api, Socket *socket);
-		void connect(Api &api, Socket *socket);
-		void process_actions(Api &api, Actions &actions);
+		void sendall_(Action &action);
+		void send_(Socket *socket, std::string const &response);
+		void disconnectall_(Api &api, Action &action);
+		void disconnect_(Api &api, Socket *socket);
+		void connect_(Api &api, Socket *socket);
+		void process_actions_(Api &api, Actions &actions);
+		void select_();
 	public:
 		Server(ConfigServer &conf, bool bind_and_activate = false);
 		Server(Server const &other);
