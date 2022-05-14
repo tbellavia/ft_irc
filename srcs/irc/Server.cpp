@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 18:47:47 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/11 22:11:45 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/15 01:10:20 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,11 @@ void IRC::Server::bind() const {
 }
 
 void IRC::Server::serve_forever(IRC::Api &api) {
-	std::pair<std::vector<File*>,
-	std::vector<File*> >			ready;
-	std::vector<File*>				readers;
-	std::vector<File*>				writers;
-	std::vector<File*>::iterator	it;
+	std::pair<std::set<File*>,
+	std::set<File*> >			ready;
+	std::set<File*>				readers;
+	std::set<File*>				writers;
+	std::set<File*>::iterator	it;
 	ssize_t							bytes = 0;
 	Actions							actions;
 
@@ -109,7 +109,7 @@ void IRC::Server::serve_forever(IRC::Api &api) {
 					file->socket()->send(ret.second);
 					ret = file->pop_response();
 				}
-				file->socket()->send(net::ston(ret.second));
+				file->socket()->send( net::ston(ret.second) );
 			}
 		}
 	}

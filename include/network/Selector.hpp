@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 18:31:22 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/10 17:38:53 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/15 01:08:27 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <sys/select.h>
 # include <vector>
 # include <map>
+# include <set>
 # include "Socket.hpp"
 # include "Network.hpp"
 # include "File.hpp"
@@ -32,7 +33,6 @@ public:
 		EXCEPT = 0x01 << 2,
 	};
 
-	typedef std::vector<File*> ready_type;
 private:
 	fd_set							m_read;
 	fd_set							m_write;
@@ -48,7 +48,7 @@ public:
 	File *find(Socket *socket);
 	void add(Socket *socket, int events);
 	void remove(Socket *socket);
-	std::pair<ready_type, ready_type> select(int seconds = -1, int useconds = -1);
+	std::pair<std::set<File*>, std::set<File*> > select(int seconds = -1, int useconds = -1);
 };
 
 #endif //FT_IRC_SELECTOR_HPP

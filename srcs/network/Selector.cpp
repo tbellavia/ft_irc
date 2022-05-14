@@ -31,11 +31,13 @@ Selector::~Selector() {
 }
 
 /* Getters / Setters */
-std::map<int, File*> const &Selector::get_entries() const {
+std::map<int, File*> const&
+Selector::get_entries() const {
 	return m_entries;
 }
 
-void Selector::add(Socket *socket, int events) {
+void
+Selector::add(Socket *socket, int events) {
 	if ( socket != NULL ){
 		File *val = new File(socket, events);
 		int fd = socket->fd();
@@ -49,7 +51,8 @@ void Selector::add(Socket *socket, int events) {
 	}
 }
 
-void Selector::remove(Socket *socket) {
+void
+Selector::remove(Socket *socket) {
 	if ( socket != NULL ){
 		File								*value;
 		std::map<int, File*>::iterator		found = m_entries.find(socket->fd());
@@ -66,10 +69,10 @@ void Selector::remove(Socket *socket) {
 	}
 }
 
-std::pair<std::vector<File*>, std::vector<File*> >
+std::pair<std::set<File*>, std::set<File*> >
 Selector::select(int seconds, int useconds){
-	ready_type  ready_readers;
-	ready_type  ready_writers;
+	std::set<File*>  ready_readers;
+	std::set<File*>  ready_writers;
 	timeval     timeout = (timeval){ seconds, (useconds == -1) ? 0 : useconds };
 	fd_set      read_set = m_read;
 	fd_set      write_set = m_write;
@@ -84,9 +87,9 @@ Selector::select(int seconds, int useconds){
 		int     fd = socket->fd();
 
 		if ( it->second->isset(READ) && FD_ISSET(fd, &read_set) )
-			ready_readers.push_back( it->second );
+			ready_readers.insert( it->second );
 		if ( it->second->isset(WRITE) && FD_ISSET(fd, &write_set) )
-			ready_writers.push_back( it->second );
+			ready_writers.insert( it->second );
 	}
 	return std::make_pair( ready_readers, ready_writers );
 }
