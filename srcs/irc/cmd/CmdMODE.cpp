@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:52:41 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/12 17:23:46 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/16 12:04:35 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -278,4 +278,46 @@ std::vector<std::string> IRC::CmdMODE::parse_mode_string_(
 		);
 	}
 	return mode_list;
+}
+
+/**
+ * @brief Parse mode list with their arguments
+ * 
+ * @param mode_list vector of mode lists (+ob, -ob etc...)
+ * @param mode_args the arguments to finds ("ob")
+ * @param arguments the arguments passed by user as parameters (lperson, *.edu)
+ * @return std::vector<
+ * std::pair<std::string, std::vector<std::string> >
+ * > a list of mode_list with their arguments attached as a list
+ */
+
+std::vector<
+	std::pair<std::string, std::vector<std::string> >
+> IRC::CmdMODE::parse_mode_arguments_(
+	std::vector<std::string> const &mode_list,
+	std::string const &mode_args,
+	std::vector<std::string> const &arguments
+) {
+	std::vector<
+		std::pair<std::string, std::vector<std::string> >
+	> mode_list_with_args;
+	std::size_t arg_len = 0;
+	for ( std::size_t i = 0; i < mode_list.size(); ++i ) {
+
+		std::vector<std::string> mode_arguments;
+		for ( std::size_t j = 0; j < mode_list[i].length(); ++j ) {
+			// If we find argument mode we append it to mode_arguments
+			if ( mode_args.find(mode_list[i][j]) != std::string::npos ) {
+				if ( arg_len < arguments.size() )
+					mode_arguments.push_back(arguments[arg_len]);
+				arg_len++;
+			}
+
+		}
+		mode_list_with_args.push_back(
+			std::make_pair(mode_list[i], mode_arguments)
+		);
+	}
+
+	return mode_list_with_args;
 }

@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:54:08 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/12 17:09:44 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/16 11:49:50 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,14 @@ namespace IRC {
 		std::vector<std::string> parse_mode_string_(
 			std::string const &mode_string
 		) const;
+		std::vector<
+			std::pair<std::string, std::vector<std::string> >
+		>
+		parse_mode_arguments_(
+			std::vector<std::string> const &mode_list,
+			std::string const &mode_args,
+			std::vector<std::string> const &arguments
+		);
 
 	};
 }
