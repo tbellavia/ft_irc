@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:54:08 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/16 11:49:50 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/16 14:42:31 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # define CMD_MODE_HPP
 
 # include "irc/ACmd.hpp"
+# include "irc/Channel.hpp"
 
 namespace IRC {
 	class CmdMODE : public ACmd {
@@ -35,6 +36,12 @@ namespace IRC {
 			std::vector<std::string> const &args, ReplyBuilder &reply
 		);
 		int *char_to_channel_mode_(char c);
+		int execute_channel_mode_list_(
+			Actions &actions,
+			ReplyBuilder &reply,
+			Channel *target,
+			std::pair<std::string, std::vector<std::string> > const &mode_list
+		);
 
 		// User mode utils
 		Actions execute_user_mode_(

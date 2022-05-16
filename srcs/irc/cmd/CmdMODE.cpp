@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:52:41 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/16 12:04:35 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/16 15:08:27 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,15 @@ int IRC::CmdMODE::m_channel_modes[] = {
 	IRC::CHAN_MODE_SECRET,
 	IRC::CHAN_MODE_INVITE,
 	IRC::CHAN_MODE_TOPIC_BY_OP,
+	IRC::CHAN_MODE_NO_OUTSIDE,
 	IRC::CHAN_MODE_MODERATED,
-	IRC::CHAN_MODE_USER_LIMIT
+	IRC::CHAN_MODE_USER_LIMIT,
+	IRC::CHAN_MODE_BAN_MASK,
+	IRC::CHAN_MODE_VOICE,
+	IRC::CHAN_MODE_KEY
 };
 
-char IRC::CmdMODE::m_channel_char_modes[] = "opsitnlbvk";
+char IRC::CmdMODE::m_channel_char_modes[] = "opsitnmlbvk";
 
 IRC::CmdMODE::CmdMODE(CmdCtx &ctx, std::string const &request):
 	ACmd(ctx, request, "MODE") { }
@@ -102,9 +106,60 @@ IRC::Actions IRC::CmdMODE::execute_channel_mode_(
 	if ( is_valid >= 0 )
 		return Actions::unique_send(sender, reply.error_unknown_mode(is_valid));
 
-	// std::vector<std::string> mode_list = this->parse_mode_string_(args[2]);
+	std::vector<std::string> mode_list = this->parse_mode_string_(args[2]);
+	std::vector<
+		std::pair<std::string, std::vector<std::string> >
+	> mode_list_with_args;
+	mode_list_with_args = parse_mode_arguments_(
+		mode_list, "olbvk", std::vector<std::string>(
+			args.begin() + 3, args.end()
+		)
+	);
 
-	return channel->notify(reply.reply_channel_mode_is(*channel));
+	Actions actions;
+	for ( std::size_t i = 0; i < mode_list_with_args.size() ; ++i ) {
+		if ( execute_channel_mode_list_(
+			actions, reply, channel, mode_list_with_args[i]
+		) )
+			return Actions::unique_idle();
+	}
+	actions.push(channel->notify(reply.reply_channel_mode_is(*channel)));
+
+	return actions;
+}
+
+int IRC::CmdMODE::execute_channel_mode_list_(
+	Actions &actions,
+	ReplyBuilder &reply,
+	Channel *target,
+	std::pair<std::string, std::vector<std::string> > const &mode_list
+) {
+	(void)actions;
+	(void)reply;
+	std::string const delimiters = "+-";
+	std::string const channel_mode_args = "olbvk";
+
+	bool is_add = true;
+	std::size_t i = 0;
+	std::string const &modes = mode_list.first;
+	if ( delimiters.find(modes[i]) != std::string::npos ) {
+		if ( modes[i] == '-' )
+			is_add = false;
+		++i;
+	}
+
+	for ( ; i < modes.length(); ++i ) {
+		std::size_t mode_arg = channel_mode_args.find(modes[i]);
+		if ( mode_arg != std::string::npos ) {
+			;
+		}
+		int *mode = char_to_channel_mode_(modes[i]);
+		if ( is_add )
+			target->set_mode(*mode);
+		else
+			target->unset_mode(*mode);
+	}
+	return 0;
 }
 
 /**

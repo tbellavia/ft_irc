@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/12 15:04:19 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/16 15:01:16 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,9 +205,9 @@ IRC::ReplyBuilder::reply_channel_mode_is(Channel &channel) {
 	reply.append(" :+");
 
 	int channel_mode = channel.get_mode();
-	char const string_channel_modes[] = "opsitnlbvk";
+	char const string_channel_modes[] = "opsitnmlbvk";
 	for ( std::size_t i = 0; i < sizeof(string_channel_modes); ++i ) {
-		if ( channel_mode & (0 << i) )
+		if ( channel_mode & (0x01 << i) )
 			reply.push_back(string_channel_modes[i]);
 	}
 	return reply;

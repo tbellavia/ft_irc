@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/01 20:24:52 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/12 14:31:14 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/16 15:01:00 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,17 @@ namespace IRC
 	};
 
 	enum ChannelMode {
-		CHAN_MODE_OPERATOR		= 0x01 << 1UL, // 'o'
-		CHAN_MODE_PRIVATE		= 0x01 << 2UL, // 'p'
-		CHAN_MODE_SECRET		= 0x01 << 3UL, // 's'
-		CHAN_MODE_INVITE		= 0x01 << 4UL, // 'i'
-		CHAN_MODE_TOPIC_BY_OP	= 0x01 << 5UL, // 't'
+		CHAN_MODE_OPERATOR		= 0x01 << 0UL, // 'o'
+		CHAN_MODE_PRIVATE		= 0x01 << 1UL, // 'p'
+		CHAN_MODE_SECRET		= 0x01 << 2UL, // 's'
+		CHAN_MODE_INVITE		= 0x01 << 3UL, // 'i'
+		CHAN_MODE_TOPIC_BY_OP	= 0x01 << 4UL, // 't'
+		CHAN_MODE_NO_OUTSIDE	= 0x01 << 5UL, // 'n'
 		CHAN_MODE_MODERATED		= 0x01 << 6UL, // 'm'
-		CHAN_MODE_USER_LIMIT	= 0x01 << 7UL  // 'l'
+		CHAN_MODE_USER_LIMIT	= 0x01 << 7UL, // 'l'
+		CHAN_MODE_BAN_MASK		= 0x01 << 8UL, // 'b'
+		CHAN_MODE_VOICE			= 0x01 << 9UL, // 'v'
+		CHAN_MODE_KEY			= 0x01 << 10UL, // 'k'
 	};
 }
 
