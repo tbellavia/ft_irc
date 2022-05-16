@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:52:41 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/16 15:08:27 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/16 16:03:56 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,16 +142,18 @@ int IRC::CmdMODE::execute_channel_mode_list_(
 	bool is_add = true;
 	std::size_t i = 0;
 	std::string const &modes = mode_list.first;
+	std::vector<std::string> const args = mode_list.second;
 	if ( delimiters.find(modes[i]) != std::string::npos ) {
 		if ( modes[i] == '-' )
 			is_add = false;
 		++i;
 	}
 
+	std::size_t arg_offset = 0;
 	for ( ; i < modes.length(); ++i ) {
 		std::size_t mode_arg = channel_mode_args.find(modes[i]);
 		if ( mode_arg != std::string::npos ) {
-			;
+			arg_offset++;
 		}
 		int *mode = char_to_channel_mode_(modes[i]);
 		if ( is_add )
