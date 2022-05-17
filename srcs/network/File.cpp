@@ -123,22 +123,64 @@ File::push_response(std::string const &response){
 
 std::pair<bool, std::string>
 File::pop_response() {
-	std::string ret;
-	std::string curr = m_responses.front();
-	bool available = true;
-
-	if ( curr.size() > BUF_SIZE) {
-		ret = curr.substr(0, BUF_SIZE);
-		m_responses.front() = curr.substr(BUF_SIZE, curr.size());
-	} else {
-		ret = curr;
-		m_responses.pop();
-		available = false;
-	}
-	return std::make_pair(available, ret);
+	return m_responses.pop();
 }
 
 bool
 File::available_response() const {
+	return m_responses.available();
+}
+
+void
+File::seek_response(size_t offset) {
+	m_responses.seek(offset);
+}
+
+/* Response buffer */
+
+File::ResponseBuffer::ResponseBuffer() : 
+	m_responses(), 
+	m_begin() { }
+
+File::ResponseBuffer::ResponseBuffer(ResponseBuffer const &other) :
+	m_responses(other.m_responses),
+	m_begin(other.m_begin) { }
+
+File::ResponseBuffer&
+File::ResponseBuffer::operator=(ResponseBuffer const &other) {
+	if ( &other == this )
+		return *this;
+	m_responses = other.m_responses;
+	m_begin = other.m_begin;
+	return *this;
+}
+
+File::ResponseBuffer::~ResponseBuffer() { }
+
+std::pair<bool, std::string>
+File::ResponseBuffer::pop() {
+	std::string top = m_responses.front();
+
+	if ( m_begin >= top.length() ){
+		m_begin = 0;
+		m_responses.pop();
+		return std::make_pair(false, "");
+	}
+	std::string sub = top.substr(m_begin, top.length());
+	return std::make_pair(true, sub);
+}
+
+void
+File::ResponseBuffer::push(std::string const &response) {
+	m_responses.push(response);
+}
+
+void
+File::ResponseBuffer::seek(size_t offset) {
+	m_begin += offset;
+}
+
+bool
+File::ResponseBuffer::available() const {
 	return !m_responses.empty();
 }
