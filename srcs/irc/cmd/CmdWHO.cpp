@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 12:08:34 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/10 13:55:31 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/17 15:02:31 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,17 @@ IRC::CmdWHO::execute() {
 			std::cout << "Mask: " << mask << std::endl;
 			if ( channel != NULL ){
 				Users::view_type users = channel->get_users();
+				std::string l;
 
 				for ( ; users.first != users.second ; ++users.first ){
 					std::string response = reply.reply_who_reply(channel, *users.first);
 
-					std::cout << "WHO: " << response << std::endl;
-					actions.push(Action::send(user, response));
+					l += (response + "\r\n");
+					// actions.push(Action::send(user, response));
 				}
-				actions.push(Action::send(user, reply.reply_end_of_who(mask)));
+				l += reply.reply_end_of_who(mask);
+				actions.push(Action::send(user, l));
+				// actions.push(Action::send(user, reply.reply_end_of_who(mask)));
 				return actions;
 			}
 		}
