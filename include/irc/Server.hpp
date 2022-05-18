@@ -23,23 +23,27 @@ namespace IRC
 			std::set<File*> >	m_ready;
 		std::set<File*>			m_writers;
 		std::set<File*>			m_readers;
+		Api						&m_api;
 
 		void sendall_(Action &action);
 		void send_(Socket *socket, std::string const &response);
-		void disconnectall_(Api &api, Action &action);
-		void disconnect_(Api &api, Socket *socket);
-		void connect_(Api &api, Socket *socket);
-		void process_actions_(Api &api, Actions &actions);
+		void disconnectall_(Action &action);
+		void disconnect_(Socket *socket);
+		void connect_(Socket *socket);
+		void process_actions_(Actions &actions);
 		void select_();
+
+		void read_requests_();
+		void write_responses_();
 	public:
-		Server(ConfigServer &conf, bool bind_and_activate = false);
+		Server(ConfigServer &conf, Api &api, bool bind_and_activate = false);
 		Server(Server const &other);
 		Server &operator=(Server const &other);
 		~Server();
 
 		void activate() const;
 		void bind() const;
-		void serve_forever(IRC::Api &api);
+		void serve_forever();
 	};
 }
 
