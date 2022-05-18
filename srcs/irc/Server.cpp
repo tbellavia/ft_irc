@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 18:47:47 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/17 15:53:49 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/18 13:18:48 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,18 +94,16 @@ void IRC::Server::serve_forever(IRC::Api &api) {
 		}
 		for ( it = m_writers.begin() ; it != m_writers.end() ; ++it ){
 			File *file = *it;
-			std::pair<bool, std::string> ret;
+			std::string response;
 			int bytes = 0;
 
 			if ( file->available_response() ){
-				ret = file->pop_response();
-
-				if ( ret.first ){
-					bytes = file->socket()->send( net::ston(ret.second) );
-					file->seek_response(bytes);
-				}
+				response = file->pop_response();
+				bytes = file->socket()->send( response );
+				file->seek_response(bytes);
 			}
 		}
+		// TODO: Process other requests (DISCONNECT, BAN, ...)
 	}
 }
 
@@ -142,7 +140,7 @@ IRC::Server::send_(Socket *socket, std::string const &response) {
 		File *file = m_selector.find(socket);
 
 		if ( file != NULL ){
-			file->push_response(response);
+			file->push_response( net::ston(response) );
 		}
 	}
 }

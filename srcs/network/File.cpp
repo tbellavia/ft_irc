@@ -121,7 +121,7 @@ File::push_response(std::string const &response){
 	m_responses.push(response);
 }
 
-std::pair<bool, std::string>
+std::string
 File::pop_response() {
 	return m_responses.pop();
 }
@@ -157,27 +157,20 @@ File::ResponseBuffer::operator=(ResponseBuffer const &other) {
 
 File::ResponseBuffer::~ResponseBuffer() { }
 
-std::pair<bool, std::string>
+std::string
 File::ResponseBuffer::pop() {
-	std::string top = m_responses.front();
-
-	if ( m_begin >= top.length() ){
-		m_begin = 0;
-		m_responses.pop();
-		return std::make_pair(false, "");
-	}
-	std::string sub = top.substr(m_begin, top.length());
-	return std::make_pair(true, sub);
+	m_responses = m_responses.substr(m_begin, m_responses.length());
+	return m_responses;
 }
 
 void
 File::ResponseBuffer::push(std::string const &response) {
-	m_responses.push(response);
+	m_responses.append(response);
 }
 
 void
 File::ResponseBuffer::seek(size_t offset) {
-	m_begin += offset;
+	m_begin = offset;
 }
 
 bool
