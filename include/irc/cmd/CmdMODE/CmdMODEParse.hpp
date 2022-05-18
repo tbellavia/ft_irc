@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 15:46:47 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/18 15:56:04 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/18 16:47:57 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,20 @@ namespace IRC
 
 		CmdMODEParse &operator=(CmdMODEParse const &rhs);
 
+		std::vector<std::string> const &mode_list() const;
+
 	private:
+		// Each token will be of size 1
+		static std::string const	m_tokens_delimiters;
+
 		std::string					m_mode_string;
 		std::vector<std::string>	m_arguments;
 		std::string					m_authorized_modes;
+
+		// Parsed arguments
+		std::vector<std::string>	m_mode_lists;
+
+		void tokenize_();
 	};
 }
 
