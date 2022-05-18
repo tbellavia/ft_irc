@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Replies.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/11 22:07:38 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/18 15:38:09 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ IRC::ReplyBuilder::reply_youre_oper() {
 	return reply;
 }
 
+// Channels error
 std::string
 IRC::ReplyBuilder::error_no_such_channel(std::string const &channel){
 	std::string reply = this->build_header_(NumericReplies::ERR_NOSUCHCHANNEL);
@@ -181,6 +182,34 @@ IRC::ReplyBuilder::error_chan_o_privs_needed(std::string const &channel_name) {
 	reply.append(" ");
 	reply.append(channel_name);
 	reply.append(" :You're not channel operator");
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::error_unknown_mode(char mode) {
+	std::string reply = this->build_header_(NumericReplies::ERR_UNKNOWNMODE);
+
+	reply.append(" ");
+	reply.push_back(mode);
+	reply.append(" :is unknown mode char to me");
+	return reply;
+}
+
+// Channel replies
+std::string
+IRC::ReplyBuilder::reply_channel_mode_is(Channel &channel) {
+	std::string reply = this->build_header_(NumericReplies::RPL_CHANNELMODEIS);
+
+	reply.append(" ");
+	reply.append(channel.get_name());
+	reply.append(" :+");
+
+	int channel_mode = channel.get_mode();
+	char const string_channel_modes[] = "opsitnmlbvk";
+	for ( std::size_t i = 0; i < sizeof(string_channel_modes); ++i ) {
+		if ( channel_mode & (0x01 << i) )
+			reply.push_back(string_channel_modes[i]);
+	}
 	return reply;
 }
 

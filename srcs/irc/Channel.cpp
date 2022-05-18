@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:38:55 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/10 09:02:58 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/16 16:05:38 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ IRC::Channel::Channel() :
 	m_name(),
 	m_key(),
 	m_topic(),
-	m_mode(CHAN_MODE_DEFAULT) { }
+	m_mode(0) { }
 
 IRC::Channel::Channel(std::string const &name, User *creator, int mode) :
 	m_users(), 
@@ -73,7 +73,12 @@ IRC::Channel::set_name(std::string const &name) {
 
 void
 IRC::Channel::set_mode(int mode) {
-	m_mode = mode;
+	m_mode |= mode;
+}
+
+void
+IRC::Channel::unset_mode(int mode) {
+	m_mode &= ~mode;
 }
 
 void
@@ -118,7 +123,7 @@ IRC::Channel::is_invited_user(User *user) const{
 
 bool
 IRC::Channel::is_operator_user(User *user) const{
-	return m_operators.has(user);
+	return m_operators.has(user) || user == m_creator;
 }
 
 bool
@@ -209,14 +214,29 @@ IRC::Channel::unsubscribe(User *user){
 	m_users.remove(user);
 }
 
+void
+IRC::Channel::setOperator(User *user) {
+	m_operators.add(user);
+}
+
+void
+IRC::Channel::unsetOperator(User *user) {
+	m_operators.remove(user);
+}
+
+void
+IRC::Channel::allowVoice(User *user) {
+	m_voices.add(user);
+}
+
+void
+IRC::Channel::disallowVoice(User *user) {
+	m_voices.remove(user);
+}
+
 IRC::Action
 IRC::Channel::notify(std::string const &msg) {
 	return m_users.notify(msg);
-}
-
-bool
-IRC::Channel::is_default() const {
-	return m_mode & CHAN_MODE_DEFAULT;
 }
 
 bool
