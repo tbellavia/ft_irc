@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:52:41 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/19 16:08:31 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/19 16:37:03 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,22 @@ IRC::Actions IRC::CmdMODE::execute_user_mode_(ReplyBuilder &reply)
 		);
 	}
 
-	std::map<Mode, bool, CmdMODEParse::ModeComp> modes = m_parser.parse();
+	std::map<Mode, bool, CmdMODEParse::ModeComp> modes;
+	try
+	{
+ 		modes = m_parser.parse();
+	}
+	catch (CmdMODEParse::ModeUnknownException const &)
+	{
+		return Actions::unique_send(
+			sender, reply.error_u_mode_unknown_flag()
+		);
+	}
+	catch (CmdMODEParse::ArgumentMissingException const &)
+	{
+		return Actions::unique_idle();
+	}
+
 	std::map<Mode, bool, CmdMODEParse::ModeComp>::iterator first;
 	first = modes.begin();
 	std::map<Mode, bool, CmdMODEParse::ModeComp>::iterator last;
@@ -151,9 +166,7 @@ IRC::Actions IRC::CmdMODE::execute_user_mode_(ReplyBuilder &reply)
 	for (; first != last; ++first)
 	{
 		if (first->second)
-		{
 			sender->set_mode(first->first.value);
-		}
 		else
 			sender->unset_mode(first->first.value);
 	}

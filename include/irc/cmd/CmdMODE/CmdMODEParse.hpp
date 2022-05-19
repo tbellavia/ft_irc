@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 15:46:47 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/19 15:43:08 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/19 16:34:21 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <map>
 # include <functional>
 # include <string>
+# include <exception>
 # include "irc/Mode.hpp"
 
 namespace IRC
@@ -35,6 +36,23 @@ namespace IRC
 		struct ModeComp : public std::binary_function<Mode, Mode, bool>
 		{
 			bool operator()(Mode const &first, Mode const &second);
+		};
+
+		class ModeUnknownException : public std::exception
+		{
+		public:
+			ModeUnknownException(char litteral);
+
+			const char *what() const throw();
+
+			char	mode() const;
+		private:
+			char	m_litteral;
+		};
+
+		struct ArgumentMissingException : public std::exception
+		{
+			const char *what() const throw();
 		};
 
 		CmdMODEParse();

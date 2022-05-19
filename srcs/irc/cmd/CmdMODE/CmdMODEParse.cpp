@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 15:53:47 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/19 15:55:18 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/19 16:34:58 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,32 @@ IRC::CmdMODEParse::ModeComp::operator()(Mode const &first, Mode const &second)
 		first.litteral < second.litteral || \
 		first.value < second.value || \
 		first.parameter < second.parameter;
+}
+
+IRC::CmdMODEParse::ModeUnknownException::ModeUnknownException(char litteral):
+		m_litteral(litteral)
+{
+}
+
+const char *
+IRC::CmdMODEParse::ModeUnknownException::what() const throw()
+{
+	static char string[19] = "Unkown character";
+	string[17] = m_litteral;
+	string[18] = '\0';
+	return string;
+}
+
+char
+IRC::CmdMODEParse::ModeUnknownException::mode() const
+{
+	return m_litteral;
+}
+
+const char *
+IRC::CmdMODEParse::ArgumentMissingException::what() const throw()
+{
+	return "Missing argument";
 }
 
 // the tokens that delimites differents mode lists in mode string
@@ -131,18 +157,14 @@ IRC::Mode IRC::CmdMODEParse::parse_one_(char c)
 {
 	int value = this->char_to_mode_(c);
 	if (value < 0)
-	{
-		// TODO: raise an error
-		;
-	}
+		throw ModeUnknownException(c);
 
 	std::string parameter = "";
 	if (m_parameters_modes.find(c) != std::string::npos)
 	{
 		if (m_cursor >= m_arguments.size())
 		{
-			// TODO: raise an error
-			;
+			throw ArgumentMissingException();
 		}
 
 		parameter = m_arguments[m_cursor];
