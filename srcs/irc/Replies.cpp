@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/19 11:43:41 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/19 13:08:56 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,10 +214,10 @@ IRC::ReplyBuilder::reply_u_mode_is(
 	reply.append(user_name);
 	reply.append(" :+");
 
-	char mode_literrals[] = "aiwroOs";
-	for (int i = 0; i < 6; ++i) {
+	std::string const mode_string = IRC_USER_MODE_STRING;
+	for (std::string::size_type i = 0; i < mode_string.length(); ++i) {
 		if ( user_mode & (0x01 << i) )
-			reply.push_back(mode_literrals[i]);
+			reply.push_back(mode_string[i]);
 	}
 	return reply;
 }
