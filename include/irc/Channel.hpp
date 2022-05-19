@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:34:06 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/10 09:02:55 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/19 11:19:07 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ namespace IRC
 		typedef	Users::const_reverse_iterator	const_reverse_iterator;
 
 		Channel();
-		Channel(std::string const &name, User *creator, int mode = CHAN_MODE_DEFAULT);
+		Channel(std::string const &name, User *creator, int mode = 0);
 		Channel(Channel const &other);
 		Channel &operator=(Channel const &other);
 		~Channel();
