@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 21:55:45 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/19 11:48:24 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/19 12:12:52 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ IRC::ACmd::ACmd(
 		m_request(request),
 		m_name(name),
 		m_parser(request),
-		m_arguments(this->parse())
+		m_arguments(m_parser.parse())
 {
 }
 
@@ -36,7 +36,7 @@ IRC::ACmd::~ACmd()
 {
 }
 
-std::vector<std::string> 
+std::vector<std::string>
 IRC::ACmd::parse() {
 	return m_parser.parse();
 }

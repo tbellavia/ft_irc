@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CmdPASS.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 23:00:36 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/05 11:25:11 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/19 12:04:20 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,12 @@ IRC::Actions
 IRC::CmdPASS::execute() {
 	User *user = m_ctx.sender;
 	ReplyBuilder reply(this->server_name(), user);
-	std::vector<std::string> args = this->parse();
 	
 	std::cout << "CmdPASS: " << m_request << std::endl;
-	if ( args.size() != Expected_args(1) ){
+	if ( m_arguments.size() != Expected_args(1) ){
 		return Actions::unique_send(user, reply.error_need_more_params(m_name));
 	}
-	std::string password = args[1];
+	std::string password = m_arguments[1];
 
 	if ( user->connected() ){
 		return Actions::unique_send(user, reply.error_already_registered());

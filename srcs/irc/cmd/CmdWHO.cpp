@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CmdWHO.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 12:08:34 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/10 13:55:31 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/19 13:02:08 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,13 @@ IRC::CmdWHO::execute() {
 	User *user = this->sender();
 	Channels &channels = this->channels();
 	ReplyBuilder reply(this->server_name(), user);
-	std::vector<std::string> args = this->parse();
 	Actions actions;
 
-	if ( args.size() == Expected_args(0) ){
+	if ( m_arguments.size() == Expected_args(0) ){
 		// If no mask, drop all users who aren't invisible
 	} else {
 		// Search in channel or for user 
-		std::string mask = args[1];
+		std::string mask = m_arguments[1];
 		
 		if ( Channel::is_channel_name(mask) ){
 			Channel *channel = channels.find(mask);
