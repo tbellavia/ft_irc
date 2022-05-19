@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:34:06 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/19 11:19:07 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/19 11:49:11 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,6 @@ namespace IRC
 
 		bool equal_key(std::string const &key) const;
 
-		bool is_default() const;
 		bool is_private() const;
 		bool is_secret() const;
 		bool is_invite() const;

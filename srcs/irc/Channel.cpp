@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:38:55 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/10 09:02:58 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/19 11:48:59 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ IRC::Channel::Channel() :
 	m_name(),
 	m_key(),
 	m_topic(),
-	m_mode(CHAN_MODE_DEFAULT) { }
+	m_mode(0) { }
 
 IRC::Channel::Channel(std::string const &name, User *creator, int mode) :
 	m_users(), 
@@ -212,11 +212,6 @@ IRC::Channel::unsubscribe(User *user){
 IRC::Action
 IRC::Channel::notify(std::string const &msg) {
 	return m_users.notify(msg);
-}
-
-bool
-IRC::Channel::is_default() const {
-	return m_mode & CHAN_MODE_DEFAULT;
 }
 
 bool

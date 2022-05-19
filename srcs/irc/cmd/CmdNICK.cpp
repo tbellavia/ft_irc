@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 18:18:53 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/09 12:51:59 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/19 11:47:46 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ IRC::CmdNICK::execute() {
 		
 		if ( user->connection_complete() ){
 			std::cout << "Connection completed!" << std::endl;
-			user->unset_mode(MODE_RESTRICTED);
+			user->unset_mode(MODE_RESTRICTED_);
 		}
 	}
 	return Actions::unique_idle();

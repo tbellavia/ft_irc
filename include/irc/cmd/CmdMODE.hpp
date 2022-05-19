@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:54:08 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/19 10:37:26 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/19 11:17:32 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ namespace IRC
 		CmdMODE &operator=(CmdMODE const &rhs);
 
 	private:
+		std::string		m_target;
+		std::string		m_authorized_modes;
 		CmdMODEParse	m_parser;
-		static int		m_modes[];
-		static char		m_char_modes[];
 
 		// Channel modes utils
 		Actions execute_channel_mode_(
@@ -50,7 +50,6 @@ namespace IRC
 		void delete_mode_list_to_user_(
 			User *target, std::string const &mode_list
 		);
-		int *char_to_mode_(char c);
 		bool is_mode_users_valid_(std::vector<std::string> const &mode_lists);
 
 
@@ -58,7 +57,7 @@ namespace IRC
 		std::vector<std::string> parse_mode_string_(
 			std::string const &mode_string
 		) const;
-
+		int char_to_mode_(char c);
 	};
 }
 

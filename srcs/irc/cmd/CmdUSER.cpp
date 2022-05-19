@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CmdUSER.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 00:53:55 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/04 19:28:24 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/19 11:47:47 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ IRC::CmdUSER::execute() {
 	// If user has completed connection, remove Restricted mode
 	if ( user->connection_complete() ){
 		std::cout << "Connection completed!" << std::endl;
-		user->unset_mode(MODE_RESTRICTED);
+		user->unset_mode(MODE_RESTRICTED_);
 	}
 	return Actions::unique_idle();
 }

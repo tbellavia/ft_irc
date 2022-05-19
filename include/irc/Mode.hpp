@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/01 20:24:52 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/19 11:18:52 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/19 11:47:20 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ namespace IRC
 		/* Special private Mode for connection verification */
 		MODE_PASS_			= 0x01 << 4UL,
 		MODE_NICK_			= 0x01 << 5UL,
-		MODE_USER_			= 0x01 << 6UL
+		MODE_USER_			= 0x01 << 6UL,
+		MODE_RESTRICTED_	= 0x01 << 7UL
 	};
 
 	enum ChannelMode {

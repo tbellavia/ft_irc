@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Replies.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/11 22:07:38 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/19 11:43:41 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -285,9 +285,11 @@ IRC::ReplyBuilder::reply_who_reply(Channel *channel, User *user) {
 	reply.append(" ");
 	reply.append(user->get_nickname());
 	reply.append(" ");
+	/*
 	if ( user->mode_isset(MODE_AWAY) )
 		reply.append("G");
 	else
+	*/
 		reply.append("H");
 	if ( channel != NULL ){
 		reply.append(get_user_mode_symbol_(channel, user));

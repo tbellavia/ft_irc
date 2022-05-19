@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 14:42:07 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/19 10:36:55 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/19 11:44:06 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,14 @@ namespace IRC
 
 		ACmd(CmdCtx &ctx, std::string const &request, std::string const &name);
 		ACmd(ACmd const &copy);
-		virtual ~ACmd();
 
 		virtual std::vector<std::string> parse();
 
 		ACmd &operator=(ACmd const &rhs);
 
 	public:
+		virtual ~ACmd();
+
 		virtual Actions execute() = 0;
 
 		User		*sender();

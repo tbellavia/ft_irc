@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:52:41 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/19 10:39:46 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/19 11:26:28 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,23 +15,36 @@
 #include <iostream>
 
 /**
- * @brief theses 2 static variables are helper to convert mode int to char mode
+ * @brief Construct a new IRC::CmdMODE object
+ *
+ * @param ctx the context of command builds (sender, channels etc...)
+ * @param request the request of the command (needed to parse this)
  */
 
-int IRC::CmdMODE::m_modes[] = {
-	IRC::MODE_AWAY,
-	IRC::MODE_INVISIBLE,
-	IRC::MODE_WALLOPS,
-	IRC::MODE_RESTRICTED,
-	IRC::MODE_OPERATOR,
-	IRC::MODE_LOCAL_OPERATOR
-};
-
-char IRC::CmdMODE::m_char_modes[] = "aiwroO";
-
 IRC::CmdMODE::CmdMODE(CmdCtx &ctx, std::string const &request):
-	ACmd(ctx, request, "MODE")
+	ACmd(ctx, request, "MODE"),
+	m_target(),
+	m_authorized_modes(IRC_USER_MODE_STRING),
+	m_parser()
 {
+	if (m_arguments.size() > 1)
+		m_target = m_arguments[1];
+
+	if (!m_target.empty() && Channel::is_valid_name(m_target))
+		m_authorized_modes = IRC_CHANNEL_MODE_STRING;
+
+	if (m_arguments.size() > 3)
+	{
+		std::vector<std::string> mode_arguments(
+			m_arguments.begin() + 2,
+			m_arguments.end()
+		);
+		m_parser = CmdMODEParse(
+			m_arguments[2],
+			mode_arguments,
+			m_authorized_modes
+		);
+	}
 }
 
 IRC::CmdMODE::CmdMODE(CmdMODE const &copy):
@@ -50,11 +63,12 @@ IRC::Actions IRC::CmdMODE::execute() {
 	std::vector<std::string> args = this->parse();
 	ReplyBuilder reply(this->server_name(), this->sender());
 
-	if ( args.size() < Expected_args(1) )
+	if (m_target.empty())
 		return Actions::unique_send(
-			this->sender(), reply.error_need_more_params("MODE")
+			this->sender(), reply.error_need_more_params(m_name)
 		);
-	if ( Channel::is_channel_name(args[1]) )
+
+	if (Channel::is_channel_name(m_target))
 		return this->execute_channel_mode_(args, reply);
 
 	std::cout << std::endl;
@@ -149,8 +163,8 @@ void IRC::CmdMODE::add_mode_list_to_user_(
 ) {
 	std::size_t i = mode_list[0] == '+' ? 1 : 0;
 	for ( ; i < mode_list.length(); ++i ) {
-		int *mode = this->char_to_mode_(mode_list[i]);
-		target->set_mode(*mode);
+		int mode = this->char_to_mode_(mode_list[i]);
+		target->set_mode(mode);
 	}
 }
 
@@ -165,8 +179,8 @@ void IRC::CmdMODE::delete_mode_list_to_user_(
 	User *target, std::string const &mode_list
 ) {
 	for ( std::size_t i = 1; i < mode_list.length(); ++i ) {
-		int *mode = this->char_to_mode_(mode_list[i]);
-		target->unset_mode(*mode);
+		int mode = this->char_to_mode_(mode_list[i]);
+		target->unset_mode(mode);
 	}
 }
 
@@ -200,14 +214,18 @@ bool IRC::CmdMODE::is_mode_users_valid_(
  * @brief Character c to mode
  * 
  * @param c the character to converts
- * @return int* pointer to the mode value or NULL if inexistant
+ * @return the actual mode value or -1 if inexistant
  */
 
-int *IRC::CmdMODE::char_to_mode_(char c) {
-	for ( std::size_t i = 0; i < sizeof(m_char_modes); ++i )
-		if ( m_char_modes[i] == c )
-			return m_modes + i;
-	return NULL;
+int IRC::CmdMODE::char_to_mode_(char c)
+{
+	for (std::string::size_type i = 0; i < m_authorized_modes.length(); ++i)
+	{
+		if (m_authorized_modes[i] == c)
+			return (1UL << i);
+	}
+
+	return -1;
 }
 
 /**
