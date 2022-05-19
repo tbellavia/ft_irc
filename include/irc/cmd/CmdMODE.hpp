@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:54:08 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/19 15:47:24 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/19 16:43:37 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,6 @@ namespace IRC
 
 		// User mode utils
 		Actions execute_user_mode_(ReplyBuilder &reply);
-		void add_mode_list_to_user_(
-			User *target, std::string const &mode_list
-		);
-		void delete_mode_list_to_user_(
-			User *target, std::string const &mode_list
-		);
-		bool is_mode_users_valid_(std::vector<std::string> const &mode_lists);
 
 	};
 }

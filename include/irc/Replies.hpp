@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Replies.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:16 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/11 22:06:47 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/19 16:54:41 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,10 @@ namespace IRC
 		std::string error_channel_is_full(std::string const &channel);
 		std::string	error_not_on_channel(std::string const &channel_name);
 		std::string error_chan_o_privs_needed(std::string const &channel_name);
+		std::string error_unknown_mode(char mode);
 
 		// Channel replies
+		std::string reply_channel_mode_is(Channel const &channel);
 		std::string reply_topic(std::string const &channel, std::string const &topic);
 		std::string reply_name_reply(Channel &channel);
 		std::string reply_end_of_names(std::string const &channel);

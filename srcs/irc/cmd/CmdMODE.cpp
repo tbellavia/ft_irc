@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:52:41 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/19 16:37:03 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/19 16:57:24 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,22 +91,38 @@ IRC::Actions IRC::CmdMODE::execute_channel_mode_(
 	std::string channel_name = m_target;
 	Channel *channel = this->channels().find(channel_name);
 
-	if ( !channel )
+	if (!channel)
 		return Actions::unique_send(
 			sender, reply.error_no_such_channel(channel_name)
 		);
 
-	if ( channel->find(sender) == channel->end() )
+	if (channel->find(sender) == channel->end())
 		return Actions::unique_send(
 			sender, reply.error_not_on_channel(channel_name)
 		);
 
-	if ( !channel->is_operator_user(sender) )
+	if (!channel->is_operator_user(sender))
 		return Actions::unique_send(
 			sender, reply.error_chan_o_privs_needed(channel_name)
 		);
 
-	return Actions::unique_idle();
+	std::map<Mode, bool, CmdMODEParse::ModeComp> modes;
+	try
+	{
+		modes = m_parser.parse();
+	}
+	catch (CmdMODEParse::ModeUnknownException const &e)
+	{
+		return Actions::unique_send(
+			sender, reply.error_unknown_mode(e.mode())
+		);
+	}
+	catch (CmdMODEParse::ArgumentMissingException const &)
+	{
+		return Actions::unique_idle();
+	}
+
+	return channel->notify(reply.reply_channel_mode_is(*channel));
 }
 
 /**
