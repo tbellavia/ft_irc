@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/01 20:24:52 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/19 14:33:22 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/19 16:02:04 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,16 @@
 
 # include <string>
 
-# define IRC_USER_MODE_STRING		"iswo"
-# define IRC_USER_MODE_LEN			sizeof(IRC_USER_MODE_STRING)
-# define IRC_CHANNEL_MODE_STRING	"opsitnmlbvk"
-# define IRC_CHANNEL_MODE_LEN		sizeof(IRC_CHANNEL_MODE_STRING)
+# define IRC_USER_MODE_STRING				"iswo"
+# define IRC_USER_MODE_LEN					sizeof(IRC_USER_MODE_STRING)
+# define IRC_USER_PARAMETERS_MODE_STRING	""
+# define IRC_USER_PARAMETERS_MODE_LEN	\
+	sizeof(IRC_USER_PARAMETERS_MODE_STRING)
+# define IRC_CHANNEL_MODE_STRING			"opsitnmlbvk"
+# define IRC_CHANNEL_PARAMETERS_MODE_STRING	"olbvk"
+# define IRC_CHANNEL_PARAMETERS_MODE_LEN	\
+	sizeof(IRC_CHANNEL_PARAMETERS_MODE_STRING)
+# define IRC_CHANNEL_MODE_LEN				sizeof(IRC_CHANNEL_MODE_STRING)
 
 namespace IRC
 {

@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:52:41 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/19 15:47:29 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/19 16:08:31 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,14 @@ IRC::CmdMODE::CmdMODE(CmdCtx &ctx, std::string const &request):
 	if (m_arguments.size() > 1)
 		m_target = m_arguments[1];
 
+	std::string parameter_modes;
 	if (!m_target.empty() && Channel::is_valid_name(m_target))
+	{
 		m_authorized_modes = IRC_CHANNEL_MODE_STRING;
+		parameter_modes = IRC_CHANNEL_PARAMETERS_MODE_STRING;
+	}
+	else
+		parameter_modes = IRC_USER_PARAMETERS_MODE_STRING;
 
 	if (m_arguments.size() > 2)
 	{
@@ -42,7 +48,8 @@ IRC::CmdMODE::CmdMODE(CmdCtx &ctx, std::string const &request):
 		m_parser = CmdMODEParse(
 			m_arguments[2],
 			mode_arguments,
-			m_authorized_modes
+			m_authorized_modes,
+			parameter_modes
 		);
 	}
 }
@@ -144,14 +151,11 @@ IRC::Actions IRC::CmdMODE::execute_user_mode_(ReplyBuilder &reply)
 	for (; first != last; ++first)
 	{
 		if (first->second)
-			std::cout << "Adding: ";
+		{
+			sender->set_mode(first->first.value);
+		}
 		else
-			std::cout << "Deleting: ";
-
-		std::cout << first->first.litteral;
-		if (!first->first.parameter.empty())
-			std::cout << " " << first->first.parameter;
-		std::cout << std::endl;
+			sender->unset_mode(first->first.value);
 	}
 
 	return Actions::unique_send(

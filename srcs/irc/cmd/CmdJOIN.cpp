@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 22:53:22 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/19 12:05:07 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/19 16:04:38 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ IRC::Actions
 IRC::CmdJOIN::execute() {
 	User *user = m_ctx.sender;
 	Channels &channels = m_ctx.channels;
-	std::vector<std::string> m_arguments = this->parse();
 	ReplyBuilder reply(this->server_name(), this->sender());
 
 	std::cout << "CmdJOIN: " << std::endl;
