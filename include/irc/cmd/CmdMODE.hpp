@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:54:08 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/10 16:52:45 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/19 10:37:26 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,25 @@
 # define CMD_MODE_HPP
 
 # include "irc/ACmd.hpp"
+# include "irc/cmd/CmdMODE/CmdMODEParse.hpp"
 
-namespace IRC {
-	class CmdMODE : public ACmd {
+namespace IRC
+{
+	class CmdMODE : public ACmd
+	{
 	public:
-		CmdMODE(CmdCtx &ctx, std::string const &request);
+		explicit CmdMODE(CmdCtx &ctx, std::string const &request);
+		CmdMODE(CmdMODE const &copy);
 		virtual ~CmdMODE();
 	
 		virtual Actions execute();
 
+		CmdMODE &operator=(CmdMODE const &rhs);
+
 	private:
-		static int	m_modes[];
-		static char	m_char_modes[];
+		CmdMODEParse	m_parser;
+		static int		m_modes[];
+		static char		m_char_modes[];
 
 		// Channel modes utils
 		Actions execute_channel_mode_(

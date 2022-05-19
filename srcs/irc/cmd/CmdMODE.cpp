@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:52:41 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/10 16:53:06 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/19 10:39:46 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,19 @@ int IRC::CmdMODE::m_modes[] = {
 char IRC::CmdMODE::m_char_modes[] = "aiwroO";
 
 IRC::CmdMODE::CmdMODE(CmdCtx &ctx, std::string const &request):
-	ACmd(ctx, request, "MODE") { }
+	ACmd(ctx, request, "MODE")
+{
+}
 
-IRC::CmdMODE::~CmdMODE() { }
+IRC::CmdMODE::CmdMODE(CmdMODE const &copy):
+		ACmd(copy),
+		m_parser(copy.m_parser)
+{
+}
+
+IRC::CmdMODE::~CmdMODE()
+{
+}
 
 IRC::Actions IRC::CmdMODE::execute() {
 	std::cout << "Commmand MODE:";
@@ -236,4 +246,14 @@ std::vector<std::string> IRC::CmdMODE::parse_mode_string_(
 		);
 	}
 	return mode_list;
+}
+
+IRC::CmdMODE &IRC::CmdMODE::operator=(CmdMODE const &rhs)
+{
+	if (this == &rhs)
+		return *this;
+
+	ACmd::operator=(rhs);
+	m_parser = rhs.m_parser;
+	return *this;
 }

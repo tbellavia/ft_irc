@@ -3,14 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   CmdParser.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 02:13:43 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/06 23:54:58 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/19 10:33:26 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "CmdParser.hpp"
+
+IRC::CmdParser::CmdParser():
+		m_request(),
+		m_start(),
+		m_current()
+{
+}
 
 IRC::CmdParser::CmdParser(std::string const &request) : 
 	m_request(request),

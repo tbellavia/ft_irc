@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 15:46:47 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/18 16:47:57 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/19 10:38:57 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ namespace IRC
 
 	class CmdMODEParse
 	{
+	public:
 		CmdMODEParse();
 		explicit CmdMODEParse(
 			std::string const &mode_string,
