@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 15:46:47 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/19 10:38:57 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/19 15:43:08 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,10 @@
 # define CMD_MODE_PARSE_HPP
 
 # include <vector>
+# include <map>
+# include <functional>
 # include <string>
+# include "irc/Mode.hpp"
 
 namespace IRC
 {
@@ -29,18 +32,24 @@ namespace IRC
 	class CmdMODEParse
 	{
 	public:
+		struct ModeComp : public std::binary_function<Mode, Mode, bool>
+		{
+			bool operator()(Mode const &first, Mode const &second);
+		};
+
 		CmdMODEParse();
 		explicit CmdMODEParse(
 			std::string const &mode_string,
 			std::vector<std::string> const &arguments,
-			std::string const &authorized_modes
+			std::string const &authorized_modes,
+			std::string const &parameters_modes = ""
 		);
 		CmdMODEParse(CmdMODEParse const &copy);
 		~CmdMODEParse();
 
-		CmdMODEParse &operator=(CmdMODEParse const &rhs);
+		std::map<Mode, bool, ModeComp> parse();
 
-		std::vector<std::string> const &mode_list() const;
+		CmdMODEParse &operator=(CmdMODEParse const &rhs);
 
 	private:
 		// Each token will be of size 1
@@ -49,11 +58,14 @@ namespace IRC
 		std::string					m_mode_string;
 		std::vector<std::string>	m_arguments;
 		std::string					m_authorized_modes;
+		std::string					m_parameters_modes;
 
 		// Parsed arguments
-		std::vector<std::string>	m_mode_lists;
+		std::size_t						m_cursor;
+		std::map<Mode, bool, ModeComp>	m_modes;
 
-		void tokenize_();
+		Mode parse_one_(char c);
+		int char_to_mode_(char c);
 	};
 }
 

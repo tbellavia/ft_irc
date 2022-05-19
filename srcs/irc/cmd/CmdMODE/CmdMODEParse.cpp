@@ -6,11 +6,29 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 15:53:47 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/19 09:45:49 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/19 15:55:18 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc/cmd/CmdMODE/CmdMODEParse.hpp"
+
+/**
+ * @brief Check if mode first is less than mode second
+ * 
+ * @param first the first mode to compare
+ * @param second the second mode to compare
+ * @return true if first is less than second
+ * @return false if first is not less than second
+ */
+
+bool
+IRC::CmdMODEParse::ModeComp::operator()(Mode const &first, Mode const &second)
+{
+	return \
+		first.litteral < second.litteral || \
+		first.value < second.value || \
+		first.parameter < second.parameter;
+}
 
 // the tokens that delimites differents mode lists in mode string
 std::string const IRC::CmdMODEParse::m_tokens_delimiters = "+-";
@@ -19,7 +37,9 @@ IRC::CmdMODEParse::CmdMODEParse():
 		m_mode_string(),
 		m_arguments(),
 		m_authorized_modes(),
-		m_mode_lists()
+		m_parameters_modes(),
+		m_cursor(),
+		m_modes()
 {
 }
 
@@ -34,21 +54,25 @@ IRC::CmdMODEParse::CmdMODEParse():
 IRC::CmdMODEParse::CmdMODEParse(
 	std::string const &mode_string,
 	std::vector<std::string> const &arguments,
-	std::string const &authorized_modes
+	std::string const &authorized_modes,
+	std::string const &parameters_modes
 ):
 		m_mode_string(mode_string),
 		m_arguments(arguments),
 		m_authorized_modes(authorized_modes),
-		m_mode_lists()
+		m_parameters_modes(parameters_modes),
+		m_cursor(0),
+		m_modes()
 {
-	// set mode lists
-	this->tokenize_();
 }
 
 IRC::CmdMODEParse::CmdMODEParse(CmdMODEParse const &copy):
 		m_mode_string(copy.m_mode_string),
 		m_arguments(copy.m_arguments),
-		m_authorized_modes(copy.m_authorized_modes)
+		m_authorized_modes(copy.m_authorized_modes),
+		m_parameters_modes(copy.m_parameters_modes),
+		m_cursor(copy.m_cursor),
+		m_modes(copy.m_modes)
 {
 }
 
@@ -56,49 +80,96 @@ IRC::CmdMODEParse::~CmdMODEParse()
 {
 }
 
-std::vector<std::string> const &IRC::CmdMODEParse::mode_list() const
+/**
+ * @brief Parse the mode string with its arguments into map of Modes
+ *
+ * @return std::map<IRC::Mode, bool, IRC::CmdMODEParse::ModeComp>
+ * the first value of the pair is the Mode itself, the second if we add it or
+ * delete it.
+ */
+
+/**
+ * The idea of using the map is to cancel modes that do the same thing twice
+ * and cancel the mode that do reverse things between each others.
+ */
+
+std::map<IRC::Mode, bool, IRC::CmdMODEParse::ModeComp>
+IRC::CmdMODEParse::parse()
 {
-	return m_mode_lists;
+	bool is_adding = true;
+	for (std::size_t i = 0; i < m_mode_string.length(); ++i)
+	{
+		if (m_tokens_delimiters.find(m_mode_string[i]) != std::string::npos)
+		{
+			if (m_mode_string[i] == '-')
+				is_adding = false;
+			else
+				is_adding = true;
+		}
+		else
+		{
+			Mode new_mode = this->parse_one_(m_mode_string[i]);
+
+			// If already in map and their values differs we erase them
+			std::pair<std::map<Mode, bool, ModeComp>::iterator, bool> r;
+			r = m_modes.insert(std::make_pair(new_mode, is_adding));
+			if (!r.second && r.first->second != is_adding)
+				m_modes.erase(r.first);
+		}
+	}
+	return m_modes;
 }
 
 /**
- * @brief tokenize mode_argument into differents mode lists
+ * @brief try to parse and construct one Mode struct
  *
- * Each mode list is a valid successions of mode adding or mode deletions
+ * @param c the mode in litteral form
+ * @return IRC::Mode the mode structure with parameter and value filled
  */
 
-void IRC::CmdMODEParse::tokenize_()
+IRC::Mode IRC::CmdMODEParse::parse_one_(char c)
 {
-	for (
-		std::size_t i = 0, new_position = i;
-		i < m_mode_string.length();
-		i = new_position
-	)
+	int value = this->char_to_mode_(c);
+	if (value < 0)
 	{
-		new_position = i;
-		// If delimiter advance 1
-		if (
-			m_tokens_delimiters.find(
-				m_mode_string[new_position]
-			) != std::string::npos
-		)
-		{
-			++new_position;
-		}
-
-		// advance until delimiter
-		while (
-			m_tokens_delimiters.find(
-				m_mode_string[new_position]
-			) == std::string::npos
-		)
-		{
-			++new_position;
-		}
-
-		m_mode_lists.push_back(m_mode_string.substr(i, new_position - i));
+		// TODO: raise an error
+		;
 	}
+
+	std::string parameter = "";
+	if (m_parameters_modes.find(c) != std::string::npos)
+	{
+		if (m_cursor >= m_arguments.size())
+		{
+			// TODO: raise an error
+			;
+		}
+
+		parameter = m_arguments[m_cursor];
+		++m_cursor;
+	}
+
+	return Mode(value, c, parameter);
 }
+
+/**
+ * @brief Character c to mode
+ * 
+ * @param c the character to converts
+ * @return the actual mode value or -1 if inexistant
+ */
+
+int IRC::CmdMODEParse::char_to_mode_(char c)
+{
+	for (std::string::size_type i = 0; i < m_authorized_modes.length(); ++i)
+	{
+		if (m_authorized_modes[i] == c)
+			return (1UL << i);
+	}
+
+	return -1;
+}
+
 
 IRC::CmdMODEParse &IRC::CmdMODEParse::operator=(CmdMODEParse const &rhs)
 {
@@ -108,5 +179,9 @@ IRC::CmdMODEParse &IRC::CmdMODEParse::operator=(CmdMODEParse const &rhs)
 	m_mode_string = rhs.m_mode_string;
 	m_arguments = rhs.m_arguments;
 	m_authorized_modes = rhs.m_authorized_modes;
+	m_parameters_modes = rhs.m_parameters_modes;
+	m_cursor = rhs.m_cursor;
+	m_modes = rhs.m_modes;
+
 	return *this;
 }

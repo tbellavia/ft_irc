@@ -6,7 +6,7 @@
 #    By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/12 19:27:05 by bbellavi          #+#    #+#              #
-#    Updated: 2022/05/18 16:21:25 by lperson-         ###   ########.fr        #
+#    Updated: 2022/05/19 14:34:03 by lperson-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,7 @@ SRCS		=	main.cpp								\
 				srcs/irc/Config.cpp						\
 				srcs/irc/Parse.cpp						\
 				srcs/irc/CmdParser.cpp					\
+				srcs/irc/Mode.cpp						\
 				srcs/irc/cmd/CmdPASS.cpp				\
 				srcs/irc/cmd/CmdUSER.cpp				\
 				srcs/irc/cmd/CmdNICK.cpp				\

@@ -6,12 +6,14 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/01 20:24:52 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/19 11:47:20 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/19 14:33:22 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MODE_HPP
 # define MODE_HPP
+
+# include <string>
 
 # define IRC_USER_MODE_STRING		"iswo"
 # define IRC_USER_MODE_LEN			sizeof(IRC_USER_MODE_STRING)
@@ -20,7 +22,7 @@
 
 namespace IRC
 {
-	enum Mode {
+	enum UserMode {
 		MODE_INVISIBLE		= 0x01 << 0UL, // 'i'
 		MODE_SERVER_NOTICE	= 0x01 << 1UL, // 's'
 		MODE_WALLOPS		= 0x01 << 2UL, // 'w'
@@ -45,7 +47,20 @@ namespace IRC
 		CHAN_MODE_VOICE_USER			= 0x01 << 9UL, // 'v'
 		CHAN_MODE_KEY					= 0x01 << 10UL // 'k'
 	};
-}
 
+	struct Mode
+	{
+		int				value;
+		char			litteral;
+		std::string		parameter;
+
+		Mode();
+		Mode(int value, char litteral, std::string const &parameter);
+		Mode(Mode const &copy);
+		~Mode();
+
+		Mode &operator=(Mode const &rhs);
+	};
+}
 
 #endif
