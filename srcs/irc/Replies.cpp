@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Replies.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/11 22:07:38 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/20 15:12:27 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ IRC::ReplyBuilder::reply_youre_oper() {
 	return reply;
 }
 
+// Channels error
 std::string
 IRC::ReplyBuilder::error_no_such_channel(std::string const &channel){
 	std::string reply = this->build_header_(NumericReplies::ERR_NOSUCHCHANNEL);
@@ -184,6 +185,24 @@ IRC::ReplyBuilder::error_chan_o_privs_needed(std::string const &channel_name) {
 	return reply;
 }
 
+// Channel replies
+std::string
+IRC::ReplyBuilder::reply_channel_mode_is(Channel &channel) {
+	std::string reply = this->build_header_(NumericReplies::RPL_CHANNELMODEIS);
+
+	reply.append(" ");
+	reply.append(channel.get_name());
+	reply.append(" :+");
+
+	int channel_mode = channel.get_mode();
+	char const string_channel_modes[] = "opsitnmlbvk";
+	for ( std::size_t i = 0; i < sizeof(string_channel_modes); ++i ) {
+		if ( channel_mode & (0x01 << i) )
+			reply.push_back(string_channel_modes[i]);
+	}
+	return reply;
+}
+
 // User errors (mode etc...)
 std::string
 IRC::ReplyBuilder::error_users_dont_match() {
@@ -214,11 +233,63 @@ IRC::ReplyBuilder::reply_u_mode_is(
 	reply.append(user_name);
 	reply.append(" :+");
 
-	char mode_literrals[] = "aiwroOs";
-	for (int i = 0; i < 6; ++i) {
+	std::string const mode_string = IRC_USER_MODE_STRING;
+	for (std::string::size_type i = 0; i < mode_string.length(); ++i) {
 		if ( user_mode & (0x01 << i) )
-			reply.push_back(mode_literrals[i]);
+			reply.push_back(mode_string[i]);
 	}
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::reply_u_mode_is(
+	std::string const &user_name, std::string const &modes
+) {
+	std::string reply = this->build_header_(NumericReplies::RPL_UMODEIS);
+
+	reply += " " + user_name + " " + modes;
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::error_unknown_mode(char mode)
+{
+	std::string reply = this->build_header_(NumericReplies::ERR_UNKNOWNMODE);
+
+	reply += " ";
+	reply.push_back(mode);
+	reply += " :is unknown to me";
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::reply_channel_mode_is(Channel const &channel)
+{
+	std::string reply = this->build_header_(NumericReplies::RPL_CHANNELMODEIS);
+
+	reply += " " + channel.get_name() + " :+";
+
+	std::string const mode_string = IRC_CHANNEL_MODE_STRING;
+	for (std::string::size_type i = 0 ; i < mode_string.length(); ++i)
+	{
+		if (channel.get_mode() & (0x01 << i))
+			reply += mode_string[i];
+	}
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::reply_channel_mode_is(
+	std::string const &channel_name,
+	std::string const &modes,
+	std::vector<std::string> const &mode_parameters
+)
+{
+	std::string reply = this->build_header_(NumericReplies::RPL_CHANNELMODEIS);
+
+	reply += " " + channel_name + " " + modes;
+	for (std::size_t i = 0; i < mode_parameters.size(); ++i)
+		reply += " " + mode_parameters[i];
 	return reply;
 }
 
@@ -285,9 +356,11 @@ IRC::ReplyBuilder::reply_who_reply(Channel *channel, User *user) {
 	reply.append(" ");
 	reply.append(user->get_nickname());
 	reply.append(" ");
+	/*
 	if ( user->mode_isset(MODE_AWAY) )
 		reply.append("G");
 	else
+	*/
 		reply.append("H");
 	if ( channel != NULL ){
 		reply.append(get_user_mode_symbol_(channel, user));

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CmdUSER.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 00:53:55 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/04 19:28:24 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/19 13:02:02 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ IRC::CmdUSER::~CmdUSER() { }
 IRC::Actions
 IRC::CmdUSER::execute() {
 	User *user = m_ctx.sender;
-	std::vector<std::string> args = CmdParser(m_request).parse();
 	ReplyBuilder reply(this->server_name(), user);
 
 	// USER: <username> <hostname> <servername> <realname>
@@ -32,14 +31,14 @@ IRC::CmdUSER::execute() {
 	if ( user->connected() )
 		return Actions::unique_idle();
 	// Not enough parameters
-	if ( args.size() == 1 || args.size() > Expected_args(4) )
+	if ( m_arguments.size() == 1 || m_arguments.size() > Expected_args(4) )
 		return Actions::unique_send(user, reply.error_need_more_params(m_name));
 	// Already registered
 	if ( user->mode_isset(MODE_USER_) )
 		return Actions::unique_send(user, reply.error_already_registered());
 
-	std::string username = args[1];
-	std::string realname = args[4];
+	std::string username = m_arguments[1];
+	std::string realname = m_arguments[4];
 
 	if ( realname[0] == ':' )
 		realname = ft::popfirst(realname);
@@ -55,7 +54,7 @@ IRC::CmdUSER::execute() {
 	// If user has completed connection, remove Restricted mode
 	if ( user->connection_complete() ){
 		std::cout << "Connection completed!" << std::endl;
-		user->unset_mode(MODE_RESTRICTED);
+		user->unset_mode(MODE_RESTRICTED_);
 	}
 	return Actions::unique_idle();
 }

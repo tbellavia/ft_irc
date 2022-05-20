@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:34:06 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/10 09:02:55 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/20 15:11:42 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,14 @@ namespace IRC
 		typedef	Users::const_reverse_iterator	const_reverse_iterator;
 
 		Channel();
-		Channel(std::string const &name, User *creator, int mode = CHAN_MODE_DEFAULT);
+		Channel(std::string const &name, User *creator, int mode = 0);
 		Channel(Channel const &other);
 		Channel &operator=(Channel const &other);
 		~Channel();
 
 		void set_name(std::string const &name);
 		void set_mode(int mode);
+		void unset_mode(int mode);
 		void set_key(std::string const &pass);
 		void set_topic(std::string const &topic);
 
@@ -60,7 +61,6 @@ namespace IRC
 		 * TODO: Maybe implements a way to iterate through each lists of users
 		 * (banned, invited etc...). Need just one paramater for this.
 		 */
-
 
 		iterator find(User *to_find);
 		const_iterator find(User *to_find) const;
@@ -83,7 +83,6 @@ namespace IRC
 
 		bool equal_key(std::string const &key) const;
 
-		bool is_default() const;
 		bool is_private() const;
 		bool is_secret() const;
 		bool is_invite() const;
@@ -91,6 +90,11 @@ namespace IRC
 
 		void subscribe(User *user);
 		void unsubscribe(User *user);
+		void setOperator(User *user);
+		void unsetOperator(User *user);
+		void allowVoice(User *user);
+		void disallowVoice(User *user);
+
 		Action notify(std::string const &msg);
 
 		static bool is_channel_name(std::string const &name);

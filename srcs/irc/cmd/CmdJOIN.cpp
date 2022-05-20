@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CmdJOIN.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 22:53:22 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/10 15:45:37 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/20 15:12:39 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,29 +23,28 @@ IRC::Actions
 IRC::CmdJOIN::execute() {
 	User *user = m_ctx.sender;
 	Channels &channels = m_ctx.channels;
-	std::vector<std::string> args = this->parse();
 	ReplyBuilder reply(this->server_name(), this->sender());
 
 	std::cout << "CmdJOIN: " << std::endl;
 	// Not enough arguments
-	if ( args.size() == 1 || args.size() > Expected_args(2) ){
+	if ( m_arguments.size() == 1 || m_arguments.size() > Expected_args(2) ){
 		return Actions::unique_send(user, reply.error_need_more_params(m_name));
 	}
-	std::vector<std::string> args_chan = ft::split(args[1], ",");
-	std::vector<std::string> args_keys;
+	std::vector<std::string> m_arguments_chan = ft::split(m_arguments[1], ",");
+	std::vector<std::string> m_arguments_keys;
 
-	if ( args.size() == Expected_args(2) ){
-		args_keys = ft::split(args[2], ",");
+	if ( m_arguments.size() == Expected_args(2) ){
+		m_arguments_keys = ft::split(m_arguments[2], ",");
 	}
 	Actions actions;
-	std::vector<std::string>::iterator chan_it = args_chan.begin();
-	std::vector<std::string>::iterator keys_it = args_keys.begin();
+	std::vector<std::string>::iterator chan_it = m_arguments_chan.begin();
+	std::vector<std::string>::iterator keys_it = m_arguments_keys.begin();
 
-	while ( chan_it != args_chan.end() ){
+	while ( chan_it != m_arguments_chan.end() ){
 		std::string name = *chan_it;
 		std::string key;
 
-		if ( keys_it != args_keys.end() ){
+		if ( keys_it != m_arguments_keys.end() ){
 			key = *keys_it;
 			++keys_it;
 		}

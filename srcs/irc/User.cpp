@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 14:36:26 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/11 13:29:16 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/19 11:47:44 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ IRC::User::User() :
 	m_username(),
 	m_nickname(),
 	m_realname(),
-	m_mode(MODE_RESTRICTED),
+	m_mode(0),
 	m_socket(NULL) { }
 
 IRC::User::User(std::string const &pseudo, std::string const &nick, 
@@ -32,7 +32,7 @@ IRC::User::User(Socket *socket) :
 	m_username(),
 	m_nickname(),
 	m_realname(),
-	m_mode(MODE_RESTRICTED),
+	m_mode(MODE_RESTRICTED_),
 	m_socket(socket) { }
 
 IRC::User::User(IRC::User const &other) : 
@@ -129,7 +129,7 @@ IRC::User::mode_isset(int mode) const {
 
 bool
 IRC::User::connected() const {
-	return !mode_isset(MODE_RESTRICTED);
+	return !mode_isset(MODE_RESTRICTED_);
 }
 
 bool

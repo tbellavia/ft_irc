@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CmdQUIT.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/23 21:57:08 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/05 17:22:00 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/19 13:01:50 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,11 @@ IRC::Actions
 IRC::CmdQUIT::execute() {
 	Actions actions;
 	User *user = m_ctx.sender;
-	std::vector<std::string> args = ft::split(m_request, ":");
 	
 	std::cout << "CmdQUIT" << std::endl;
 	// Notify all channels where sender is present
-	if ( args.size() >= 2 ){
-		std::string message = args[1];
+	if ( m_arguments.size() >= 2 ){
+		std::string message = m_arguments[1];
 
 		actions.push(Action::send(user, message));
 	}
