@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:52:41 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/20 12:19:47 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/20 14:24:44 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,10 @@ IRC::Actions IRC::CmdMODE::execute_channel_mode_(
 			sender, reply.error_chan_o_privs_needed(channel_name)
 		);
 
-	std::map<Mode, bool, CmdMODEParse::ModeComp> modes;
+	if (m_arguments.size() == 2)
+		return channel->notify(reply.reply_channel_mode_is(*channel));
+
+	std::vector<std::pair<std::vector<Mode>, bool> > modes;
 	try
 	{
 		modes = m_parser.parse();
@@ -128,43 +131,44 @@ IRC::Actions IRC::CmdMODE::execute_channel_mode_(
 		return Actions::unique_idle();
 	}
 
-	std::map<Mode, bool, CmdMODEParse::ModeComp>::const_iterator first;
+	std::vector<std::pair<std::vector<Mode>, bool> >::const_iterator first;
 	first = modes.begin();
-	std::map<Mode, bool, CmdMODEParse::ModeComp>::const_iterator last;
+	std::vector<std::pair<std::vector<Mode>, bool> >::const_iterator last;
 	last = modes.end();
 	for (; first != last; ++first)
 	{
-		if (first->second)
-		{
-			if (!first->first.parameter.empty())
-			{
-				; // TODO: handle parameter mode
-			}
-			else if (!(first->first.value & channel->get_mode()))
-			{
-				m_mode_reply.push_back('-');
-				m_mode_reply.push_back(first->first.litteral);
-				channel->set_mode(first->first.value);
-			}
-		}
-		else
-		{
-			if (!first->first.parameter.empty())
-			{
-				; // TODO: handle parameter mode
-			}
-			else if (first->first.value & channel->get_mode())
-			{
-				m_mode_reply.push_back('-');
-				m_mode_reply.push_back(first->first.litteral);
-				channel->unset_mode(first->first.value);
-			}
-		}
+		this->execute_channel_mode_list_(*channel, first->first, first->second);
 	}
 
 	return channel->notify(reply.reply_channel_mode_is(
 		channel->get_name(), m_mode_reply, m_mode_arguments_reply
 	));
+}
+
+void IRC::CmdMODE::execute_channel_mode_list_(
+	Channel &channel,
+	std::vector<Mode> const &mode_list,
+	bool is_adding
+)
+{
+	m_mode_reply += is_adding ? "+" : "-";
+	for (std::size_t i = 0; i < mode_list.size(); ++i)
+	{
+		if (!mode_list[i].parameter.empty())
+		{
+			; // TODO: handle parameters modes
+		}
+		else if (is_adding && !(mode_list[i].value & channel.get_mode()))
+		{
+			m_mode_reply.push_back(mode_list[i].litteral);
+			channel.set_mode(mode_list[i].value);
+		}
+		else if (!is_adding && mode_list[i].value & channel.get_mode())
+		{
+			m_mode_reply.push_back(mode_list[i].litteral);
+			channel.unset_mode(mode_list[i].value);
+		}
+	}
 }
 
 /**
@@ -200,7 +204,7 @@ IRC::Actions IRC::CmdMODE::execute_user_mode_(ReplyBuilder &reply)
 		);
 	}
 
-	std::map<Mode, bool, CmdMODEParse::ModeComp> modes;
+	std::vector<std::pair<std::vector<Mode>, bool> > modes;
 	try
 	{
  		modes = m_parser.parse();
@@ -216,25 +220,14 @@ IRC::Actions IRC::CmdMODE::execute_user_mode_(ReplyBuilder &reply)
 		return Actions::unique_idle();
 	}
 
-	std::map<Mode, bool, CmdMODEParse::ModeComp>::iterator first;
+	std::vector<std::pair<std::vector<Mode>, bool> >::const_iterator first;
 	first = modes.begin();
-	std::map<Mode, bool, CmdMODEParse::ModeComp>::iterator last;
+	std::vector<std::pair<std::vector<Mode>, bool> >::const_iterator last;
 	last = modes.end();
 
 	for (; first != last; ++first)
 	{
-		if (first->second && !(sender->get_mode() & first->first.value))
-		{
-			m_mode_reply.push_back('+');
-			m_mode_reply.push_back(first->first.litteral);
-			sender->set_mode(first->first.value);
-		}
-		else if (sender->get_mode() & first->first.value)
-		{
-			m_mode_reply.push_back('-');
-			m_mode_reply.push_back(first->first.litteral);
-			sender->unset_mode(first->first.value);
-		}
+		this->execute_user_mode_list_(*sender, first->first, first->second);
 	}
 
 	return Actions::unique_send(
@@ -242,4 +235,26 @@ IRC::Actions IRC::CmdMODE::execute_user_mode_(ReplyBuilder &reply)
 			sender->get_nickname(), m_mode_reply
 		)
 	);
+}
+
+void IRC::CmdMODE::execute_user_mode_list_(
+	User &user,
+	std::vector<Mode> const &mode_list,
+	bool is_adding
+)
+{
+	m_mode_reply += is_adding ? "+" : "-";
+	for (std::size_t i = 0; i < mode_list.size(); ++i)
+	{
+		if (is_adding && !(mode_list[i].value & user.get_mode()))
+		{
+			m_mode_reply.push_back(mode_list[i].litteral);
+			user.set_mode(mode_list[i].value);
+		}
+		else if (!is_adding && mode_list[i].value & user.get_mode())
+		{
+			m_mode_reply.push_back(mode_list[i].litteral);
+			user.unset_mode(mode_list[i].value);
+		}
+	}
 }

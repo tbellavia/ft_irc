@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 15:46:47 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/19 16:34:21 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/20 13:47:10 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,6 @@ namespace IRC
 	class CmdMODEParse
 	{
 	public:
-		struct ModeComp : public std::binary_function<Mode, Mode, bool>
-		{
-			bool operator()(Mode const &first, Mode const &second);
-		};
-
 		class ModeUnknownException : public std::exception
 		{
 		public:
@@ -65,7 +60,9 @@ namespace IRC
 		CmdMODEParse(CmdMODEParse const &copy);
 		~CmdMODEParse();
 
-		std::map<Mode, bool, ModeComp> parse();
+		std::vector<
+			std::pair<std::vector<Mode>, bool>
+		> parse();
 
 		CmdMODEParse &operator=(CmdMODEParse const &rhs);
 
@@ -80,8 +77,11 @@ namespace IRC
 
 		// Parsed arguments
 		std::size_t						m_cursor;
-		std::map<Mode, bool, ModeComp>	m_modes;
+		std::vector<
+			std::pair<std::vector<Mode>, bool>
+		>	m_mode_lists;
 
+		std::vector<std::string> tokenize_();
 		Mode parse_one_(char c);
 		int char_to_mode_(char c);
 	};

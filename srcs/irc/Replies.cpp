@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/20 12:14:27 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/20 14:21:28 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,7 +228,7 @@ IRC::ReplyBuilder::reply_u_mode_is(
 ) {
 	std::string reply = this->build_header_(NumericReplies::RPL_UMODEIS);
 
-	reply += " " + user_name + modes;
+	reply += " " + user_name + " " + modes;
 	return reply;
 }
 
@@ -268,7 +268,7 @@ IRC::ReplyBuilder::reply_channel_mode_is(
 {
 	std::string reply = this->build_header_(NumericReplies::RPL_CHANNELMODEIS);
 
-	reply += " " + channel_name + modes;
+	reply += " " + channel_name + " " + modes;
 	for (std::size_t i = 0; i < mode_parameters.size(); ++i)
 		reply += " " + mode_parameters[i];
 	return reply;
