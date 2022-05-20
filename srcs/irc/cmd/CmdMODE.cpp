@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:52:41 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/20 11:50:53 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/20 12:19:47 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,9 @@ IRC::CmdMODE::CmdMODE(CmdCtx &ctx, std::string const &request):
 	ACmd(ctx, request, "MODE"),
 	m_target(""),
 	m_authorized_modes(IRC_USER_MODE_STRING),
-	m_parser()
+	m_parser(),
+	m_mode_reply(),
+	m_mode_arguments_reply()
 {
 	if (m_arguments.size() > 1)
 		m_target = m_arguments[1];
@@ -56,7 +58,11 @@ IRC::CmdMODE::CmdMODE(CmdCtx &ctx, std::string const &request):
 
 IRC::CmdMODE::CmdMODE(CmdMODE const &copy):
 		ACmd(copy),
-		m_parser(copy.m_parser)
+		m_target(copy.m_target),
+		m_authorized_modes(copy.m_authorized_modes),
+		m_parser(copy.m_parser),
+		m_mode_reply(copy.m_mode_reply),
+		m_mode_arguments_reply(copy.m_mode_arguments_reply)
 {
 }
 
@@ -134,8 +140,10 @@ IRC::Actions IRC::CmdMODE::execute_channel_mode_(
 			{
 				; // TODO: handle parameter mode
 			}
-			else
+			else if (!(first->first.value & channel->get_mode()))
 			{
+				m_mode_reply.push_back('-');
+				m_mode_reply.push_back(first->first.litteral);
 				channel->set_mode(first->first.value);
 			}
 		}
@@ -145,15 +153,18 @@ IRC::Actions IRC::CmdMODE::execute_channel_mode_(
 			{
 				; // TODO: handle parameter mode
 			}
-			else
+			else if (first->first.value & channel->get_mode())
 			{
+				m_mode_reply.push_back('-');
+				m_mode_reply.push_back(first->first.litteral);
 				channel->unset_mode(first->first.value);
 			}
 		}
 	}
 
-
-	return channel->notify(reply.reply_channel_mode_is(*channel));
+	return channel->notify(reply.reply_channel_mode_is(
+		channel->get_name(), m_mode_reply, m_mode_arguments_reply
+	));
 }
 
 /**
@@ -212,15 +223,23 @@ IRC::Actions IRC::CmdMODE::execute_user_mode_(ReplyBuilder &reply)
 
 	for (; first != last; ++first)
 	{
-		if (first->second)
+		if (first->second && !(sender->get_mode() & first->first.value))
+		{
+			m_mode_reply.push_back('+');
+			m_mode_reply.push_back(first->first.litteral);
 			sender->set_mode(first->first.value);
-		else
+		}
+		else if (sender->get_mode() & first->first.value)
+		{
+			m_mode_reply.push_back('-');
+			m_mode_reply.push_back(first->first.litteral);
 			sender->unset_mode(first->first.value);
+		}
 	}
 
 	return Actions::unique_send(
 		sender, reply.reply_u_mode_is(
-			sender->get_nickname(), sender->get_mode()
+			sender->get_nickname(), m_mode_reply
 		)
 	);
 }

@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:16 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/19 16:54:41 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/20 12:11:45 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,11 @@ namespace IRC
 
 		// Channel replies
 		std::string reply_channel_mode_is(Channel const &channel);
+		std::string reply_channel_mode_is(
+			std::string const &channel_name,
+			std::string const &modes,
+			std::vector<std::string> const &mode_parameters
+		);
 		std::string reply_topic(std::string const &channel, std::string const &topic);
 		std::string reply_name_reply(Channel &channel);
 		std::string reply_end_of_names(std::string const &channel);
@@ -71,6 +76,9 @@ namespace IRC
 		// User replies (infos etc...)
 		std::string reply_u_mode_is(
 			std::string const &user_name, int user_mode
+		);
+		std::string reply_u_mode_is(
+			std::string const &user_name, std::string const &modes
 		);
 
 		std::string error_no_oper_host();
