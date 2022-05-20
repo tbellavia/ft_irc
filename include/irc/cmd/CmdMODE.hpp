@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:54:08 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/20 14:16:25 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/20 15:10:25 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,13 @@ namespace IRC
 			Channel &channel,
 			std::vector<Mode> const &mode_list,
 			bool is_adding
+		);
+		int *char_to_channel_mode_(char c);
+		int execute_channel_mode_list_(
+			Actions &actions,
+			ReplyBuilder &reply,
+			Channel *target,
+			std::pair<std::string, std::vector<std::string> > const &mode_list
 		);
 
 		// User mode utils

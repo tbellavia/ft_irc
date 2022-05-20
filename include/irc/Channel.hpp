@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:34:06 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/20 11:48:52 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/20 15:11:42 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ namespace IRC
 		 * (banned, invited etc...). Need just one paramater for this.
 		 */
 
-
 		iterator find(User *to_find);
 		const_iterator find(User *to_find) const;
 
@@ -91,6 +90,11 @@ namespace IRC
 
 		void subscribe(User *user);
 		void unsubscribe(User *user);
+		void setOperator(User *user);
+		void unsetOperator(User *user);
+		void allowVoice(User *user);
+		void disallowVoice(User *user);
+
 		Action notify(std::string const &msg);
 
 		static bool is_channel_name(std::string const &name);

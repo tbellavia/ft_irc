@@ -6,14 +6,12 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:16 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/20 12:11:45 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/20 15:11:35 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef REPLIES_HPP
-# define REPLIES_HPP
 
-# include <string>
 # include "NumericReplies.hpp"
 # include "User.hpp"
 # include "Channel.hpp"
@@ -65,6 +63,9 @@ namespace IRC
 		std::string reply_name_reply(Channel &channel);
 		std::string reply_end_of_names(std::string const &channel);
 		std::string reply_join(std::string const &channel);
+		std::string reply_channel_mode_is(
+			Channel &channel
+		);
 
 		std::string reply_who_reply(Channel *channel, User *user);
 		std::string reply_end_of_who(std::string const &name);

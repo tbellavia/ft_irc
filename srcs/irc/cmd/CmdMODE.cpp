@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:52:41 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/20 14:24:44 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/20 15:13:24 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,15 @@ IRC::Actions IRC::CmdMODE::execute() {
 	std::cout << std::endl;
 	return this->execute_user_mode_(reply);
 }
+
+
+/**
+ * @brief Change channel options and mode in IRC
+ *
+ * @param args channel target and modes to change with their parameters
+ * @param reply reply previously built
+ * @return IRC::Actions actions to perform by the server
+ */
 
 IRC::Actions IRC::CmdMODE::execute_channel_mode_(
 	ReplyBuilder &reply
