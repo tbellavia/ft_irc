@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 18:47:47 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/18 16:09:05 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/21 00:44:43 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,13 +66,16 @@ void IRC::Server::serve_forever() {
 
 		this->read_requests_();
 		this->write_responses_();
+		
 		// TODO: Process other requests (DISCONNECT, BAN, ...)
+		this->finish_requests_();
 	}
 }
 
 void
 IRC::Server::read_requests_() {
 	std::set<File*>::iterator	it;
+	std::set<File*>::iterator	tmp;
 	Actions						actions;
 	ssize_t						bytes = 0;
 
@@ -82,14 +85,20 @@ IRC::Server::read_requests_() {
 		std::string	buffer;
 
 		if ( *socket == *m_server ){
-			this->connect_(m_server->accept());
+			this->connect_socket_(m_server->accept());
 		} else {
 			if ( (bytes = socket->recv(buffer)) <= 0 ){
 				// Connection shutdown
 				if ( bytes == 0 ){
 					std::cout << "Client has closed the connection" << std::endl;
 				}
-				this->disconnect_(socket);
+				// Remove File from writers to prevent using it in the writer loop.
+				tmp = it++;
+				file = *tmp;
+				socket = file->socket();
+
+				m_writers.erase( file );
+				this->disconnect_socket_( socket );
 			} else {
 				file->push_request( buffer );
 
@@ -100,7 +109,7 @@ IRC::Server::read_requests_() {
 				*/
 				while ( file->available_request() ){
 					actions = m_api.process_request(socket, file->pop_request());
-					this->process_actions_(actions);
+					this->handle_actions_(actions);
 					std::cout << "============================================" << std::endl;
 				}
 			}
@@ -111,7 +120,6 @@ IRC::Server::read_requests_() {
 void
 IRC::Server::write_responses_() {
 	std::set<File*>::iterator	it;
-	Actions						actions;
 	ssize_t						bytes = 0;
 	
 	for ( it = m_writers.begin() ; it != m_writers.end() ; ++it ){
@@ -127,7 +135,29 @@ IRC::Server::write_responses_() {
 }
 
 void
-IRC::Server::process_actions_(Actions &actions) {
+IRC::Server::finish_requests_() {
+	std::map<int, File*> const &entries = m_selector.get_entries();
+	std::map<int, File*>::const_iterator it;
+
+	for ( it = entries.begin() ; it != entries.end() ; ++it ){
+		File *file = it->second;
+		Socket *socket = file->socket();
+
+		if ( file->isset_event(Selector::DISCONNECT) && !file->available_response() ){
+			// WARN: this line is super important, do not touch !!!
+			++it;
+			this->disconnect_socket_(socket);
+		}
+	}
+}
+
+/**
+ * Handle actions
+ * 
+ * Handle actions and route it to the right service. 
+ */
+void
+IRC::Server::handle_actions_(Actions &actions) {
 	Action action;
 
 	while ( !actions.empty() ){
@@ -153,8 +183,15 @@ IRC::Server::process_actions_(Actions &actions) {
 	}
 }
 
+/**
+ * Push send
+ * 
+ * Push a send request into the associated File object.
+ * The request is later processed by the server when the
+ * socket is available in writing mode.
+ */
 void
-IRC::Server::send_(Socket *socket, std::string const &response) {
+IRC::Server::push_send_(Socket *socket, std::string const &response) {
 	if ( socket != NULL ){
 		File *file = m_selector.find(socket);
 
@@ -164,32 +201,30 @@ IRC::Server::send_(Socket *socket, std::string const &response) {
 	}
 }
 
+/**
+ * Sendall
+ * 
+ * Push send request into all sockets File.
+ */
 void
 IRC::Server::sendall_(Action &action) {
 	std::vector<Socket*> sockets = action.sockets();
 	std::vector<Socket*>::iterator it = sockets.begin();
 
 	for ( ; it != sockets.end() ; ++it ) {
-		this->send_(*it, action.response());
+		this->push_send_(*it, action.response());
 	}
 }
 
+/**
+ * Connect socket
+ * 
+ * Connect a socket to the underlying services :
+ * 	- IRC::Api
+ * 	- Selector
+ */
 void
-IRC::Server::disconnect_(Socket *socket){
-	if ( socket != NULL ){
-		File *file = m_selector.find(socket);
-
-		// Remove File from writers to prevent using it in the writer loop.
-		m_writers.erase(file);
-
-		m_api.disconnect(socket);
-		m_selector.remove(socket);
-		Socket::release(&socket);
-	}
-}
-
-void
-IRC::Server::connect_(Socket *socket){
+IRC::Server::connect_socket_(Socket *socket){
 	if ( socket != NULL ){
 		std::cout << "New connection from : " << socket->ip() << std::endl;
 		socket->set_blocking(false);
@@ -198,14 +233,57 @@ IRC::Server::connect_(Socket *socket){
 	}
 }
 
+/**
+ * Push disconnect
+ * 
+ * Push a disconnect event into File events.
+ */
+void
+IRC::Server::push_disconnect_(Socket *socket){
+	if ( socket != NULL ){
+		File *file = m_selector.find(socket);
+
+		if ( file != NULL )
+			file->set_event(Selector::DISCONNECT);
+		m_selector.unset(socket, Selector::READ);
+	}
+}
+
+/**
+ * Disconnect socket
+ * 
+ * Disconnect a socket from the underlying services :
+ * 	- IRC::Api
+ * 	- Selector
+ */
+void
+IRC::Server::disconnect_socket_(Socket *socket) {
+	if ( socket != NULL ){
+		m_api.disconnect(socket);
+		m_selector.remove(socket);
+		Socket::release(&socket);
+	}
+}
+
+
+/**
+ * Disconnect all
+ * 
+ * Push disconnect event into all File object associated to sockets.
+ */
 void
 IRC::Server::disconnectall_(Action &action){
 	std::vector<Socket*> sockets = action.sockets();
 	
 	for ( std::vector<Socket*>::iterator it = sockets.begin() ; it != sockets.end() ; ++it )
-		this->disconnect_(*it);
+		this->push_disconnect_(*it);
 }
 
+/**
+ * Select
+ * 
+ * Select_ wrap Selector::select method.
+ */
 void
 IRC::Server::select_() {
 	m_ready = m_selector.select();

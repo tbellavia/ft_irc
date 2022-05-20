@@ -25,16 +25,26 @@ namespace IRC
 		std::set<File*>			m_readers;
 		Api						&m_api;
 
+
 		void sendall_(Action &action);
-		void send_(Socket *socket, std::string const &response);
+		void push_send_(Socket *socket, std::string const &response);
+
 		void disconnectall_(Action &action);
-		void disconnect_(Socket *socket);
-		void connect_(Socket *socket);
-		void process_actions_(Actions &actions);
+		// Push disconnect request into File
+		void push_disconnect_(Socket *socket);
+		// Disconnect a socket
+		void disconnect_socket_(Socket *socket);
+		
+		// Connect a socket to the underlying services
+		void connect_socket_(Socket *socket);
+
+		void handle_actions_(Actions &actions);
+		
 		void select_();
 
 		void read_requests_();
 		void write_responses_();
+		void finish_requests_();
 	public:
 		Server(ConfigServer &conf, Api &api, bool bind_and_activate = false);
 		Server(Server const &other);

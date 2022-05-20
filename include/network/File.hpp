@@ -21,7 +21,6 @@
 
 class File {
 	class ResponseBuffer {
-		// std::queue<std::string> m_responses;
 		std::string				m_responses;
 		size_t					m_begin;
 	public:
@@ -50,7 +49,9 @@ public:
 	Socket				*socket();
 	std::string const	&buffer() const;
 	
-	bool				isset(int event) const;
+	void				set_event(int event);
+	void				unset_event(int event);
+	bool				isset_event(int event) const;
 	void				clear();
 
 	// Request Queue Interface

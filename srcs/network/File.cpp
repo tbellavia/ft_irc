@@ -41,15 +41,28 @@ File::~File() {
 	
 }
 
-Socket *File::socket() {
+void
+File::set_event(int event) {
+	m_events |= event;
+}
+
+void
+File::unset_event(int event) {
+	m_events &= ~event;
+}
+
+Socket*
+File::socket() {
 	return m_socket;
 }
 
-std::string const &File::buffer() const {
+std::string const&
+File::buffer() const {
 	return m_buffer;
 }
 
-bool File::isset(int event) const {
+bool
+File::isset_event(int event) const {
 	return m_events & event;
 }
 
