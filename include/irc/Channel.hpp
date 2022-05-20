@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:34:06 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/19 11:49:11 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/20 11:48:52 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ namespace IRC
 
 		void set_name(std::string const &name);
 		void set_mode(int mode);
+		void unset_mode(int mode);
 		void set_key(std::string const &pass);
 		void set_topic(std::string const &topic);
 

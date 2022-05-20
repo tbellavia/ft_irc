@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:38:55 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/19 16:39:35 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/20 11:49:41 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,12 @@ IRC::Channel::set_name(std::string const &name) {
 
 void
 IRC::Channel::set_mode(int mode) {
-	m_mode = mode;
+	m_mode |= mode;
+}
+
+void
+IRC::Channel::unset_mode(int mode) {
+	m_mode &= ~mode;
 }
 
 void

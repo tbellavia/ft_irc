@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:52:41 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/19 16:57:24 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/20 11:50:53 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,37 @@ IRC::Actions IRC::CmdMODE::execute_channel_mode_(
 	{
 		return Actions::unique_idle();
 	}
+
+	std::map<Mode, bool, CmdMODEParse::ModeComp>::const_iterator first;
+	first = modes.begin();
+	std::map<Mode, bool, CmdMODEParse::ModeComp>::const_iterator last;
+	last = modes.end();
+	for (; first != last; ++first)
+	{
+		if (first->second)
+		{
+			if (!first->first.parameter.empty())
+			{
+				; // TODO: handle parameter mode
+			}
+			else
+			{
+				channel->set_mode(first->first.value);
+			}
+		}
+		else
+		{
+			if (!first->first.parameter.empty())
+			{
+				; // TODO: handle parameter mode
+			}
+			else
+			{
+				channel->unset_mode(first->first.value);
+			}
+		}
+	}
+
 
 	return channel->notify(reply.reply_channel_mode_is(*channel));
 }
