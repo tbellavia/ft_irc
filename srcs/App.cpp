@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   App.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/18 14:13:48 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/09 11:39:34 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/18 16:01:34 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ App::App() { }
 App::~App() { }
 
 void App::start(IRC::ConfigServer &config) const {
-	IRC::Server server(config, true);
 	IRC::Api api(config);
+	IRC::Server server(config, api, true);
 
-	server.serve_forever(api);
+	server.serve_forever();
 }
