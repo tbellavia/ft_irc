@@ -6,19 +6,21 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:52:41 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/24 15:37:53 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/24 16:25:21 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc/cmd/CmdMODE.hpp"
 #include "irc/Mode.hpp"
 #include <iostream>
+#include <sstream>
 
 IRC::CmdMODE::setter_t const IRC::CmdMODE::m_parameters_func[
 	IRC_CHANNEL_PARAMETERS_MODE_LEN
 ] = 
 {
-	&IRC::CmdMODE::set_channel_op_
+	&IRC::CmdMODE::set_channel_op_,
+	&IRC::CmdMODE::set_channel_limit_
 };
 
 /**
@@ -226,12 +228,15 @@ bool IRC::CmdMODE::set_channel_op_(
 {
 	if (!parameter)
 	{
+		/*
 		actions.push(
 			IRC::Action(
 				Event::SEND, this->sender(),
 				reply.error_need_more_params(m_name)
 			)
 		);
+		*/
+		return false;
 	}
 
 	Channel::const_iterator first = channel.begin();
@@ -259,6 +264,45 @@ bool IRC::CmdMODE::set_channel_op_(
 			Event::SEND, this->sender(), reply.error_no_such_nick(*parameter)
 		)
 	);
+	return false;
+}
+
+bool IRC::CmdMODE::set_channel_limit_(
+	bool to_add, ReplyBuilder &reply, Actions &actions,
+	Channel &channel, std::string const *parameter
+)
+{
+	(void)reply;
+	(void)actions;
+	if (to_add && !parameter)
+	{
+		/*
+		actions.push(
+			IRC::Action(
+				Event::SEND, this->sender(),
+				reply.error_need_more_params(m_name)
+			)
+		);
+		*/
+		return false;
+	}
+
+	if (to_add)
+	{
+		std::stringstream ss(*parameter);
+		std::size_t limit;
+		ss >> limit;
+		if (ss.fail() || static_cast<int>(limit) == channel.get_limit())
+			return false;
+	
+		channel.set_limit(limit);
+		return true;
+	}
+	else if (channel.get_limit() >= 0)
+	{
+		channel.set_limit(-1);
+		return true;
+	}
 	return false;
 }
 

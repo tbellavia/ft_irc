@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:38:55 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/20 15:11:22 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/24 16:05:57 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ IRC::Channel::Channel() :
 	m_creator(NULL),
 	m_name(),
 	m_key(),
+	m_limit(-1),
 	m_topic(),
 	m_mode(0) { }
 
@@ -33,6 +34,7 @@ IRC::Channel::Channel(std::string const &name, User *creator, int mode) :
 	m_creator(creator),
 	m_name(name),
 	m_key(),
+	m_limit(-1),
 	m_topic(),
 	m_mode(mode) { }
 
@@ -45,6 +47,7 @@ IRC::Channel::Channel(Channel const &other) :
 	m_creator(other.m_creator),
 	m_name(other.m_name),
 	m_key(other.m_key),
+	m_limit(other.m_limit),
 	m_topic(other.m_topic),
 	m_mode(other.m_mode) { }
 
@@ -59,6 +62,7 @@ IRC::Channel &IRC::Channel::operator=(IRC::Channel const &other) {
 	m_creator = other.m_creator;
 	m_name = other.m_name;
 	m_key = other.m_key;
+	m_limit = other.m_limit;
 	m_topic = other.m_topic;
 	m_mode = other.m_mode;
 	return *this;
@@ -87,6 +91,11 @@ IRC::Channel::set_key(std::string const &pass) {
 }
 
 void
+IRC::Channel::set_limit(int limit) {
+	m_limit = limit;
+}
+
+void
 IRC::Channel::set_topic(std::string const &topic) {
 	m_topic = topic;
 }
@@ -104,6 +113,11 @@ IRC::Channel::get_mode() const {
 std::string const&
 IRC::Channel::get_key() const {
 	return m_key;
+}
+
+int
+IRC::Channel::get_limit() const {
+	return m_limit;
 }
 
 std::string const&

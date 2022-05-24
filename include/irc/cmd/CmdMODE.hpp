@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:54:08 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/24 15:25:16 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/24 15:59:45 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,10 @@ namespace IRC
 			std::string const &mode_list
 		);
 		bool set_channel_op_(
+			bool to_add, ReplyBuilder &reply, Actions &actions,
+			Channel &channel, std::string const *parameter
+		);
+		bool set_channel_limit_(
 			bool to_add, ReplyBuilder &reply, Actions &actions,
 			Channel &channel, std::string const *parameter
 		);
