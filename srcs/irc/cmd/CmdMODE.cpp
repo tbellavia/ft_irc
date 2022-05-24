@@ -6,13 +6,20 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:52:41 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/24 13:53:28 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/24 15:37:53 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc/cmd/CmdMODE.hpp"
 #include "irc/Mode.hpp"
 #include <iostream>
+
+IRC::CmdMODE::setter_t const IRC::CmdMODE::m_parameters_func[
+	IRC_CHANNEL_PARAMETERS_MODE_LEN
+] = 
+{
+	&IRC::CmdMODE::set_channel_op_
+};
 
 /**
  * @brief Construct a new IRC::CmdMODE object
@@ -148,17 +155,22 @@ void IRC::CmdMODE::execute_channel_mode_list_(
 {
 	std::string const delimiters = "+-";
 	bool is_add = true, already_written = false;
+	char correct_delimiter = '+';
 	std::size_t i = 0;
 	if (delimiters.find(mode_list[i]) != std::string::npos)
 	{
 		if (mode_list[i] == '-')
+		{
 			is_add = false;
+			correct_delimiter = '-';
+		}
 		++i;
 	}
 
 	for (; i < mode_list.length(); ++i)
 	{
 		Mode mode = parse_one_mode_(mode_list[i]);
+		std::size_t pos = m_parameter_modes.find(mode.litteral);
 		if (mode.value < 0)
 		{
 			actions.push(Action(
@@ -167,16 +179,29 @@ void IRC::CmdMODE::execute_channel_mode_list_(
 				reply.error_unknown_mode(mode_list[i])
 			));
 		}
-		else if (m_parameter_modes.find(mode.litteral) != std::string::npos)
+		else if (pos != std::string::npos)
 		{
-			; // TODO: handle parameters
+			bool worked = (this->*m_parameters_func[pos])(
+				is_add, reply, actions, channel, mode.parameter
+			);
+			if (worked)
+			{
+				if (!already_written)
+				{
+					already_written = true;
+					m_mode_reply.push_back(correct_delimiter);
+				}
+				m_mode_reply += mode.litteral;
+				if (mode.parameter)
+					m_mode_arguments_reply.push_back(*mode.parameter);
+			}
 		}
 		else if (is_add && !(channel.get_mode() & mode.value))
 		{
 			if (!already_written)
 			{
 				already_written = true;
-				m_mode_reply += "+";
+				m_mode_reply.push_back(correct_delimiter);
 			}
 			channel.set_mode(mode.value);
 			m_mode_reply += mode.litteral;
@@ -186,12 +211,55 @@ void IRC::CmdMODE::execute_channel_mode_list_(
 			if (!already_written)
 			{
 				already_written = true;
-				m_mode_reply += "-";
+				m_mode_reply.push_back(correct_delimiter);
 			}
 			channel.unset_mode(mode.value);
 			m_mode_reply += mode.litteral;
 		}
 	}
+}
+
+bool IRC::CmdMODE::set_channel_op_(
+	bool to_add, ReplyBuilder &reply, Actions &actions,
+	Channel &channel, std::string const *parameter
+)
+{
+	if (!parameter)
+	{
+		actions.push(
+			IRC::Action(
+				Event::SEND, this->sender(),
+				reply.error_need_more_params(m_name)
+			)
+		);
+	}
+
+	Channel::const_iterator first = channel.begin();
+	Channel::const_iterator last = channel.end();
+	for (; first != last; ++first)
+	{
+		if ((*first)->get_nickname() == *parameter)
+		{
+			if (to_add && !channel.is_operator_user(*first))
+			{
+				channel.setOperator(*first);
+				return true;
+			}
+			else if (!to_add && channel.is_operator_user(*first))
+			{
+				channel.unsetOperator(*first);
+				return true;
+			}
+			return false;
+		}
+	}
+
+	actions.push(
+		IRC::Action(
+			Event::SEND, this->sender(), reply.error_no_such_nick(*parameter)
+		)
+	);
+	return false;
 }
 
 /**

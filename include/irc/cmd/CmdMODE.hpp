@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:54:08 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/24 13:06:49 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/24 15:25:16 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,12 @@ namespace IRC
 		CmdMODE &operator=(CmdMODE const &rhs);
 
 	private:
+		typedef bool (CmdMODE::*setter_t)(
+			bool, ReplyBuilder &, Actions &, Channel &, std::string const *
+		);
+		static setter_t const		m_parameters_func[
+			IRC_CHANNEL_PARAMETERS_MODE_LEN
+		];
 		std::string					m_target;
 		// Parsing
 		std::string					m_authorized_modes;
@@ -50,6 +56,10 @@ namespace IRC
 			ReplyBuilder &reply,
 			Channel &channel,
 			std::string const &mode_list
+		);
+		bool set_channel_op_(
+			bool to_add, ReplyBuilder &reply, Actions &actions,
+			Channel &channel, std::string const *parameter
 		);
 
 		// User mode utils

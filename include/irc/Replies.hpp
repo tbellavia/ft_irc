@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:16 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/20 15:11:35 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/24 15:38:35 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ namespace IRC
 		std::string error_already_registered();
 		
 		// Nickname
+		std::string error_no_such_nick(std::string const &nickname);
 		std::string error_no_nickname_given();
 		std::string error_nickname_in_use(std::string const &nickname);
 		std::string error_erroneus_nickname(std::string const &nickname);
@@ -63,9 +64,6 @@ namespace IRC
 		std::string reply_name_reply(Channel &channel);
 		std::string reply_end_of_names(std::string const &channel);
 		std::string reply_join(std::string const &channel);
-		std::string reply_channel_mode_is(
-			Channel &channel
-		);
 
 		std::string reply_who_reply(Channel *channel, User *user);
 		std::string reply_end_of_who(std::string const &name);
