@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:52:41 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/24 13:52:11 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/24 13:53:28 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,9 @@ IRC::Actions IRC::CmdMODE::execute_channel_mode_(
 	Actions actions;
 	for (std::size_t i = 0; i < m_mode_lists.size(); ++i)
 	{
-		this->execute_user_mode_list_(actions, reply, *sender, m_mode_lists[i]);
+		this->execute_channel_mode_list_(
+			actions, reply, *channel, m_mode_lists[i]
+		);
 	}
 	Actions reply_action = channel->notify(
 		reply.reply_channel_mode_is(
