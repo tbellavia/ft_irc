@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/23 22:40:12 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/16 14:24:48 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/24 13:35:52 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,19 @@ IRC::Actions::~Actions() { }
 IRC::Actions&
 IRC::Actions::push(Action action) {
 	m_actions.push(action);
+	return *this;
+}
+
+/**
+ * Append
+ * 
+ * Push all actions in @param actions into the actual action queue.
+ */
+
+IRC::Actions&
+IRC::Actions::append(Actions &actions) {
+	while (!actions.empty())
+		m_actions.push(actions.pop());
 	return *this;
 }
 

@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:52:41 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/20 15:13:24 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/24 13:41:30 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 /**
  * @brief Construct a new IRC::CmdMODE object
  *
+ * Set up all parsing and context for execution
  * @param ctx the context of command builds (sender, channels etc...)
  * @param request the request of the command (needed to parse this)
  */
@@ -24,35 +25,30 @@
 IRC::CmdMODE::CmdMODE(CmdCtx &ctx, std::string const &request):
 	ACmd(ctx, request, "MODE"),
 	m_target(""),
-	m_authorized_modes(IRC_USER_MODE_STRING),
-	m_parser(),
+	m_mode_lists(),
+	m_mode_arguments(),
+	m_arg_cursor(0),
 	m_mode_reply(),
 	m_mode_arguments_reply()
 {
 	if (m_arguments.size() > 1)
 		m_target = m_arguments[1];
 
-	std::string parameter_modes;
 	if (!m_target.empty() && Channel::is_valid_name(m_target))
 	{
 		m_authorized_modes = IRC_CHANNEL_MODE_STRING;
-		parameter_modes = IRC_CHANNEL_PARAMETERS_MODE_STRING;
+		m_parameter_modes = IRC_CHANNEL_PARAMETERS_MODE_STRING;
 	}
 	else
-		parameter_modes = IRC_USER_PARAMETERS_MODE_STRING;
+	{
+		m_authorized_modes = IRC_USER_MODE_STRING;
+		m_parameter_modes = IRC_USER_PARAMETERS_MODE_STRING;
+	}
 
 	if (m_arguments.size() > 2)
 	{
-		std::vector<std::string> mode_arguments;
-		if (m_arguments.size() > 3)
-			mode_arguments.assign(m_arguments.begin() + 3, m_arguments.end());
-
-		m_parser = CmdMODEParse(
-			m_arguments[2],
-			mode_arguments,
-			m_authorized_modes,
-			parameter_modes
-		);
+		this->parse_modes_(m_arguments[2]);
+		m_mode_arguments.assign(m_arguments.begin() + 3, m_arguments.end());
 	}
 }
 
@@ -60,7 +56,10 @@ IRC::CmdMODE::CmdMODE(CmdMODE const &copy):
 		ACmd(copy),
 		m_target(copy.m_target),
 		m_authorized_modes(copy.m_authorized_modes),
-		m_parser(copy.m_parser),
+		m_parameter_modes(copy.m_parameter_modes),
+		m_mode_lists(copy.m_mode_lists),
+		m_mode_arguments(copy.m_mode_arguments),
+		m_arg_cursor(copy.m_arg_cursor),
 		m_mode_reply(copy.m_mode_reply),
 		m_mode_arguments_reply(copy.m_mode_arguments_reply)
 {
@@ -124,58 +123,69 @@ IRC::Actions IRC::CmdMODE::execute_channel_mode_(
 	if (m_arguments.size() == 2)
 		return channel->notify(reply.reply_channel_mode_is(*channel));
 
-	std::vector<std::pair<std::vector<Mode>, bool> > modes;
-	try
+	Actions actions;
+	for (std::size_t i = 0; i < m_mode_lists.size(); ++i)
 	{
-		modes = m_parser.parse();
+		this->execute_user_mode_list_(actions, reply, *sender, m_mode_lists[i]);
 	}
-	catch (CmdMODEParse::ModeUnknownException const &e)
-	{
-		return Actions::unique_send(
-			sender, reply.error_unknown_mode(e.mode())
-		);
-	}
-	catch (CmdMODEParse::ArgumentMissingException const &)
-	{
-		return Actions::unique_idle();
-	}
-
-	std::vector<std::pair<std::vector<Mode>, bool> >::const_iterator first;
-	first = modes.begin();
-	std::vector<std::pair<std::vector<Mode>, bool> >::const_iterator last;
-	last = modes.end();
-	for (; first != last; ++first)
-	{
-		this->execute_channel_mode_list_(*channel, first->first, first->second);
-	}
-
-	return channel->notify(reply.reply_channel_mode_is(
-		channel->get_name(), m_mode_reply, m_mode_arguments_reply
-	));
+	Actions reply_action = channel->notify(
+		reply.reply_channel_mode_is(
+			m_target, m_mode_reply, m_mode_arguments_reply
+		)
+	);
+	actions.append(reply_action);
+	return actions;
 }
 
 void IRC::CmdMODE::execute_channel_mode_list_(
+	Actions &actions,
+	ReplyBuilder &reply,
 	Channel &channel,
-	std::vector<Mode> const &mode_list,
-	bool is_adding
+	std::string const &mode_list
 )
 {
-	m_mode_reply += is_adding ? "+" : "-";
-	for (std::size_t i = 0; i < mode_list.size(); ++i)
+	std::string const delimiters = "+-";
+	bool is_add = true, already_written = false;
+	std::size_t i = 0;
+	if (delimiters.find(mode_list[i]) != std::string::npos)
 	{
-		if (!mode_list[i].parameter.empty())
+		if (mode_list[i] == '-')
+			is_add = false;
+		++i;
+	}
+
+	for (; i < mode_list.length(); ++i)
+	{
+		Mode mode = parse_one_mode_(mode_list[i]);
+		if (mode.value < 0)
 		{
-			; // TODO: handle parameters modes
+			actions.push(Action(
+				Event::SEND, this->sender(), reply.error_u_mode_unknown_flag()
+			));
 		}
-		else if (is_adding && !(mode_list[i].value & channel.get_mode()))
+		else if (m_parameter_modes.find(mode.litteral) != std::string::npos)
 		{
-			m_mode_reply.push_back(mode_list[i].litteral);
-			channel.set_mode(mode_list[i].value);
+			; // TODO: handle parameters
 		}
-		else if (!is_adding && mode_list[i].value & channel.get_mode())
+		else if (is_add && !(channel.get_mode() & mode.value))
 		{
-			m_mode_reply.push_back(mode_list[i].litteral);
-			channel.unset_mode(mode_list[i].value);
+			if (!already_written)
+			{
+				already_written = true;
+				m_mode_reply += "+";
+			}
+			channel.set_mode(mode.value);
+			m_mode_reply += mode.litteral;
+		}
+		else if (!is_add && channel.get_mode() & mode.value)
+		{
+			if (!already_written)
+			{
+				already_written = true;
+				m_mode_reply += "-";
+			}
+			channel.unset_mode(mode.value);
+			m_mode_reply += mode.litteral;
 		}
 	}
 }
@@ -213,57 +223,135 @@ IRC::Actions IRC::CmdMODE::execute_user_mode_(ReplyBuilder &reply)
 		);
 	}
 
-	std::vector<std::pair<std::vector<Mode>, bool> > modes;
-	try
+	Actions actions;
+	for (std::size_t i = 0; i < m_mode_lists.size(); ++i)
 	{
- 		modes = m_parser.parse();
+		this->execute_user_mode_list_(actions, reply, *sender, m_mode_lists[i]);
 	}
-	catch (CmdMODEParse::ModeUnknownException const &)
-	{
-		return Actions::unique_send(
-			sender, reply.error_u_mode_unknown_flag()
-		);
-	}
-	catch (CmdMODEParse::ArgumentMissingException const &)
-	{
-		return Actions::unique_idle();
-	}
-
-	std::vector<std::pair<std::vector<Mode>, bool> >::const_iterator first;
-	first = modes.begin();
-	std::vector<std::pair<std::vector<Mode>, bool> >::const_iterator last;
-	last = modes.end();
-
-	for (; first != last; ++first)
-	{
-		this->execute_user_mode_list_(*sender, first->first, first->second);
-	}
-
-	return Actions::unique_send(
-		sender, reply.reply_u_mode_is(
-			sender->get_nickname(), m_mode_reply
-		)
+	Actions reply_action = Actions::unique_send(
+		sender, reply.reply_u_mode_is(m_target, m_mode_reply)
 	);
+	actions.append(reply_action);
+	return actions;
 }
 
 void IRC::CmdMODE::execute_user_mode_list_(
+	Actions &actions,
+	ReplyBuilder &reply,
 	User &user,
-	std::vector<Mode> const &mode_list,
-	bool is_adding
+	std::string const &mode_list
 )
 {
-	m_mode_reply += is_adding ? "+" : "-";
-	for (std::size_t i = 0; i < mode_list.size(); ++i)
+	std::string const delimiters = "+-";
+	bool is_add = true, already_written = false;
+	std::size_t i = 0;
+	if (delimiters.find(mode_list[i]) != std::string::npos)
 	{
-		if (is_adding && !(mode_list[i].value & user.get_mode()))
+		if (mode_list[i] == '-')
+			is_add = false;
+		++i;
+	}
+
+	for (; i < mode_list.length(); ++i)
+	{
+		Mode mode = parse_one_mode_(mode_list[i]);
+		if (mode.value < 0)
 		{
-			m_mode_reply.push_back(mode_list[i].litteral);
-			user.set_mode(mode_list[i].value);
+			actions.push(Action(
+				Event::SEND, this->sender(), reply.error_u_mode_unknown_flag()
+			));
 		}
-		else if (!is_adding && mode_list[i].value & user.get_mode())
+		else if (m_parameter_modes.find(mode.litteral) != std::string::npos)
 		{
-			m_mode_reply.push_back(mode_list[i].litteral);
-			user.unset_mode(mode_list[i].value);
+			; // TODO: handle parameters
+		}
+		else if (is_add && !(user.get_mode() & mode.value))
+		{
+			if (!already_written)
+			{
+				already_written = true;
+				m_mode_reply += "+";
+			}
+			user.set_mode(mode.value);
+			m_mode_reply += mode.litteral;
+		}
+		else if (!is_add && user.get_mode() & mode.value)
+		{
+			if (!already_written)
+			{
+				already_written = true;
+				m_mode_reply += "-";
+			}
+			user.unset_mode(mode.value);
+			m_mode_reply += mode.litteral;
 		}
 	}
+}
+
+/**
+ * @brief Construct one mode from c
+ * 
+ * @param c litteral character
+ * @return IRC::Mode the newly constructed mode
+ */
+
+IRC::Mode IRC::CmdMODE::parse_one_mode_(char c)
+{
+	int value = char_to_mode_(c);
+	std::string const *parameter = NULL;
+
+	if (
+		m_parameter_modes.find(c) != std::string::npos 
+		&& m_arg_cursor < m_mode_arguments.size()
+	)
+	{
+		parameter = new std::string(m_mode_arguments[m_arg_cursor]);
+		m_arg_cursor++;
+	}
+
+	return Mode(value, c, parameter);
+}
+
+/**
+ * @brief Parse mode string into vector of mode lists
+ *
+ * @return std::vector<std::string> 
+ */
+
+void IRC::CmdMODE::parse_modes_(std::string const &mode_string)
+{
+	std::string const delimiters = "+-";
+	for (std::size_t i = 0, new_pos; i < mode_string.length(); i = new_pos)
+	{
+		new_pos = i;
+		// Advance 1 if delimiter
+		if (delimiters.find(mode_string[new_pos]) != std::string::npos)
+			++new_pos;
+
+		// Find until next delimiter or end
+		while (
+			new_pos < mode_string.length()
+			&& delimiters.find(mode_string[new_pos]) == std::string::npos
+		)
+			++new_pos;
+
+		m_mode_lists.push_back(
+			mode_string.substr(i, new_pos - i)
+		);
+	}
+}
+
+/**
+ * @brief Take litteral c to return value of mode
+ * 
+ * @param c the litteral converted
+ * @return int the value of the mode found or -1 if not found
+ */
+
+int IRC::CmdMODE::char_to_mode_(char c)
+{
+	std::size_t pos = m_authorized_modes.find(c);
+	if (pos == std::string::npos)
+		return -1;
+	return 0x01 << pos;
 }

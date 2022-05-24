@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/01 20:24:52 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/20 15:11:59 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/24 13:20:02 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,12 @@ namespace IRC
 
 	struct Mode
 	{
-		int				value;
-		char			litteral;
-		std::string		parameter;
+		int					value;
+		char				litteral;
+		std::string const	*parameter;
 
 		Mode();
-		Mode(int value, char litteral, std::string const &parameter);
+		Mode(int value, char litteral, std::string const *parameter);
 		Mode(Mode const &copy);
 		~Mode();
 
