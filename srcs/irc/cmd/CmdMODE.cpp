@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:52:41 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/24 13:41:30 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/24 13:52:11 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,9 @@ void IRC::CmdMODE::execute_channel_mode_list_(
 		if (mode.value < 0)
 		{
 			actions.push(Action(
-				Event::SEND, this->sender(), reply.error_u_mode_unknown_flag()
+				Event::SEND,
+				this->sender(),
+				reply.error_unknown_mode(mode_list[i])
 			));
 		}
 		else if (m_parameter_modes.find(mode.litteral) != std::string::npos)
