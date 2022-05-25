@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Actions.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/23 22:35:46 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/23 23:05:13 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/24 13:21:11 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,15 @@ namespace IRC
 	class Actions {
 		std::queue<Action> m_actions;
 		
-		Actions(Action unique);
 	public:
 		Actions();
+		Actions(Action unique);
 		Actions(Actions const &other);
 		Actions &operator=(Actions const &other);
 		~Actions();
 
 		Actions &push(Action action);
+		Actions &append(Actions &actions);
 		Action pop();
 		bool empty() const;
 		

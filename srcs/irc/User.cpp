@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   User.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 14:36:26 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/08 14:16:38 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/19 11:47:44 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ IRC::User::User() :
 	m_username(),
 	m_nickname(),
 	m_realname(),
-	m_mode(MODE_RESTRICTED),
+	m_mode(0),
 	m_socket(NULL) { }
 
 IRC::User::User(std::string const &pseudo, std::string const &nick, 
@@ -32,12 +32,12 @@ IRC::User::User(Socket *socket) :
 	m_username(),
 	m_nickname(),
 	m_realname(),
-	m_mode(MODE_RESTRICTED),
+	m_mode(MODE_RESTRICTED_),
 	m_socket(socket) { }
 
 IRC::User::User(IRC::User const &other) : 
-	m_username(other.m_username), 
-	m_nickname(other.m_nickname), 
+	m_username(other.m_username),
+	m_nickname(other.m_nickname),
 	m_realname(other.m_realname),
 	m_mode(other.m_mode), 
 	m_socket(other.m_socket) { }
@@ -100,6 +100,13 @@ IRC::User::get_realname() const {
 	return m_realname;
 }
 
+std::string
+IRC::User::get_fullname() const {
+	return std::string(
+		m_nickname + "!" + m_username + "@" + this->get_hostname()
+	);
+}
+
 int
 IRC::User::get_mode() const {
 	return m_mode;
@@ -111,7 +118,7 @@ IRC::User::get_socket() {
 }
 
 std::string
-IRC::User::get_hostname() {
+IRC::User::get_hostname() const{
 	return m_socket->hostname();
 }
 
@@ -122,7 +129,7 @@ IRC::User::mode_isset(int mode) const {
 
 bool
 IRC::User::connected() const {
-	return !mode_isset(MODE_RESTRICTED);
+	return !mode_isset(MODE_RESTRICTED_);
 }
 
 bool

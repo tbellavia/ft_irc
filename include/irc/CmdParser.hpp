@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CmdParser.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 02:11:07 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/05 23:11:44 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/19 10:32:05 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ namespace IRC
 		char		peek();
 		char		advance();
 	public:
+		CmdParser();
 		CmdParser(std::string const &request);
 		CmdParser(CmdParser const &other);
 		CmdParser &operator=(CmdParser const &other);

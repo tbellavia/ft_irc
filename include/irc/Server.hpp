@@ -15,23 +15,45 @@
 namespace IRC
 {
 	class Server {
-		ConfigServer		&m_config;
-		Socket				*m_server;
-		Selector			m_selector;
+		ConfigServer			&m_config;
+		Socket					*m_server;
+		Selector				m_selector;
+		std::pair<
+			std::set<File*>,
+			std::set<File*> >	m_ready;
+		std::set<File*>			m_writers;
+		std::set<File*>			m_readers;
+		Api						&m_api;
 
-		void sendall(Action &action);
-		void disconnectall(Api &api, Action &action);
-		void disconnect(Api &api, Socket *socket);
-		void connect(Api &api, Socket *socket);
-		void process_actions(Api &api, Actions &actions);
+
+		void sendall_(Action &action);
+		void push_send_(Socket *socket, std::string const &response);
+
+		void disconnectall_(Action &action);
+		// Push disconnect request into File
+		void push_disconnect_(Socket *socket);
+		// Disconnect a socket
+		void disconnect_socket_(Socket *socket);
+		
+		// Connect a socket to the underlying services
+		void connect_socket_(Socket *socket);
+
+		void handle_actions_(Actions &actions);
+		
+		void select_();
+
+		void read_requests_();
+		void write_responses_();
+		void finish_requests_();
 	public:
-		Server(ConfigServer &conf, bool bind_and_activate = false);
+		Server(ConfigServer &conf, Api &api, bool bind_and_activate = false);
 		Server(Server const &other);
 		Server &operator=(Server const &other);
+		~Server();
 
 		void activate() const;
 		void bind() const;
-		void serve_forever(IRC::Api &api);
+		void serve_forever();
 	};
 }
 

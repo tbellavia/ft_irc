@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MasterUsers.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 15:55:53 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/27 02:28:18 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/09 11:35:24 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,9 @@ namespace IRC
 		std::map<int, User*> m_users;
 	public:
 		MasterUsers();
+		MasterUsers(MasterUsers const &copy);
 		~MasterUsers();
-		
+
 		User *create(Socket *socket);
 		void remove(Socket *socket);
 		User *find(Socket *socket);

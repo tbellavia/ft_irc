@@ -41,15 +41,28 @@ File::~File() {
 	
 }
 
-Socket *File::socket() {
+void
+File::set_event(int event) {
+	m_events |= event;
+}
+
+void
+File::unset_event(int event) {
+	m_events &= ~event;
+}
+
+Socket*
+File::socket() {
 	return m_socket;
 }
 
-std::string const &File::buffer() const {
+std::string const&
+File::buffer() const {
 	return m_buffer;
 }
 
-bool File::isset(int event) const {
+bool
+File::isset_event(int event) const {
 	return m_events & event;
 }
 
@@ -64,7 +77,7 @@ bool File::isset(int event) const {
  * an internal request queue.
  */
 void
-File::push(std::string const &req){
+File::push_request(std::string const &req){
 	std::vector<std::string> parts;
 	size_t pos;
 
@@ -92,7 +105,7 @@ File::push(std::string const &req){
  * whether there are requests to retrieve.
  */
 std::string
-File::pop() {
+File::pop_request() {
 	std::string front = m_requests.front();
 
 	m_requests.pop();
@@ -107,7 +120,7 @@ File::pop() {
  * False.
  */
 bool
-File::available() const {
+File::available_request() const {
 	return !m_requests.empty();
 }
 
@@ -115,3 +128,65 @@ void
 File::clear() {
 	m_buffer.clear();
  }
+
+void
+File::push_response(std::string const &response){
+	m_responses.push(response);
+}
+
+std::string
+File::pop_response() {
+	return m_responses.pop();
+}
+
+bool
+File::available_response() const {
+	return m_responses.available();
+}
+
+void
+File::seek_response(size_t offset) {
+	m_responses.seek(offset);
+}
+
+/* Response buffer */
+
+File::ResponseBuffer::ResponseBuffer() : 
+	m_responses(), 
+	m_begin() { }
+
+File::ResponseBuffer::ResponseBuffer(ResponseBuffer const &other) :
+	m_responses(other.m_responses),
+	m_begin(other.m_begin) { }
+
+File::ResponseBuffer&
+File::ResponseBuffer::operator=(ResponseBuffer const &other) {
+	if ( &other == this )
+		return *this;
+	m_responses = other.m_responses;
+	m_begin = other.m_begin;
+	return *this;
+}
+
+File::ResponseBuffer::~ResponseBuffer() { }
+
+std::string
+File::ResponseBuffer::pop() {
+	m_responses = m_responses.substr(m_begin, m_responses.length());
+	return m_responses;
+}
+
+void
+File::ResponseBuffer::push(std::string const &response) {
+	m_responses.append(response);
+}
+
+void
+File::ResponseBuffer::seek(size_t offset) {
+	m_begin = offset;
+}
+
+bool
+File::ResponseBuffer::available() const {
+	return !m_responses.empty();
+}

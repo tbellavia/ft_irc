@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 18:31:22 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/04/13 16:57:54 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/20 16:14:55 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <sys/select.h>
 # include <vector>
 # include <map>
+# include <set>
 # include "Socket.hpp"
 # include "Network.hpp"
 # include "File.hpp"
@@ -27,17 +28,17 @@
 class Selector {
 public:
 	enum {
-		READ = 0x01,
-		WRITE = 0x01 << 1,
-		EXCEPT = 0x01 << 2,
+		READ		= 0x01 << 0,
+		WRITE		= 0x01 << 1,
+		EXCEPT		= 0x01 << 2,
+		DISCONNECT	= 0x01 << 3
 	};
 
-	typedef std::vector<File*> ready_type;
 private:
-	fd_set							m_read;
-	fd_set							m_write;
-	std::map<int, File*>	        m_entries;
-	int								m_max_fd;
+	fd_set					m_read;
+	fd_set					m_write;
+	std::map<int, File*>	m_entries;
+	int						m_max_fd;
 public:
 	Selector();
 	Selector(Selector const &other);
@@ -45,9 +46,12 @@ public:
 	~Selector();
 
 	std::map<int, File*> const &get_entries() const;
+	File *find(Socket *socket);
+
+	void unset(Socket *socket, int events);
 	void add(Socket *socket, int events);
 	void remove(Socket *socket);
-	std::pair<ready_type, ready_type> select(int seconds = -1, int useconds = -1);
+	std::pair<std::set<File*>, std::set<File*> > select(int seconds = -1, int useconds = -1);
 };
 
 #endif //FT_IRC_SELECTOR_HPP

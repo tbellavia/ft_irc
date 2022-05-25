@@ -6,11 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-<<<<<<< Updated upstream
-/*   Updated: 2022/05/10 16:02:23 by bbellavi         ###   ########.fr       */
-=======
-/*   Updated: 2022/05/20 20:15:40 by bbellavi         ###   ########.fr       */
->>>>>>> Stashed changes
+/*   Updated: 2022/05/25 20:31:37 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +106,7 @@ IRC::ReplyBuilder::reply_youre_oper() {
 	return reply;
 }
 
+// Channels error
 std::string
 IRC::ReplyBuilder::error_no_such_channel(std::string const &channel){
 	std::string reply = this->build_header_(NumericReplies::ERR_NOSUCHCHANNEL);
@@ -163,6 +160,136 @@ IRC::ReplyBuilder::error_channel_is_full(std::string const &channel){
 	reply.append(" ");
 	reply.append(channel);
 	reply.append(" :Cannot join channel (+l)");
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::error_not_on_channel(std::string const &channel_name) {
+	std::string reply = this->build_header_(NumericReplies::ERR_NOTONCHANNEL);
+
+	reply.append(" ");
+	reply.append(channel_name);
+	reply.append(" :You're not on that channel");
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::error_chan_o_privs_needed(std::string const &channel_name) {
+	std::string reply = this->build_header_(
+		NumericReplies::ERR_CHANOPRIVSNEEDED
+	);
+
+	reply.append(" ");
+	reply.append(channel_name);
+	reply.append(" :You're not channel operator");
+	return reply;
+}
+
+// Channel replies
+std::string
+IRC::ReplyBuilder::reply_channel_mode_is(Channel &channel) {
+	std::string reply = this->build_header_(NumericReplies::RPL_CHANNELMODEIS);
+
+	reply.append(" ");
+	reply.append(channel.get_name());
+	reply.append(" :+");
+
+	int channel_mode = channel.get_mode();
+	char const string_channel_modes[] = "opsitnmlbvk";
+	for ( std::size_t i = 0; i < sizeof(string_channel_modes); ++i ) {
+		if ( channel_mode & (0x01 << i) )
+			reply.push_back(string_channel_modes[i]);
+	}
+	return reply;
+}
+
+// User errors (mode etc...)
+std::string
+IRC::ReplyBuilder::error_users_dont_match() {
+	std::string reply = this->build_header_(NumericReplies::ERR_USERSDONTMATCH);
+
+	reply.append(" :Can't change mode for other users");
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::error_u_mode_unknown_flag() {
+	std::string reply = this->build_header_(
+		NumericReplies::ERR_UMODEUNKNOWNFLAG
+	);
+
+	reply.append(" :Unknown MODE flag");
+	return reply;
+}
+
+// User replies (infos etc...)
+std::string
+IRC::ReplyBuilder::reply_u_mode_is(
+	std::string const &user_name, int user_mode
+) {
+	std::string reply = this->build_header_(NumericReplies::RPL_UMODEIS);
+
+	reply.append(" ");
+	reply.append(user_name);
+	reply.append(" :+");
+
+	std::string const mode_string = IRC_USER_MODE_STRING;
+	for (std::string::size_type i = 0; i < mode_string.length(); ++i) {
+		if ( user_mode & (0x01 << i) )
+			reply.push_back(mode_string[i]);
+	}
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::reply_u_mode_is(
+	std::string const &user_name, std::string const &modes
+) {
+	std::string reply = this->build_header_(NumericReplies::RPL_UMODEIS);
+
+	reply += " " + user_name + " " + modes;
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::error_unknown_mode(char mode)
+{
+	std::string reply = this->build_header_(NumericReplies::ERR_UNKNOWNMODE);
+
+	reply += " ";
+	reply.push_back(mode);
+	reply += " :is unknown to me";
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::reply_channel_mode_is(Channel const &channel)
+{
+	std::string reply = this->build_header_(NumericReplies::RPL_CHANNELMODEIS);
+
+	reply += " " + channel.get_name() + " :+";
+
+	std::string const mode_string = IRC_CHANNEL_MODE_STRING;
+	for (std::string::size_type i = 0 ; i < mode_string.length(); ++i)
+	{
+		if (channel.get_mode() & (0x01 << i))
+			reply += mode_string[i];
+	}
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::reply_channel_mode_is(
+	std::string const &channel_name,
+	std::string const &modes,
+	std::vector<std::string> const &mode_parameters
+)
+{
+	std::string reply = this->build_header_(NumericReplies::RPL_CHANNELMODEIS);
+
+	reply += " " + channel_name + " " + modes;
+	for (std::size_t i = 0; i < mode_parameters.size(); ++i)
+		reply += " " + mode_parameters[i];
 	return reply;
 }
 
@@ -233,14 +360,7 @@ IRC::ReplyBuilder::reply_who_reply(Channel *channel, User *user) {
 	reply.append(" ");
 	reply.append(user->get_nickname());
 	reply.append(" ");
-<<<<<<< Updated upstream
-	if ( user->mode_isset(MODE_AWAY) )
-		reply.append("G");
-	else
-		reply.append("H");
-=======
 	reply.append("H");
->>>>>>> Stashed changes
 	if ( channel != NULL ){
 		reply.append(get_user_mode_symbol_(channel, user));
 	}
@@ -328,15 +448,9 @@ IRC::ReplyBuilder::code_to_string_(int digit){
  */
 std::string
 IRC::ReplyBuilder::get_user_mode_symbol_(Channel *channel, User *user){
-<<<<<<< Updated upstream
-	return (std::string[2]){"+", "@"}[(channel->is_operator_user(user) || channel->is_voices_user(user))];
-}
-=======
 	if ( channel->is_operator_user(user) )
 		return "@";
 	if ( channel->is_voices_user(user) )
 		return "+";
 	return "";
-	// return (std::string[3]){"+", "@", ""}[(channel->is_operator_user(user) || channel->is_voices_user(user))];
 }
->>>>>>> Stashed changes
