@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/23 22:35:46 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/20 15:11:49 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/24 13:21:11 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ namespace IRC
 		~Actions();
 
 		Actions &push(Action action);
+		Actions &append(Actions &actions);
 		Action pop();
 		bool empty() const;
 		

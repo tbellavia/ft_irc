@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:54:08 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/20 15:10:25 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/24 13:06:49 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 # define CMD_MODE_HPP
 
 # include "irc/ACmd.hpp"
-# include "irc/cmd/CmdMODE/CmdMODEParse.hpp"
 
 namespace IRC
 {
@@ -32,8 +31,13 @@ namespace IRC
 
 	private:
 		std::string					m_target;
+		// Parsing
 		std::string					m_authorized_modes;
-		CmdMODEParse				m_parser;
+		std::string					m_parameter_modes;
+		std::vector<std::string>	m_mode_lists;
+		std::vector<std::string>	m_mode_arguments;
+		std::size_t					m_arg_cursor;
+		// Reply
 		std::string					m_mode_reply;
 		std::vector<std::string>	m_mode_arguments_reply;
 
@@ -42,25 +46,25 @@ namespace IRC
 			ReplyBuilder &reply
 		);
 		void execute_channel_mode_list_(
-			Channel &channel,
-			std::vector<Mode> const &mode_list,
-			bool is_adding
-		);
-		int *char_to_channel_mode_(char c);
-		int execute_channel_mode_list_(
 			Actions &actions,
 			ReplyBuilder &reply,
-			Channel *target,
-			std::pair<std::string, std::vector<std::string> > const &mode_list
+			Channel &channel,
+			std::string const &mode_list
 		);
 
 		// User mode utils
 		Actions execute_user_mode_(ReplyBuilder &reply);
 		void execute_user_mode_list_(
+			Actions &actions,
+			ReplyBuilder &reply,
 			User &user,
-			std::vector<Mode> const &mode_list,
-			bool is_adding
+			std::string const &mode_list
 		);
+
+		// Parsing
+		Mode parse_one_mode_(char c);
+		void parse_modes_(std::string const &mode_string);
+		int char_to_mode_(char c);
 
 	};
 }

@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 13:29:20 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/19 14:33:26 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/24 13:28:42 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ IRC::Mode::Mode():
 {
 }
 
-IRC::Mode::Mode(int value, char litteral, std::string const &parameter):
+IRC::Mode::Mode(int value, char litteral, std::string const *parameter):
 		value(value),
 		litteral(litteral),
 		parameter(parameter)
@@ -29,12 +29,14 @@ IRC::Mode::Mode(int value, char litteral, std::string const &parameter):
 IRC::Mode::Mode(Mode const &copy):
 		value(copy.value),
 		litteral(copy.litteral),
-		parameter(copy.parameter)
+		parameter(new std::string(*copy.parameter))
 {
 }
 
 IRC::Mode::~Mode()
 {
+	if (parameter)
+		delete parameter;
 }
 
 IRC::Mode &IRC::Mode::operator=(Mode const &rhs)
@@ -44,6 +46,6 @@ IRC::Mode &IRC::Mode::operator=(Mode const &rhs)
 
 	value = rhs.value;
 	litteral = rhs.litteral;
-	parameter = rhs.parameter;
+	parameter = new std::string(*rhs.parameter);
 	return *this;
 }
