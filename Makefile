@@ -3,18 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+         #
+#    By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/12 19:27:05 by bbellavi          #+#    #+#              #
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-#    Updated: 2022/05/10 13:42:40 by bbellavi         ###   ########.fr        #
-=======
-#    Updated: 2022/05/21 00:32:02 by bbellavi         ###   ########.fr        #
->>>>>>> Stashed changes
-=======
-#    Updated: 2022/05/24 13:29:08 by lperson-         ###   ########.fr        #
->>>>>>> 7f7e9310c25daad4662abeb2d9866e33f69ffaba
+#    Updated: 2022/05/25 20:32:49 by bbellavi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
