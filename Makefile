@@ -6,12 +6,16 @@
 #    By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/12 19:27:05 by bbellavi          #+#    #+#              #
+<<<<<<< Updated upstream
 #    Updated: 2022/05/10 13:42:40 by bbellavi         ###   ########.fr        #
+=======
+#    Updated: 2022/05/21 00:32:02 by bbellavi         ###   ########.fr        #
+>>>>>>> Stashed changes
 #                                                                              #
 # **************************************************************************** #
 
 CXX			= c++
-CXXFLAGS	= -Wall -Werror -Wextra -std=c++98
+CXXFLAGS	= -Wall -Werror -Wextra -std=c++98 -g
 
 SRC_DIR			= srcs
 INC_DIR			= include
