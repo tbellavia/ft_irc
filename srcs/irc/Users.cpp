@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Users.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 15:43:00 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/10 08:59:45 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/26 16:33:00 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,22 @@ IRC::Users::find(User *to_find) const {
 }
 
 IRC::Action
-IRC::Users::notify(std::string const &msg) {
-	return Action::sendall(std::vector<User*>(m_users.begin(), m_users.end()), msg);
+IRC::Users::notify(std::string const &msg, User *except) {
+	Action action;
+	view_type view = this->get_view();
+	std::vector<User*> subscribers;
+
+	// If no exception, send notify to all users.
+	if ( except == NULL )
+		return Action::sendall(std::vector<User*>(view.first, view.second), msg);
+
+	for ( ; view.first != view.second ; ++view.first ){
+		User *current = *view.first;
+
+		if ( current != except )
+			subscribers.push_back(current);
+	}
+	return Action::sendall(subscribers, msg);
 }
 
 IRC::Users::iterator

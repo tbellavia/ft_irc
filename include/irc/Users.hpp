@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Users.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 15:22:18 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/10 08:59:40 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/26 16:27:18 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ namespace IRC
 		template<typename Pred>
 		std::vector<User*> select(Pred pred);
 
-		Action notify(std::string const &msg);
+		Action notify(std::string const &msg, User *except = NULL);
 	};
 
 	template<typename Pred>

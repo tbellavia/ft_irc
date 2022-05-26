@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:38:55 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/20 15:11:22 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/26 16:34:03 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,8 +235,8 @@ IRC::Channel::disallowVoice(User *user) {
 }
 
 IRC::Action
-IRC::Channel::notify(std::string const &msg) {
-	return m_users.notify(msg);
+IRC::Channel::notify(std::string const &msg, User *user) {
+	return m_users.notify(msg, user);
 }
 
 bool
