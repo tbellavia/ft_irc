@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Replies.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:16 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/20 15:11:35 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/26 16:09:47 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,8 @@ namespace IRC
 		std::string reply_u_mode_is(
 			std::string const &user_name, std::string const &modes
 		);
+
+		std::string reply_privmsg(std::string const &msg, std::string const &channel);
 
 		std::string error_no_oper_host();
 		std::string error_password_mismatch();

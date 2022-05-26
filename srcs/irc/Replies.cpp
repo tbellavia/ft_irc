@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/25 20:31:37 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/26 16:37:54 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -386,6 +386,21 @@ IRC::ReplyBuilder::reply_end_of_who(std::string const &name) {
 	reply.append(" ");
 	reply.append(name);
 	reply.append(" :End of /WHO list.");
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::reply_privmsg(std::string const &msg, std::string const &channel) {
+	std::string reply;
+
+	reply.append(":");
+	reply.append(m_target->get_fullname());
+	reply.append(" ");
+	reply.append("PRIVMSG");
+	reply.append(" ");
+	reply.append(channel);
+	reply.append(" :");
+	reply.append(msg);
 	return reply;
 }
 
