@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 23:07:36 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/11 22:07:16 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/26 16:03:44 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ IRC::CmdFactory::CmdFactory() : ICmdFactory(), m_callbacks()
 	m_callbacks.insert(std::make_pair("PONG", &CmdFactory::create_pong_cmd));
 	m_callbacks.insert(std::make_pair("QUIT", &CmdFactory::create_quit_cmd));
 	m_callbacks.insert(std::make_pair("MODE", &CmdFactory::create_mode_cmd));
+	m_callbacks.insert(std::make_pair("PRIVMSG", &CmdFactory::create_privmsg_cmd));
 }
 
 IRC::CmdFactory::CmdFactory(CmdFactory const &copy) :
@@ -87,4 +88,9 @@ IRC::CmdFactory::create_who_cmd(CmdCtx &ctx, std::string const &request) {
 IRC::ACmd *
 IRC::CmdFactory::create_mode_cmd(CmdCtx &ctx, std::string const &request) {
 	return new CmdMODE(ctx, request);
+}
+
+IRC::ACmd*
+IRC::CmdFactory::create_privmsg_cmd(CmdCtx &ctx, std::string const &request) {
+	return new CmdPRIVMSG(ctx, request);
 }
