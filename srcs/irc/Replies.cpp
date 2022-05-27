@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/27 15:04:12 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/27 15:08:13 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -280,6 +280,16 @@ IRC::ReplyBuilder::error_cannot_send_to_chan(std::string const &channel) {
 	reply.append(" ");
 	reply.append(channel);
 	reply.append(" :Cannot send to channel");
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::error_wild_toplevel(std::string const &mask) {
+	std::string reply = this->build_header_(NumericReplies::ERR_WILDTOPLEVEL);
+
+	reply.append(" ");
+	reply.append(mask);
+	reply.append(" :Wildcard in toplevel domain");
 	return reply;
 }
 
