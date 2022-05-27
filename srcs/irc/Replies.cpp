@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/27 15:50:56 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/27 15:52:59 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -290,6 +290,16 @@ IRC::ReplyBuilder::error_wild_toplevel(std::string const &mask) {
 	reply.append(" ");
 	reply.append(mask);
 	reply.append(" :Wildcard in toplevel domain");
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::error_no_toplevel(std::string const &mask) {
+	std::string reply = this->build_header_(NumericReplies::ERR_NOTTOPLEVEL);
+
+	reply.append(" ");
+	reply.append(mask);
+	reply.append(" :No toplevel domain specified");
 	return reply;
 }
 
