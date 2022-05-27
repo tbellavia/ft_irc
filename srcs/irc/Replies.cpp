@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/27 15:08:13 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/27 15:11:02 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -290,6 +290,16 @@ IRC::ReplyBuilder::error_wild_toplevel(std::string const &mask) {
 	reply.append(" ");
 	reply.append(mask);
 	reply.append(" :Wildcard in toplevel domain");
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::error_no_such_nick(std::string const &nick) {
+	std::string reply = this->build_header_(NumericReplies::ERR_WILDTOPLEVEL);
+
+	reply.append(" ");
+	reply.append(nick);
+	reply.append(" :No such nick/channel");
 	return reply;
 }
 
