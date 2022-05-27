@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/26 16:37:54 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/27 15:00:42 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,6 +259,17 @@ IRC::ReplyBuilder::error_unknown_mode(char mode)
 	reply += " ";
 	reply.push_back(mode);
 	reply += " :is unknown to me";
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::error_no_recipient(std::string const &cmd) {
+	std::string reply = this->build_header_(NumericReplies::ERR_NORECIPIENT);
+
+	reply.append(" ");
+	reply.append(":No recipient given (");
+	reply.append(cmd);
+	reply.append(")");
 	return reply;
 }
 
