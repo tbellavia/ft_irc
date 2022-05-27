@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 12:08:34 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/20 15:27:42 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/26 16:02:55 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ IRC::CmdWHO::execute() {
 	Actions actions;
 
 	if ( m_arguments.size() == Expected_args(0) ){
-		// If no mask, drop all users who aren't invisible
+		// TODO: If no mask, drop all users who aren't invisible
 	} else {
 		// Search in channel or for user 
 		std::string mask = m_arguments[1];
