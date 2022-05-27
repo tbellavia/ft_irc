@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/27 15:00:42 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/27 15:04:12 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -270,6 +270,16 @@ IRC::ReplyBuilder::error_no_recipient(std::string const &cmd) {
 	reply.append(":No recipient given (");
 	reply.append(cmd);
 	reply.append(")");
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::error_cannot_send_to_chan(std::string const &channel) {
+	std::string reply = this->build_header_(NumericReplies::ERR_CANNOTSENDTOCHAN);
+
+	reply.append(" ");
+	reply.append(channel);
+	reply.append(" :Cannot send to channel");
 	return reply;
 }
 

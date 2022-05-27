@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:16 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/27 14:53:21 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/27 15:02:52 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ namespace IRC
 
 		// Sending errors
 		std::string error_no_recipient(std::string const &cmd);
+		std::string error_cannot_send_to_chan(std::string const &channel);
 
 		// Channel replies
 		std::string reply_channel_mode_is(Channel const &channel);
