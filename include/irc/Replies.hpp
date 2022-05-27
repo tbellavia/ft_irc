@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:16 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/27 15:09:40 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/27 15:50:08 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ namespace IRC
 		std::string error_cannot_send_to_chan(std::string const &channel);
 		std::string error_wild_toplevel(std::string const &mask);
 		std::string error_no_such_nick(std::string const &nickname);
+		std::string error_no_text_to_send();
 
 		// Channel replies
 		std::string reply_channel_mode_is(Channel const &channel);

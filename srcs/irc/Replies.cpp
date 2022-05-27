@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/27 15:11:02 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/27 15:50:56 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -300,6 +300,14 @@ IRC::ReplyBuilder::error_no_such_nick(std::string const &nick) {
 	reply.append(" ");
 	reply.append(nick);
 	reply.append(" :No such nick/channel");
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::error_no_text_to_send() {
+	std::string reply = this->build_header_(NumericReplies::ERR_NOTEXTTOSEND);
+
+	reply.append(" :No text to send");
 	return reply;
 }
 
