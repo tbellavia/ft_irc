@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:38:55 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/26 16:34:03 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/27 22:27:15 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,8 +235,9 @@ IRC::Channel::disallowVoice(User *user) {
 }
 
 IRC::Action
-IRC::Channel::notify(std::string const &msg, User *user) {
-	return m_users.notify(msg, user);
+IRC::Channel::notify(std::string const &msg, User *sender) {
+	// TODO: verify if sender has the correct rights
+	return m_users.notify(msg, sender);
 }
 
 bool

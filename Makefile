@@ -6,7 +6,7 @@
 #    By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/12 19:27:05 by bbellavi          #+#    #+#              #
-#    Updated: 2022/05/26 17:14:24 by bbellavi         ###   ########.fr        #
+#    Updated: 2022/05/27 21:57:40 by bbellavi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,6 +33,7 @@ SRCS		=	main.cpp								\
 				srcs/irc/IRCApi.cpp						\
 				srcs/irc/Config.cpp						\
 				srcs/irc/Parse.cpp						\
+				srcs/irc/Masks.cpp						\
 				srcs/irc/CmdParser.cpp					\
 				srcs/irc/Mode.cpp						\
 				srcs/irc/cmd/CmdPASS.cpp				\
@@ -66,6 +67,7 @@ HEADERS		=	include/irc/Server.hpp					\
 				include/irc/Replies.hpp					\
 				include/irc/Role.hpp					\
 				include/irc/Parse.hpp					\
+				include/irc/Masks.hpp					\
 				include/irc/CmdParser.hpp				\
 				include/irc/CmdFactory.hpp				\
 				include/irc/CmdCtx.hpp					\

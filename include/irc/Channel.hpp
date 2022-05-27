@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:34:06 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/26 16:33:47 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/27 22:26:25 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ namespace IRC
 		void allowVoice(User *user);
 		void disallowVoice(User *user);
 
-		Action notify(std::string const &msg, User *except = NULL);
+		Action notify(std::string const &msg, User *sender = NULL);
 
 		static bool is_channel_name(std::string const &name);
 		static bool is_valid_name(std::string const &name);
