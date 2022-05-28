@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 15:35:32 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/27 22:28:29 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/28 22:11:06 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ namespace IRC
 		virtual Actions execute();
 	private:
 		void send_to_channel_(std::string const &name, std::string const &msg, Actions &actions, ReplyBuilder &reply);
-		// void send_to_user_(std::string const &name, Actions &actions, ReplyBuilder &reply);
-		// void send_to_user_mask_(std::string const &name, Actions &actions, ReplyBuilder &reply);
+		void send_to_user_(std::string const &name, std::string const &msg, Actions &actions, ReplyBuilder &reply);
+		void send_to_user_mask_(std::string const &mask, std::string const &msg, Actions &actions, ReplyBuilder &reply);
 	};
 }
 

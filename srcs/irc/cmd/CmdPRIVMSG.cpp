@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 15:36:57 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/27 22:48:34 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/29 00:00:46 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,19 @@ IRC::CmdPRIVMSG::execute() {
 	for ( ; it != targets.end() ; ++it ){
 		// Does the command continue if user or channel does not exists ? Yes
 		if ( Channel::is_channel_name(*it) ){
-			this->send_to_channel_(*it, message, actions, reply);
+			if ( mask::is_server_or_host_mask(*it) ){
+				// Notify user mask
+				std::cout << "Sending to mask!" << std::endl;
+
+				this->send_to_user_mask_(*it, message, actions, reply);
+			} else {
+				std::cout << "Sending to channel!" << std::endl;
+				this->send_to_channel_(*it, message, actions, reply);
+			}
 		} else {
-			
+			// Notify user
+			std::cout << "Sending to user!" << std::endl;
+			this->send_to_user_(*it, message, actions, reply);
 		}
 	}
 	std::cout << "Arguments: ";
@@ -72,4 +82,28 @@ IRC::CmdPRIVMSG::send_to_channel_(std::string const &name, std::string const &me
 			this->sender())
 		);
 	}
+}
+
+void
+IRC::CmdPRIVMSG::send_to_user_mask_(std::string const &mask, std::string const &message, Actions &actions, ReplyBuilder &reply) {
+	// TODO: Change the target instead of sending the mask ?
+	std::string reply_message = reply.reply_privmsg(message, mask);
+
+	if ( !mask::is_valid(mask) )
+		actions.push(Action::send(this->sender(), reply.error_wild_toplevel(mask)));
+	else if ( mask::is_host_mask(mask) ){
+		std::cout << "Sending to host mask!" << std::endl;
+		actions.push(this->users().notify_host_mask(reply_message, mask, this->sender()));
+	}
+	// TODO: Manage server mask ?
+}
+
+void
+IRC::CmdPRIVMSG::send_to_user_(std::string const &name, std::string const &message, Actions &actions, ReplyBuilder &reply) {
+	User *target = this->users().select_unique(User::NickSelector(name));
+
+	if ( target == NULL )
+		actions.push(Action::send(this->sender(), reply.error_no_such_nick(name)));
+	else
+		actions.push(Action::send(target, reply.reply_privmsg(message, name)));
 }

@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 18:47:47 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/25 21:27:34 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/27 22:37:46 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,6 +192,7 @@ IRC::Server::push_send_(Socket *socket, std::string const &response) {
 		File *file = m_selector.find(socket);
 
 		if ( file != NULL ){
+			std::cout << "Response: '" << response << "'" << std::endl;
 			file->push_response( net::ston(response) );
 		}
 	}
