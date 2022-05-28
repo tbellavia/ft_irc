@@ -84,21 +84,46 @@ IRC::Users::find(User *to_find) const {
 	return m_users.find(to_find);
 }
 
+
+/**
+ * Notify all users except sender
+ */
 IRC::Action
-IRC::Users::notify(std::string const &msg, User *except) {
+IRC::Users::notify(std::string const &msg, User *sender) {
 	Action action;
 	view_type view = this->get_view();
 	std::vector<User*> subscribers;
 
 	// If no exception, send notify to all users.
-	if ( except == NULL )
+	if ( sender == NULL )
 		return Action::sendall(std::vector<User*>(view.first, view.second), msg);
 
 	for ( ; view.first != view.second ; ++view.first ){
-		User *current = *view.first;
+		User *user = *view.first;
 
-		if ( current != except )
-			subscribers.push_back(current);
+		if ( user != sender )
+			subscribers.push_back(user);
+	}
+	return Action::sendall(subscribers, msg);
+}
+
+/**
+ * Notify users matching the host mask
+ */
+IRC::Action
+IRC::Users::notify_host_mask(std::string const &msg, std::string const &mask, User *sender){
+	Action action;
+	view_type view = this->get_view();
+	std::vector<User*> subscribers;
+	// Remove `#' or `$' prefix
+	std::string clean_mask = ft::popfirst(mask); 
+
+	for ( ; view.first != view.second ; ++view.first ){
+		User *user = *view.first;
+
+		if ( mask::match(user->get_hostname(), clean_mask) && user != sender ){
+			subscribers.push_back(user);
+		}
 	}
 	return Action::sendall(subscribers, msg);
 }

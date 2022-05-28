@@ -72,7 +72,12 @@ namespace IRC
 		template<typename Pred>
 		std::vector<User*> select(Pred pred);
 
-		Action notify(std::string const &msg, User *except = NULL);
+		template<typename Pred>
+		User *select_unique(Pred pred);
+
+		Action notify(std::string const &msg, User *sender = NULL);
+		// Action notify_server_mask(std::string const &msg, std::string const &mask, User *sender = NULL);
+		Action notify_host_mask(std::string const &msg, std::string const &mask, User *sender = NULL);
 	};
 
 	template<typename Pred>
@@ -101,6 +106,17 @@ namespace IRC
 				selected.push_back(user);
 		}
 		return selected;
+	}
+
+	template<typename Pred>
+	User *Users::select_unique(Pred pred){
+		iterator it = m_users.begin();
+
+		for ( ; it != m_users.end() ; ++it ) {
+			if ( pred(*it) )
+				return *it;
+		}
+		return NULL;
 	}
 }
 
