@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 15:22:18 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/26 16:27:18 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/28 22:10:18 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 # include <set>
 # include "User.hpp"
 # include "Action.hpp"
+# include "MasterUsers.hpp"
+
 namespace IRC
 {
 	class Users {
@@ -34,6 +36,7 @@ namespace IRC
 															const_reverse_view_type;
 		
 		Users();
+		Users(MasterUsers const &users);
 		Users(Users const &other);
 		Users &operator=(Users const &other);
 		~Users();

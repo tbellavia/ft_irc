@@ -6,15 +6,25 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 15:43:00 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/26 16:33:00 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/28 22:06:56 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "Users.hpp"
+# include "Masks.hpp"
 
 IRC::Users::Users() : m_users() { }
 
 IRC::Users::Users(Users const &other) : m_users(other.m_users) { }
+
+IRC::Users::Users(MasterUsers const &other) : m_users() {
+	std::map<int, User*> const &users = other.get_users();
+	std::map<int, User*>::const_iterator it = users.begin();
+
+	for ( ; it != users.end() ; ++it ){
+		this->add(it->second);
+	}
+}
 
 IRC::Users &IRC::Users::operator=(Users const &other) {
 	if ( this == &other )
