@@ -20,7 +20,6 @@
 # include "Parse.hpp"
 # include "CmdParser.hpp"
 
-# define SERVER_NAME "ft_irc.com"
 # define Expected_args(n) (n + 1)
 
 namespace IRC
