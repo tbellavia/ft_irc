@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/27 21:53:27 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/27 22:01:10 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/28 20:11:15 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,15 @@
 
 namespace IRC
 {
-	bool is_valid_mask(std::string const &mask);
+	namespace mask
+	{
+		bool is_valid(std::string const &mask);
+		bool match(std::string const &s, std::string const &mask);
+		
+		bool is_server_mask(std::string const &mask);
+		bool is_host_mask(std::string const &mask);
+		bool is_server_or_host_mask(std::string const &mask);
+	}
 }
 
 
