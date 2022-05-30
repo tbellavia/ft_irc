@@ -87,7 +87,7 @@ IRC::CmdPRIVMSG::send_to_channel_(std::string const &name, std::string const &me
 void
 IRC::CmdPRIVMSG::send_to_user_mask_(std::string const &mask, std::string const &message, Actions &actions, ReplyBuilder &reply) {
 	// TODO: Change the target instead of sending the mask ?
-	std::string reply_message = reply.reply_privmsg(message, mask);
+	std::string reply_message = reply.reply_privmsg(message, this->sender()->get_nickname());
 
 	if ( !mask::is_valid(mask) )
 		actions.push(Action::send(this->sender(), reply.error_wild_toplevel(mask)));
