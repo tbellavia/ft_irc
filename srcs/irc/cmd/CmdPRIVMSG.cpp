@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 15:36:57 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/31 13:41:53 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/31 14:44:04 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,11 @@
 #include <iostream>
 
 IRC::CmdPRIVMSG::CmdPRIVMSG(CmdCtx &ctx, std::string const &request)
-	: ACmd(ctx, request, "PRIVMSG") { }
+	: ACmd(ctx, request, "PRIVMSG") 
+{
+	std::cout << "COMMAND NAME : " << m_arguments[0] << std::endl;
+	m_name = (m_arguments[0] == "PRIVMSG") ? "PRIVMSG" : "NOTICE";
+}
 
 IRC::CmdPRIVMSG::~CmdPRIVMSG() { }
 
@@ -82,7 +86,7 @@ IRC::CmdPRIVMSG::send_to_channel_(std::string const &name, std::string const &me
 			actions.push(Action::send(sender, reply.error_cannot_send_to_chan(name)));
 		} else {
 			actions.push(channel->notify(
-				reply.reply_privmsg(message, name), 
+				reply.reply_privmsg(m_name, message, name), 
 				sender)
 			);
 		}
@@ -92,7 +96,7 @@ IRC::CmdPRIVMSG::send_to_channel_(std::string const &name, std::string const &me
 void
 IRC::CmdPRIVMSG::send_to_user_mask_(std::string const &mask, std::string const &message, Actions &actions, ReplyBuilder &reply) {
 	// TODO: Change the target instead of sending the mask ?
-	std::string reply_message = reply.reply_privmsg(message, this->sender()->get_nickname());
+	std::string reply_message = reply.reply_privmsg(m_name, message, this->sender()->get_nickname());
 
 	if ( !mask::is_valid(mask) )
 		actions.push(Action::send(this->sender(), reply.error_wild_toplevel(mask)));
@@ -110,5 +114,5 @@ IRC::CmdPRIVMSG::send_to_user_(std::string const &name, std::string const &messa
 	if ( target == NULL )
 		actions.push(Action::send(this->sender(), reply.error_no_such_nick(name)));
 	else
-		actions.push(Action::send(target, reply.reply_privmsg(message, name)));
+		actions.push(Action::send(target, reply.reply_privmsg(m_name, message, name)));
 }
