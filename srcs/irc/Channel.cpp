@@ -112,6 +112,11 @@ IRC::Channel::get_topic() const {
 }
 
 bool
+IRC::Channel::is_user(User *user) const {
+	return m_users.has(user);
+}
+
+bool
 IRC::Channel::is_banned_user(User *user) const {
 	return m_bans.has(user);
 }
@@ -129,6 +134,23 @@ IRC::Channel::is_operator_user(User *user) const{
 bool
 IRC::Channel::is_voices_user(User *user) const{
 	return m_voices.has(user);
+}
+
+
+/**
+ * Check if user has correct rights to send message on channel.
+ */
+bool
+IRC::Channel::is_authorized(User *user) const {
+	if ( is_banned_user(user) )
+		return false;
+	// Check outside message disable
+	if ( is_outside_disable() && !is_user(user) )
+		return false;
+	// Check if authorized to speak in channel
+	if ( is_moderated() && !(is_voices_user(user) || is_operator_user(user)) )
+		return false;
+	return true;
 }
 
 bool
@@ -258,6 +280,11 @@ IRC::Channel::is_invite() const {
 bool
 IRC::Channel::is_moderated() const {
 	return m_mode & CHAN_MODE_MODERATED;
+}
+
+bool
+IRC::Channel::is_outside_disable() const {
+	return m_mode & CHAN_MODE_NO_OUTSIDE_MESSAGE;
 }
 
 bool
