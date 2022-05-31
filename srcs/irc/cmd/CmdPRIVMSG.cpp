@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 15:36:57 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/29 00:00:46 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/31 13:41:53 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,10 @@ IRC::CmdPRIVMSG::execute() {
 				// Notify user mask
 				std::cout << "Sending to mask!" << std::endl;
 
-				this->send_to_user_mask_(*it, message, actions, reply);
+				if ( user->is_server_operator() )
+					this->send_to_user_mask_(*it, message, actions, reply);
+				else
+					reply.error_cannot_send_to_chan(*it);
 			} else {
 				std::cout << "Sending to channel!" << std::endl;
 				this->send_to_channel_(*it, message, actions, reply);
@@ -63,24 +66,26 @@ IRC::CmdPRIVMSG::execute() {
 			this->send_to_user_(*it, message, actions, reply);
 		}
 	}
-	std::cout << "Arguments: ";
-	ft::debug_log_args(targets.begin(), targets.end(), std::cout);
-	std::cout << std::endl;
 	return actions;
 }
 
 void
 IRC::CmdPRIVMSG::send_to_channel_(std::string const &name, std::string const &message, Actions &actions, ReplyBuilder &reply) {
 	Channel *channel = this->channels().find(name);
+	User *sender = this->sender();
 
 	if ( channel == NULL ){
 		// No such nick if channel not found ?
-		actions.push(Action::send(this->sender(), reply.error_no_such_nick(name)));
+		actions.push(Action::send(sender, reply.error_no_such_nick(name)));
 	} else {
-		actions.push(channel->notify(
-			reply.reply_privmsg(message, name), 
-			this->sender())
-		);
+		if ( !channel->is_authorized(sender) ) {
+			actions.push(Action::send(sender, reply.error_cannot_send_to_chan(name)));
+		} else {
+			actions.push(channel->notify(
+				reply.reply_privmsg(message, name), 
+				sender)
+			);
+		}
 	}
 }
 
