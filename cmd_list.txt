@@ -16,8 +16,8 @@
 	- KICK    []
 
 [Sending Messages]
-	- PRIVMSG []
-	- NOTICE  []
+	- PRIVMSG [x]
+	- NOTICE  [x]
 
 [User Queries]
 	- WHO   []
