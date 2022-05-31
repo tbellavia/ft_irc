@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   User.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 14:36:26 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/19 11:47:44 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/31 12:22:09 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,11 @@ IRC::User::get_socket() {
 std::string
 IRC::User::get_hostname() const{
 	return m_socket->hostname();
+}
+
+bool
+IRC::User::is_server_operator() const {
+	return this->mode_isset(MODE_OPERATOR);
 }
 
 bool

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   User.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 14:22:35 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/11 13:29:09 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/31 12:22:05 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ namespace IRC
 		int					get_mode() const;
 		Socket				*get_socket();
 
+		bool is_server_operator() const;
 
 		virtual void update(std::string const &msg);
 
