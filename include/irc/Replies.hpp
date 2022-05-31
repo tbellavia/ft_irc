@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:16 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/27 15:51:50 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/05/31 14:42:32 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ namespace IRC
 			std::string const &user_name, std::string const &modes
 		);
 
-		std::string reply_privmsg(std::string const &msg, std::string const &channel);
+		std::string reply_privmsg(std::string const &cmd, std::string const &msg, std::string const &channel);
 
 		std::string error_no_oper_host();
 		std::string error_password_mismatch();
