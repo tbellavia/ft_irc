@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 14:22:35 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/31 12:22:05 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/01 15:48:31 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ namespace IRC
 		Socket				*get_socket();
 
 		bool is_server_operator() const;
+		bool is_invisible() const;
+		bool mask_match(std::string const &mask);
 
 		virtual void update(std::string const &msg);
 
