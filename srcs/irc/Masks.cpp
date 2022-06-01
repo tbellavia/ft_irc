@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/27 21:56:31 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/28 23:56:07 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/01 13:39:00 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,4 +130,10 @@ IRC::mask::is_server_mask(std::string const &mask) {
 bool
 IRC::mask::is_server_or_host_mask(std::string const &mask) {
 	return is_server_mask(mask) || is_host_mask(mask);
+}
+
+bool
+IRC::mask::is_mask(std::string const &mask) {
+	return mask.find(MASK_SYM_SELECTOR_ALL) != std::string::npos
+		|| mask.find(MASK_SYM_SELECTOR_OPT) != std::string::npos;
 }
