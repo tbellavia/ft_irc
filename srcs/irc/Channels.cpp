@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channels.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:19:21 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/09 12:32:04 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/01 23:54:10 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,20 @@ IRC::Channels::remove_user(User *user){
 	for ( ; it != m_channels.end() ; ++it ){
 		it->second.unsubscribe(user);
 	}
+}
+
+/**
+ * Returns the first Channel where user is present.
+ */
+IRC::Channel*
+IRC::Channels::find_by_user(User *user) {
+	std::map<std::string, Channel>::reverse_iterator it = m_channels.rbegin();
+
+	for ( ; it != m_channels.rend() ; ++it ){
+		if ( (*it).second.is_user(user) )
+			return &it->second;
+	}
+	return NULL;
 }
 
 /**

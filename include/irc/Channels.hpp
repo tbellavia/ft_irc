@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:16:06 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/07 16:03:22 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/01 15:24:30 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ namespace IRC
 		Channel *find(std::string const &name);
 
 		void remove_user(User *user);
-
+		Channel *find_by_user(User *user);
 		std::vector<Channel> get_channels();
 	};
 }
