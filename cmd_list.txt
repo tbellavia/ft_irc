@@ -20,7 +20,7 @@
 	- NOTICE  [x]
 
 [User Queries]
-	- WHO   []
+	- WHO   [x]
 	- WHOIS []
 
 [Miscellaneous]
