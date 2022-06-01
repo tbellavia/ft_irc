@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/31 14:43:27 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/01 15:56:55 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -376,7 +376,7 @@ IRC::ReplyBuilder::reply_name_reply(Channel &channel){
 		// `+` -> channel voices
 		User *user = *users.first;
 
-		reply.append(get_user_mode_symbol_(&channel, user));
+		reply.append(get_user_mode_symbol_(user, &channel));
 		reply.append(user->get_nickname());
 	}
 	return reply;
@@ -393,23 +393,27 @@ IRC::ReplyBuilder::reply_end_of_names(std::string const &channel){
 }
 
 std::string
-IRC::ReplyBuilder::reply_who_reply(Channel *channel, User *user) {
+IRC::ReplyBuilder::reply_who_reply(User *user, Channel *channel) {
 	// std::string reply = this->build_header_(NumericReplies::RPL_WHOREPLY);
 	std::string reply;
 
 	// :72004f985062.example.com 354 Alpha2 152 #channel Tony 172.17.0.1 72004f985062.example.com Alpha2 H@ 0 :realname
+	// :85d322b2505b.example.com 352 b #channel2 b3 172.17.0.1 85d322b2505b.example.com b H@ :0 realname
 	reply.append(":");
 	reply.append(m_sender);
 	reply.append(" ");
-	reply.append(code_to_string_(354));
+	reply.append(code_to_string_(NumericReplies::RPL_WHOREPLY));
 	reply.append(" ");
 	reply.append(m_target->get_nickname());
-	reply.append(" 152 ");
+	// reply.append(" 152 ");
 
 
 	// "<channel> <user> <host> <server> <nick> <H|G>[*][@|+] :<hopcount> <real name>"
-	// reply.append(" ");
-	reply.append(channel->get_name());
+	reply.append(" ");
+	if ( channel == NULL )
+		reply.append("*");
+	else
+		reply.append(channel->get_name());
 	reply.append(" ");
 	reply.append(user->get_username());
 	reply.append(" ");
@@ -420,18 +424,16 @@ IRC::ReplyBuilder::reply_who_reply(Channel *channel, User *user) {
 	reply.append(user->get_nickname());
 	reply.append(" ");
 	reply.append("H");
-	if ( channel != NULL ){
-		reply.append(get_user_mode_symbol_(channel, user));
-	}
+	reply.append(get_user_mode_symbol_(user, channel));
 	reply.append(" ");
 	// We don't manage server to server, the hopcount is always 0
-	reply.append("0 :");
+	reply.append(":0 ");
 	reply.append(user->get_realname());
 	return reply;
 }
 
 std::string
-IRC::ReplyBuilder::reply_end_of_who(std::string const &name) {
+IRC::ReplyBuilder::reply_end_of_who(Channel *channel) {
 	// std::string reply = this->build_header_(NumericReplies::RPL_ENDOFWHO);
 	std::string reply;
 	
@@ -443,7 +445,26 @@ IRC::ReplyBuilder::reply_end_of_who(std::string const &name) {
 	reply.append(" ");
 	reply.append(m_target->get_nickname());
 	reply.append(" ");
-	reply.append(name);
+	if ( channel == NULL )
+		reply.append("*");
+	else
+		reply.append(channel->get_name());
+	reply.append(" :End of /WHO list.");
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::reply_end_of_who(std::string const &mask) {
+	std::string reply;
+
+	reply.append(":");
+	reply.append(m_sender);
+	reply.append(" ");
+	reply.append(code_to_string_(NumericReplies::RPL_ENDOFWHO));
+	reply.append(" ");
+	reply.append(m_target->get_nickname());
+	reply.append(" ");
+	reply.append(mask);
 	reply.append(" :End of /WHO list.");
 	return reply;
 }
@@ -521,7 +542,12 @@ IRC::ReplyBuilder::code_to_string_(int digit){
  * `+' is returned.
  */
 std::string
-IRC::ReplyBuilder::get_user_mode_symbol_(Channel *channel, User *user){
+IRC::ReplyBuilder::get_user_mode_symbol_(User *user, Channel *channel){
+	if ( channel == NULL ){
+		if ( user->is_server_operator() )
+			return "@";
+		return "";
+	}
 	if ( channel->is_operator_user(user) )
 		return "@";
 	if ( channel->is_voices_user(user) )

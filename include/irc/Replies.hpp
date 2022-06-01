@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:16 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/31 14:42:32 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/01 15:55:44 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ namespace IRC
 
 		std::string build_header_(int code);
 		std::string code_to_string_(int code);
-		std::string get_user_mode_symbol_(Channel *channel, User *user);
+		std::string get_user_mode_symbol_(User *user, Channel *channel = NULL);
 	public:
 		ReplyBuilder(std::string const &sender, User *target = NULL);
 		ReplyBuilder(ReplyBuilder const &other);
@@ -75,8 +75,9 @@ namespace IRC
 			Channel &channel
 		);
 
-		std::string reply_who_reply(Channel *channel, User *user);
-		std::string reply_end_of_who(std::string const &name);
+		std::string reply_who_reply(User *user, Channel *channel = NULL);
+		std::string reply_end_of_who(Channel *channel = NULL);
+		std::string reply_end_of_who(std::string const &mask);
 
 		// User errors (mode etc...)
 		std::string error_users_dont_match();
