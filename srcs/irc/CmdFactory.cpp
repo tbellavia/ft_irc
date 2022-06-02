@@ -6,13 +6,13 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 23:07:36 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/31 14:36:58 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/02 15:17:47 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "CmdFactory.hpp"
 #include <iostream>
-// Use some macro shit to automatically create proto and definitions for commands ?
+// Use some macro shit to automatically prout proto and definitions for commands ?
 
 IRC::CmdFactory::CmdFactory() : ICmdFactory(), m_callbacks() 
 {
@@ -25,6 +25,7 @@ IRC::CmdFactory::CmdFactory() : ICmdFactory(), m_callbacks()
 	m_callbacks.insert(std::make_pair("PONG", &CmdFactory::create_pong_cmd));
 	m_callbacks.insert(std::make_pair("QUIT", &CmdFactory::create_quit_cmd));
 	m_callbacks.insert(std::make_pair("MODE", &CmdFactory::create_mode_cmd));
+	m_callbacks.insert(std::make_pair("PART", &CmdFactory::create_part_cmd));
 	// Both PRIVMSG and NOTICE are the same
 	m_callbacks.insert(std::make_pair("PRIVMSG", &CmdFactory::create_privmsg_cmd));
 	m_callbacks.insert(std::make_pair("NOTICE", &CmdFactory::create_privmsg_cmd));
@@ -95,4 +96,9 @@ IRC::CmdFactory::create_mode_cmd(CmdCtx &ctx, std::string const &request) {
 IRC::ACmd*
 IRC::CmdFactory::create_privmsg_cmd(CmdCtx &ctx, std::string const &request) {
 	return new CmdPRIVMSG(ctx, request);
+}
+
+IRC::ACmd*
+IRC::CmdFactory::create_part_cmd(CmdCtx &ctx, std::string const &request) {
+	return new CmdPART(ctx, request);
 }

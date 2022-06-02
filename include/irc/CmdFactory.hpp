@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 14:22:35 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/26 15:43:31 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/02 15:17:38 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # include "cmd/CmdPONG.hpp"
 # include "cmd/CmdQUIT.hpp"
 # include "cmd/CmdMODE.hpp"
+# include "cmd/CmdPART.hpp"
 
 namespace IRC
 {
@@ -44,6 +45,7 @@ namespace IRC
 		ACmd *create_who_cmd(CmdCtx &ctx, std::string const &request);
 		ACmd *create_mode_cmd(CmdCtx &ctx, std::string const &request);
 		ACmd *create_privmsg_cmd(CmdCtx &ctx, std::string const &request);
+		ACmd *create_part_cmd(CmdCtx &ctx, std::string const &request);
 	public:
 		CmdFactory();
 		CmdFactory(CmdFactory const &copy);
