@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/01 15:56:55 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/02 15:49:24 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -481,6 +481,20 @@ IRC::ReplyBuilder::reply_privmsg(std::string const &cmd, std::string const &msg,
 	reply.append(channel);
 	reply.append(" :");
 	reply.append(msg);
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::reply_part(std::string const &name, std::string const &message) {
+	std::string reply;
+
+	reply.append(":");
+	reply.append( m_target->get_fullname() );
+	reply.append(" PART ");
+	reply.append(name);
+	reply.append(" :\"");
+	reply.append(message);
+	reply.append("\"");
 	return reply;
 }
 
