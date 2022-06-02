@@ -7,7 +7,7 @@
 
 [Channel Operations]
 	- JOIN    [x]
-	- PART    []
+	- PART    [x]
 	- MODE    []
 	- TOPIC   []
 	- NAMES   []
