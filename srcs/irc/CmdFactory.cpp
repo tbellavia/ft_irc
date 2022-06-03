@@ -6,13 +6,14 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 23:07:36 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/02 15:17:47 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/03 10:32:58 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "CmdFactory.hpp"
 #include <iostream>
-// Use some macro shit to automatically prout proto and definitions for commands ?
+
+// Use some macro shit to automatically create proto and definitions for commands ?
 
 IRC::CmdFactory::CmdFactory() : ICmdFactory(), m_callbacks() 
 {
