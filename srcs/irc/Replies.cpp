@@ -513,7 +513,7 @@ IRC::ReplyBuilder::build_header_(int code){
 	else
 		// TODO: For now, header is built with ip representation, should we use
 		// the hostname ? 
-		s.append(m_target->get_socket()->ip());
+		s.append(m_target->get_hostname());
 	return s;
 }
 
