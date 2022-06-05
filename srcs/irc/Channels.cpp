@@ -92,6 +92,23 @@ IRC::Channels::find_by_user(User *user) {
 }
 
 /**
+ * Notify all channels the `user' has subscribed to.
+ * 
+ */
+IRC::Actions
+IRC::Channels::notify_by_user(User *user, std::string const &message) {
+	std::map<std::string, Channel>::iterator it = m_channels.begin();
+	Actions actions;
+
+	for ( ; it != m_channels.end() ; ++it ){
+		if ( it->second.is_user(user) ){
+			actions.push(it->second.notify(message, user));
+		}
+	}
+	return actions;
+}
+
+/**
  * Get channels
  * 
  * Get a vector of all the channels.
