@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:19:21 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/01 23:54:10 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/03 19:40:40 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ IRC::Channels::find(std::string const &name) {
 
 void
 IRC::Channels::remove_user(User *user){
-	std::map<std::string, Channel>::iterator it;
+	std::map<std::string, Channel>::iterator it = m_channels.begin();
 
 	for ( ; it != m_channels.end() ; ++it ){
 		it->second.unsubscribe(user);
