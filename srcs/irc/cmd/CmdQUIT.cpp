@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CmdQUIT.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/23 21:57:08 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/19 13:01:50 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/03 20:26:51 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,16 @@ IRC::CmdQUIT::~CmdQUIT() { }
  */
 IRC::Actions
 IRC::CmdQUIT::execute() {
-	Actions actions;
-	User *user = m_ctx.sender;
+	Actions			actions;
+	User			*sender = m_ctx.sender;
+	ReplyBuilder	reply(this->server_name(), sender);
+	std::string		message = "Leaving";
 	
-	std::cout << "CmdQUIT" << std::endl;
 	// Notify all channels where sender is present
-	if ( m_arguments.size() >= 2 ){
-		std::string message = m_arguments[1];
-
-		actions.push(Action::send(user, message));
-	}
-	actions.push(Action::disconnect(user));
+	if ( m_arguments.size() == Expected_args(1))
+		message = ft::popfirst(m_arguments[1]);
+	message = reply.reply_quit(message);
+	actions = this->channels().notify_by_user(sender, message);
+	actions.push(Action::disconnect(sender));
 	return actions;
 }

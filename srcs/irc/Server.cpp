@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 18:47:47 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/27 22:37:46 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/03 20:24:59 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,6 +142,7 @@ IRC::Server::finish_requests_() {
 		if ( file->isset_event(Selector::DISCONNECT) && !file->available_response() ){
 			// WARN: this line is super important, do not touch !!!
 			++it;
+			std::cout << "REALLY DISCONNECT" << std::endl;
 			this->disconnect_socket_(socket);
 		}
 	}
