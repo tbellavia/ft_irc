@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 23:07:36 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/05 23:05:41 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/06 23:18:14 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ IRC::CmdFactory::CmdFactory() : ICmdFactory(), m_callbacks()
 	m_callbacks.insert(std::make_pair("MODE", &CmdFactory::create_mode_cmd));
 	m_callbacks.insert(std::make_pair("PART", &CmdFactory::create_part_cmd));
 	m_callbacks.insert(std::make_pair("TOPIC", &CmdFactory::create_topic_cmd));
+	m_callbacks.insert(std::make_pair("NAMES", &CmdFactory::create_names_cmd));
 	// Both PRIVMSG and NOTICE are the same
 	m_callbacks.insert(std::make_pair("PRIVMSG", &CmdFactory::create_privmsg_cmd));
 	m_callbacks.insert(std::make_pair("NOTICE", &CmdFactory::create_privmsg_cmd));
@@ -108,4 +109,9 @@ IRC::CmdFactory::create_part_cmd(CmdCtx &ctx, std::string const &request) {
 IRC::ACmd*
 IRC::CmdFactory::create_topic_cmd(CmdCtx &ctx, std::string const &request) {
 	return new CmdTOPIC(ctx, request);
+}
+
+IRC::ACmd*
+IRC::CmdFactory::create_names_cmd(CmdCtx &ctx, std::string const &request) {
+	return new CmdNAMES(ctx, request);
 }
