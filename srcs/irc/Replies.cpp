@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/02 15:49:24 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/06 14:36:54 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -360,6 +360,16 @@ IRC::ReplyBuilder::reply_topic(std::string const &channel, std::string const &to
 	reply.append(channel);
 	reply.append(" :");
 	reply.append(topic);
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::reply_notopic(std::string const &channel) {
+	std::string reply = this->build_header_(NumericReplies::RPL_NOTOPIC);
+
+	reply.append(" ");
+	reply.append(channel);
+	reply.append(" :No topic is set");
 	return reply;
 }
 
