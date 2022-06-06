@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/05 23:00:36 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/06 14:43:59 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/06 15:31:09 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,36 @@ IRC::CmdTOPIC::~CmdTOPIC() { }
 
 IRC::Actions
 IRC::CmdTOPIC::execute() {
-	User			*target = this->sender();
-	ReplyBuilder	reply(this->server_name(), target);
+	User			*user = this->sender();
+	ReplyBuilder	reply(this->server_name(), user);
 	Actions			actions;
 
-	if ( !target->connected() )
+	if ( !user->connected() )
 		return Actions::unique_idle();
 	if ( m_arguments.size() < Expected_args(1) || m_arguments.size() > Expected_args(2))
-		return Actions::unique_send(target, reply.error_need_more_params(m_name));
-	return Actions::unique_idle();
+		return Actions::unique_send(user, reply.error_need_more_params(m_name));
+	std::string name = m_arguments[1];
+	Channel *channel = this->channels().find(name);
+	
+	if ( channel == NULL )
+		return Actions::unique_send(user, reply.error_no_such_channel(name));
+	if ( !channel->is_user(user) )
+		return Actions::unique_send(user, reply.error_not_on_channel(name));
+	if ( m_arguments.size() == Expected_args(1) ){
+		// Get topic
+		std::string const &topic = channel->get_topic();
+
+		if ( topic.empty() )
+			return Actions::unique_send(user, reply.reply_notopic(name));
+		return Actions::unique_send(user, reply.reply_topic(name, topic));
+	}
+	// Set topic
+	if ( !channel->is_operator_user(user) )
+		return Actions::unique_send(user, reply.error_chan_o_privs_needed(name));
+	std::string new_topic =  ft::popfirst(m_arguments[2]);
+
+	channel->set_topic(new_topic);
+	if ( new_topic.empty() )
+		return Actions::unique_send(user, reply.reply_topic(name, new_topic));
+	return Actions::unique_send(user, reply.reply_topic(name, new_topic));
 }
