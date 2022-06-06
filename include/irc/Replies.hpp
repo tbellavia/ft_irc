@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:16 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/02 15:27:37 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/06 14:35:44 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ namespace IRC
 			std::vector<std::string> const &mode_parameters
 		);
 		std::string reply_topic(std::string const &channel, std::string const &topic);
+		std::string reply_notopic(std::string const &channel);
 		std::string reply_name_reply(Channel &channel);
 		std::string reply_end_of_names(std::string const &channel);
 		std::string reply_join(std::string const &channel);
