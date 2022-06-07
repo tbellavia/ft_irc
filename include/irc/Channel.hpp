@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:34:06 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/07 13:36:36 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/07 13:47:07 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,16 @@ namespace IRC
 	class Channel {
 		Users		m_users;
 		Users		m_voices;
-		Users		m_bans;
 		Users		m_invites;
 		Users		m_operators;
 
-		User		*m_creator;
-		std::string	m_name;
-		std::string m_key;
-		int	m_limit;
-		std::string m_topic;
-		int			m_mode;
+		User						*m_creator;
+		std::vector<std::string>	m_ban_masks;
+		std::string					m_name;
+		std::string					m_key;
+		int							m_limit;
+		std::string					m_topic;
+		int							m_mode;
 	public:
 		typedef	Users::iterator					iterator;
 		typedef	Users::const_iterator			const_iterator;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   User.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 14:22:35 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/01 15:48:31 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/07 13:51:39 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ namespace IRC
 		std::string const	&get_username() const;
 		std::string const	&get_nickname() const;
 		std::string const	&get_realname() const;
-		std::string			get_fullname() const;
+		std::string			get_mask() const;
 		std::string			get_hostname() const;
 		int					get_mode() const;
 		Socket				*get_socket();

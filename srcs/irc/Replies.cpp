@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/07 13:35:53 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/07 13:53:49 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -464,7 +464,7 @@ IRC::ReplyBuilder::reply_privmsg(std::string const &cmd, std::string const &msg,
 	std::string reply;
 
 	reply.append(":");
-	reply.append(m_target->get_fullname());
+	reply.append(m_target->get_mask());
 	reply.append(" ");
 	reply.append(cmd);
 	reply.append(" ");
@@ -479,7 +479,7 @@ IRC::ReplyBuilder::reply_part(std::string const &name, std::string const &messag
 	std::string reply;
 
 	reply.append(":");
-	reply.append( m_target->get_fullname() );
+	reply.append( m_target->get_mask() );
 	reply.append(" PART ");
 	reply.append(name);
 	reply.append(" :\"");

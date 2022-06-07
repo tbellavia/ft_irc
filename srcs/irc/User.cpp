@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   User.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 14:36:26 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/01 15:50:39 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/07 13:52:20 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ IRC::User::get_realname() const {
 }
 
 std::string
-IRC::User::get_fullname() const {
+IRC::User::get_mask() const {
 	return std::string(
 		m_nickname + "!" + m_username + "@" + this->get_hostname()
 	);
@@ -135,9 +135,7 @@ IRC::User::is_invisible() const {
 
 bool
 IRC::User::mask_match(std::string const &mask) {
-	return mask::match(this->get_hostname(), mask)
-		|| mask::match(this->get_realname(), mask)
-		|| mask::match(this->get_nickname(), mask);
+	return mask::match(this->get_mask(), mask);
 }
 
 bool

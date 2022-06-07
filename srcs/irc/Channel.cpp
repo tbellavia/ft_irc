@@ -6,19 +6,20 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:38:55 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/07 13:36:28 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/07 13:53:08 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Channel.hpp"
+#include "Masks.hpp"
 
 IRC::Channel::Channel() : 
 	m_users(), 
 	m_voices(),
-	m_bans(),
 	m_invites(),
 	m_operators(),
 	m_creator(NULL),
+	m_ban_masks(),
 	m_name(),
 	m_key(),
 	m_limit(-1),
@@ -28,10 +29,10 @@ IRC::Channel::Channel() :
 IRC::Channel::Channel(std::string const &name, User *creator, int mode) :
 	m_users(), 
 	m_voices(),
-	m_bans(),
 	m_invites(),
 	m_operators(),
 	m_creator(creator),
+	m_ban_masks(),
 	m_name(name),
 	m_key(),
 	m_limit(-1),
@@ -41,10 +42,10 @@ IRC::Channel::Channel(std::string const &name, User *creator, int mode) :
 IRC::Channel::Channel(Channel const &other) :
 	m_users(other.m_users),
 	m_voices(other.m_voices),
-	m_bans(other.m_bans),
 	m_invites(other.m_invites),
 	m_operators(other.m_operators),
 	m_creator(other.m_creator),
+	m_ban_masks(other.m_ban_masks),
 	m_name(other.m_name),
 	m_key(other.m_key),
 	m_limit(other.m_limit),
@@ -56,10 +57,10 @@ IRC::Channel &IRC::Channel::operator=(IRC::Channel const &other) {
 		return *this;
 	m_users = other.m_users;
 	m_voices = other.m_voices;
-	m_bans = other.m_bans;
 	m_invites = other.m_invites;
 	m_operators = other.m_operators;
 	m_creator = other.m_creator;
+	m_ban_masks = other.m_ban_masks;
 	m_name = other.m_name;
 	m_key = other.m_key;
 	m_limit = other.m_limit;
@@ -132,7 +133,11 @@ IRC::Channel::is_user(User *user) const {
 
 bool
 IRC::Channel::is_banned_user(User *user) const {
-	return m_bans.has(user);
+	for ( std::size_t i = 0; i < m_ban_masks.size(); ++i ) {
+		if ( user->mask_match(m_ban_masks[i]) )
+			return true;
+	}
+	return false;
 }
 
 bool
