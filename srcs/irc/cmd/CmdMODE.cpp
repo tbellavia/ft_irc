@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:52:41 by lperson-          #+#    #+#             */
-/*   Updated: 2022/06/07 15:51:20 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/07 16:52:18 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ IRC::CmdMODE::setter_t const IRC::CmdMODE::m_parameters_func[
 {
 	&IRC::CmdMODE::set_channel_op_,
 	&IRC::CmdMODE::set_channel_limit_,
-	&IRC::CmdMODE::set_channel_ban_mask_
+	&IRC::CmdMODE::set_channel_ban_mask_,
+	&IRC::CmdMODE::set_channel_voice_user_
 };
 
 /**
@@ -342,21 +343,74 @@ bool IRC::CmdMODE::set_channel_ban_mask_(
 		std::vector<std::string>::const_iterator it = std::find(
 			ban_masks.begin(), ban_masks.end(), *parameter
 		);
-
 		if (it == ban_masks.end())
 		{
 			channel.addBanMask(*parameter);
 		}
+		else
+			return false;
 		return true;
 	}
 
 	// Delete ban mask
 	if (!to_add && parameter)
 	{
+		std::vector<std::string> const &ban_masks = channel.get_ban_masks();
+		std::vector<std::string>::const_iterator it = std::find(
+			ban_masks.begin(), ban_masks.end(), *parameter
+		);
+		if (it == ban_masks.end())
+			return false;
 		channel.deleteBanMask(*parameter);
 		return true;
 	}
 
+	return false;
+}
+
+bool IRC::CmdMODE::set_channel_voice_user_(
+	bool to_add, ReplyBuilder &reply, Actions &actions,
+	Channel &channel, std::string const *parameter
+)
+{
+	if (!parameter)
+	{
+		/*
+		actions.push(
+			IRC::Action(
+				Event::SEND, this->sender(),
+				reply.error_need_more_params(m_name)
+			)
+		);
+		*/
+		return false;
+	}
+
+	Channel::const_iterator first = channel.begin();
+	Channel::const_iterator last = channel.end();
+	for (; first != last; ++first)
+	{
+		if ((*first)->get_nickname() == *parameter)
+		{
+			if (to_add && !channel.is_voices_user(*first))
+			{
+				channel.allowVoice(*first);
+				return true;
+			}
+			else if (!to_add && channel.is_voices_user(*first))
+			{
+				channel.disallowVoice(*first);
+				return true;
+			}
+			return false;
+		}
+	}
+
+	actions.push(
+		IRC::Action(
+			Event::SEND, this->sender(), reply.error_no_such_nick(*parameter)
+		)
+	);
 	return false;
 }
 
