@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:38:55 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/07 15:41:17 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/07 17:14:50 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ IRC::Channel::Channel() :
 	m_creator(NULL),
 	m_ban_masks(),
 	m_name(),
-	m_key(),
+	m_key(NULL),
 	m_limit(-1),
 	m_topic(),
 	m_mode(0) { }
@@ -35,7 +35,7 @@ IRC::Channel::Channel(std::string const &name, User *creator, int mode) :
 	m_creator(creator),
 	m_ban_masks(),
 	m_name(name),
-	m_key(),
+	m_key(NULL),
 	m_limit(-1),
 	m_topic(),
 	m_mode(mode) { }
@@ -48,10 +48,13 @@ IRC::Channel::Channel(Channel const &other) :
 	m_creator(other.m_creator),
 	m_ban_masks(other.m_ban_masks),
 	m_name(other.m_name),
-	m_key(other.m_key),
+	m_key(NULL),
 	m_limit(other.m_limit),
 	m_topic(other.m_topic),
-	m_mode(other.m_mode) { }
+	m_mode(other.m_mode) {
+	if (other.m_key)
+		m_key = new std::string(*other.m_key);
+}
 
 IRC::Channel &IRC::Channel::operator=(IRC::Channel const &other) {
 	if ( &other == this )
@@ -63,14 +66,21 @@ IRC::Channel &IRC::Channel::operator=(IRC::Channel const &other) {
 	m_creator = other.m_creator;
 	m_ban_masks = other.m_ban_masks;
 	m_name = other.m_name;
-	m_key = other.m_key;
+	if ( m_key )
+		delete m_key;
+	m_key = NULL;
+	if ( other.m_key )
+		m_key = new std::string(*other.m_key);
 	m_limit = other.m_limit;
 	m_topic = other.m_topic;
 	m_mode = other.m_mode;
 	return *this;
 }
 
-IRC::Channel::~Channel() { }
+IRC::Channel::~Channel() {
+	if ( m_key )
+		delete m_key;
+}
 
 void
 IRC::Channel::set_name(std::string const &name) {
@@ -89,7 +99,17 @@ IRC::Channel::unset_mode(int mode) {
 
 void
 IRC::Channel::set_key(std::string const &pass) {
-	m_key = pass;
+	if ( m_key )
+		delete m_key;
+	m_key = new std::string(pass);
+}
+
+void
+IRC::Channel::unset_key(std::string const &pass) {
+	if ( m_key && *m_key == pass ) {
+		delete m_key;
+		m_key = NULL;
+	}
 }
 
 void
@@ -112,7 +132,7 @@ IRC::Channel::get_mode() const {
 	return m_mode;
 }
 
-std::string const&
+std::string const*
 IRC::Channel::get_key() const {
 	return m_key;
 }
@@ -180,7 +200,7 @@ IRC::Channel::is_authorized(User *user) const {
 
 bool
 IRC::Channel::equal_key(std::string const &key) const {
-	return m_key == key;
+	return m_key && *m_key == key;
 }
 
 /**

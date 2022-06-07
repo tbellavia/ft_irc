@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/07 15:34:08 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/07 17:18:01 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,6 +249,13 @@ IRC::ReplyBuilder::error_unknown_mode(char mode)
 	reply += " ";
 	reply.push_back(mode);
 	reply += " :is unknown to me";
+	return reply;
+}
+std::string
+IRC::ReplyBuilder::error_key_set(std::string const &channel_name) {
+	std::string reply = this->build_header_(NumericReplies::ERR_KEYSET);
+
+	reply += " " + channel_name + " :Channel key already set";
 	return reply;
 }
 

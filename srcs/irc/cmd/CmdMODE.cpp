@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:52:41 by lperson-          #+#    #+#             */
-/*   Updated: 2022/06/07 16:52:18 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/07 17:14:44 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ IRC::CmdMODE::setter_t const IRC::CmdMODE::m_parameters_func[
 	&IRC::CmdMODE::set_channel_op_,
 	&IRC::CmdMODE::set_channel_limit_,
 	&IRC::CmdMODE::set_channel_ban_mask_,
-	&IRC::CmdMODE::set_channel_voice_user_
+	&IRC::CmdMODE::set_channel_voice_user_,
+	&IRC::CmdMODE::set_channel_key_
 };
 
 /**
@@ -411,6 +412,42 @@ bool IRC::CmdMODE::set_channel_voice_user_(
 			Event::SEND, this->sender(), reply.error_no_such_nick(*parameter)
 		)
 	);
+	return false;
+}
+
+bool IRC::CmdMODE::set_channel_key_(
+	bool to_add, ReplyBuilder &reply, Actions &actions,
+	Channel &channel, std::string const *parameter
+)
+{
+	if (to_add && parameter)
+	{
+		std::string const *key = channel.get_key();
+		if (key)
+		{
+			actions.push(
+				IRC::Action(
+					Event::SEND, this->sender(), reply.error_key_set(
+						channel.get_name()
+					)
+				)
+			);
+		}
+		else
+		{
+			channel.set_key(*parameter);
+			return true;
+		}
+	}
+	else if (!to_add && parameter)
+	{
+		std::string const *key = channel.get_key();
+		if (key && *key == *parameter)
+		{
+			channel.unset_key(*parameter);
+			return true;
+		}
+	}
 	return false;
 }
 
