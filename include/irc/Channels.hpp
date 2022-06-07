@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:16:06 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/07 16:03:22 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/03 18:52:33 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #define CHANNELS_HPP
 
 # include "Channel.hpp"
+# include "Actions.hpp"
 # include <vector>
 # include <map>
 
@@ -25,13 +26,14 @@ namespace IRC
 		Channels();
 		~Channels();
 
-		void add(Channel const &channel);
-		void remove(std::string const &name);
-		bool has(std::string const &name);
-		Channel *find(std::string const &name);
+		void	add(Channel const &channel);
+		void	remove(std::string const &name);
+		bool	has(std::string const &name);
+		Channel	*find(std::string const &name);
 
-		void remove_user(User *user);
-
+		void	remove_user(User *user);
+		Channel	*find_by_user(User *user);
+		Actions notify_by_user(User *user, std::string const &message);
 		std::vector<Channel> get_channels();
 	};
 }

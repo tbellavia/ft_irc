@@ -3,15 +3,15 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+         #
+#    By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/12 19:27:05 by bbellavi          #+#    #+#              #
-#    Updated: 2022/05/24 13:29:08 by lperson-         ###   ########.fr        #
+#    Updated: 2022/06/05 23:49:27 by bbellavi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CXX			= c++
-CXXFLAGS	= -Wall -Werror -Wextra -std=c++98
+CXXFLAGS	= -Wall -Werror -Wextra -std=c++98 -g
 
 SRC_DIR			= srcs
 INC_DIR			= include
@@ -33,6 +33,7 @@ SRCS		=	main.cpp								\
 				srcs/irc/IRCApi.cpp						\
 				srcs/irc/Config.cpp						\
 				srcs/irc/Parse.cpp						\
+				srcs/irc/Masks.cpp						\
 				srcs/irc/CmdParser.cpp					\
 				srcs/irc/Mode.cpp						\
 				srcs/irc/cmd/CmdPASS.cpp				\
@@ -44,6 +45,9 @@ SRCS		=	main.cpp								\
 				srcs/irc/cmd/CmdQUIT.cpp				\
 				srcs/irc/cmd/CmdPONG.cpp				\
 				srcs/irc/cmd/CmdMODE.cpp				\
+				srcs/irc/cmd/CmdPRIVMSG.cpp				\
+				srcs/irc/cmd/CmdPART.cpp				\
+				srcs/irc/cmd/CmdTOPIC.cpp				\
 				srcs/irc/ISubscriber.cpp				\
 				srcs/irc/User.cpp						\
 				srcs/irc/Users.cpp						\
@@ -65,6 +69,7 @@ HEADERS		=	include/irc/Server.hpp					\
 				include/irc/Replies.hpp					\
 				include/irc/Role.hpp					\
 				include/irc/Parse.hpp					\
+				include/irc/Masks.hpp					\
 				include/irc/CmdParser.hpp				\
 				include/irc/CmdFactory.hpp				\
 				include/irc/CmdCtx.hpp					\
@@ -76,6 +81,9 @@ HEADERS		=	include/irc/Server.hpp					\
 				include/irc/cmd/CmdWHO.hpp				\
 				include/irc/cmd/CmdPONG.hpp				\
 				include/irc/cmd/CmdQUIT.hpp				\
+				include/irc/cmd/CmdPRIVMSG.hpp			\
+				include/irc/cmd/CmdPART.hpp				\
+				include/irc/cmd/CmdTOPIC.hpp			\
 				srcs/irc/cmd/CmdMODE.hpp				\
 				include/network/Network.hpp				\
 				include/network/Selector.hpp			\

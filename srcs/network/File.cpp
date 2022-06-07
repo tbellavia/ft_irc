@@ -41,15 +41,28 @@ File::~File() {
 	
 }
 
-Socket *File::socket() {
+void
+File::set_event(int event) {
+	m_events |= event;
+}
+
+void
+File::unset_event(int event) {
+	m_events &= ~event;
+}
+
+Socket*
+File::socket() {
 	return m_socket;
 }
 
-std::string const &File::buffer() const {
+std::string const&
+File::buffer() const {
 	return m_buffer;
 }
 
-bool File::isset(int event) const {
+bool
+File::isset_event(int event) const {
 	return m_events & event;
 }
 
@@ -121,24 +134,59 @@ File::push_response(std::string const &response){
 	m_responses.push(response);
 }
 
-std::pair<bool, std::string>
+std::string
 File::pop_response() {
-	std::string ret;
-	std::string curr = m_responses.front();
-	bool available = true;
-
-	if ( curr.size() > BUF_SIZE) {
-		ret = curr.substr(0, BUF_SIZE);
-		m_responses.front() = curr.substr(BUF_SIZE, curr.size());
-	} else {
-		ret = curr;
-		m_responses.pop();
-		available = false;
-	}
-	return std::make_pair(available, ret);
+	return m_responses.pop();
 }
 
 bool
 File::available_response() const {
+	return m_responses.available();
+}
+
+void
+File::seek_response(size_t offset) {
+	m_responses.seek(offset);
+}
+
+/* Response buffer */
+
+File::ResponseBuffer::ResponseBuffer() : 
+	m_responses(), 
+	m_begin() { }
+
+File::ResponseBuffer::ResponseBuffer(ResponseBuffer const &other) :
+	m_responses(other.m_responses),
+	m_begin(other.m_begin) { }
+
+File::ResponseBuffer&
+File::ResponseBuffer::operator=(ResponseBuffer const &other) {
+	if ( &other == this )
+		return *this;
+	m_responses = other.m_responses;
+	m_begin = other.m_begin;
+	return *this;
+}
+
+File::ResponseBuffer::~ResponseBuffer() { }
+
+std::string
+File::ResponseBuffer::pop() {
+	m_responses = m_responses.substr(m_begin, m_responses.length());
+	return m_responses;
+}
+
+void
+File::ResponseBuffer::push(std::string const &response) {
+	m_responses.append(response);
+}
+
+void
+File::ResponseBuffer::seek(size_t offset) {
+	m_begin = offset;
+}
+
+bool
+File::ResponseBuffer::available() const {
 	return !m_responses.empty();
 }

@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 14:22:35 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/11 22:06:06 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/05 23:04:13 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,13 @@
 # include "cmd/CmdUSER.hpp"
 # include "cmd/CmdOPER.hpp"
 # include "cmd/CmdJOIN.hpp"
+# include "cmd/CmdPRIVMSG.hpp"
 # include "cmd/CmdWHO.hpp"
 # include "cmd/CmdPONG.hpp"
 # include "cmd/CmdQUIT.hpp"
 # include "cmd/CmdMODE.hpp"
+# include "cmd/CmdPART.hpp"
+# include "cmd/CmdTOPIC.hpp"
 
 namespace IRC
 {
@@ -42,6 +45,9 @@ namespace IRC
 		ACmd *create_quit_cmd(CmdCtx &ctx, std::string const &request);
 		ACmd *create_who_cmd(CmdCtx &ctx, std::string const &request);
 		ACmd *create_mode_cmd(CmdCtx &ctx, std::string const &request);
+		ACmd *create_privmsg_cmd(CmdCtx &ctx, std::string const &request);
+		ACmd *create_part_cmd(CmdCtx &ctx, std::string const &request);
+		ACmd *create_topic_cmd(CmdCtx &ctx, std::string const &request);
 	public:
 		CmdFactory();
 		CmdFactory(CmdFactory const &copy);

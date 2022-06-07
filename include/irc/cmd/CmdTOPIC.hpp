@@ -1,36 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   CmdCtx.hpp                                         :+:      :+:    :+:   */
+/*   CmdTOPIC.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/20 14:26:54 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/28 20:05:01 by bbellavi         ###   ########.fr       */
+/*   Created: 2022/06/05 23:00:40 by bbellavi          #+#    #+#             */
+/*   Updated: 2022/06/06 14:47:32 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CMDCTX_HPP
-#define CMDCTX_HPP
+#ifndef CMDTOPIC_HPP
+#define CMDTOPIC_HPP
 
-# include "User.hpp"
-# include "Channels.hpp"
-# include "MasterUsers.hpp"
-# include "Config.hpp"
+# include "ACmd.hpp"
 
 namespace IRC
 {
-	struct CmdCtx {
-		User			*sender;
-		Channels		&channels;
-		Users			users;
-		ConfigServer	&config;
+	struct CmdTOPIC : public ACmd {
+		CmdTOPIC(CmdCtx &ctx, std::string const &request);
+		virtual ~CmdTOPIC();
 
-		CmdCtx();
-		CmdCtx(User *sender, Channels &channels, MasterUsers &users, ConfigServer &config);
-		CmdCtx(CmdCtx const &other);
-		~CmdCtx();
-		CmdCtx &operator=(CmdCtx const &other);
+		virtual Actions execute();
 	};
 }
 

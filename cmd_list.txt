@@ -7,20 +7,20 @@
 
 [Channel Operations]
 	- JOIN    [x]
-	- PART    []
+	- PART    [x]
 	- MODE    []
-	- TOPIC   []
+	- TOPIC   [X]
 	- NAMES   []
 	- LIST    []
 	- INVITE  []
 	- KICK    []
 
 [Sending Messages]
-	- PRIVMSG []
-	- NOTICE  []
+	- PRIVMSG [x]
+	- NOTICE  [x]
 
 [User Queries]
-	- WHO   []
+	- WHO   [x]
 	- WHOIS []
 
 [Miscellaneous]
