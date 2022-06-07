@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/07 13:53:49 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/07 15:34:08 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -379,6 +379,24 @@ IRC::ReplyBuilder::reply_end_of_names(std::string const &channel){
 	reply.append(" ");
 	reply.append(channel);
 	reply.append(" :End of /NAMES list");
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::reply_ban_list(
+	std::string const &channel_name, std::string const &banid
+){
+	std::string reply = this->build_header_(NumericReplies::RPL_BANLIST);
+
+	reply += " " + channel_name + " " + banid;
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::reply_end_of_ban_list(std::string const &channel_name){
+	std::string reply = this->build_header_(NumericReplies::RPL_ENDOFBANLIST);
+
+	reply += " " + channel_name + " :End of ban list";
 	return reply;
 }
 

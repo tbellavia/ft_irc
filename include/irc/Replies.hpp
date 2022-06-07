@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:16 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/07 13:35:35 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/07 15:33:12 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,10 @@ namespace IRC
 		std::string reply_name_reply(Channel &channel);
 		std::string reply_end_of_names(std::string const &channel);
 		std::string reply_join(std::string const &channel);
+		std::string reply_ban_list(
+			std::string const &channel_name, std::string const &banid
+		);
+		std::string reply_end_of_ban_list(std::string const &channel_name);
 
 		std::string reply_who_reply(User *user, Channel *channel = NULL);
 		std::string reply_end_of_who(Channel *channel = NULL);

@@ -6,10 +6,11 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:38:55 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/07 13:53:08 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/07 15:41:17 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <algorithm>
 #include "Channel.hpp"
 #include "Masks.hpp"
 
@@ -124,6 +125,11 @@ IRC::Channel::get_limit() const {
 std::string const&
 IRC::Channel::get_topic() const {
 	return m_topic;
+}
+
+std::vector<std::string> const&
+IRC::Channel::get_ban_masks() const {
+	return m_ban_masks;
 }
 
 bool
@@ -258,6 +264,21 @@ IRC::Channel::unsubscribe(User *user){
 void
 IRC::Channel::setOperator(User *user) {
 	m_operators.add(user);
+}
+
+void
+IRC::Channel::addBanMask(std::string const &ban_mask) {
+	m_ban_masks.push_back(ban_mask);
+}
+
+void
+IRC::Channel::deleteBanMask(std::string const &ban_mask) {
+	std::vector<std::string>::iterator it = std::find(
+		m_ban_masks.begin(), m_ban_masks.end(), ban_mask
+	);
+
+	if (it != m_ban_masks.end())
+		m_ban_masks.erase(it);
 }
 
 void

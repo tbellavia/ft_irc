@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:34:06 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/07 13:47:07 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/07 15:36:44 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ namespace IRC
 		std::string const &get_key() const;
 		int get_limit() const;
 		std::string const &get_topic() const;
+		std::vector<std::string> const &get_ban_masks() const;
 
 		bool equal_key(std::string const &key) const;
 
@@ -99,6 +100,8 @@ namespace IRC
 		void unsubscribe(User *user);
 		void setOperator(User *user);
 		void unsetOperator(User *user);
+		void addBanMask(std::string const &ban_mask);
+		void deleteBanMask(std::string const &ban_mask);
 		void allowVoice(User *user);
 		void disallowVoice(User *user);
 

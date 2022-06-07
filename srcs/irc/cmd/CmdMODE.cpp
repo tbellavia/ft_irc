@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:52:41 by lperson-          #+#    #+#             */
-/*   Updated: 2022/06/07 13:47:17 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/07 15:51:20 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ IRC::CmdMODE::setter_t const IRC::CmdMODE::m_parameters_func[
 ] = 
 {
 	&IRC::CmdMODE::set_channel_op_,
-	&IRC::CmdMODE::set_channel_limit_
+	&IRC::CmdMODE::set_channel_limit_,
+	&IRC::CmdMODE::set_channel_ban_mask_
 };
 
 /**
@@ -303,6 +304,59 @@ bool IRC::CmdMODE::set_channel_limit_(
 		channel.set_limit(-1);
 		return true;
 	}
+	return false;
+}
+
+bool IRC::CmdMODE::set_channel_ban_mask_(
+	bool to_add, ReplyBuilder &reply, Actions &actions,
+	Channel &channel, std::string const *parameter
+)
+{
+	// List ban masks
+	if (!parameter && to_add)
+	{
+		std::vector<std::string> const &ban_masks = channel.get_ban_masks();
+		for (std::size_t i = 0; i < ban_masks.size(); ++i)
+		{
+			actions.push(
+				channel.notify(
+					reply.reply_ban_list(channel.get_name() ,ban_masks[i])
+				)
+			);
+		}
+		actions.push(
+			channel.notify(reply.reply_end_of_ban_list(channel.get_name()))
+		);
+		return true;
+	}
+
+	if (!to_add && !parameter)
+	{
+		;// Error: need more params ?
+	}
+
+	// Add ban mask
+	if (to_add && parameter)
+	{
+		std::vector<std::string> const &ban_masks = channel.get_ban_masks();
+		std::vector<std::string>::const_iterator it = std::find(
+			ban_masks.begin(), ban_masks.end(), *parameter
+		);
+
+		if (it == ban_masks.end())
+		{
+			channel.addBanMask(*parameter);
+		}
+		return true;
+	}
+
+	// Delete ban mask
+	if (!to_add && parameter)
+	{
+		channel.deleteBanMask(*parameter);
+		return true;
+	}
+
 	return false;
 }
 
