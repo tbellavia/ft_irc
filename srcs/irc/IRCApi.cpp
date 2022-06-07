@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   IRCApi.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 04:11:43 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/09 11:37:05 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/03 19:14:58 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,10 @@ IRC::Api::connect(Socket *socket) {
 void
 IRC::Api::disconnect(Socket *socket){
 	std::cout << "Unregister user: " << socket->fd() << std::endl;
+	User *user = m_users.find(socket);
+
+	if ( user != NULL )
+		m_channels.remove_user(user);
 	m_users.remove(socket);
 }
 

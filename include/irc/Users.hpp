@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Users.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 15:22:18 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/10 08:59:40 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/28 22:10:18 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 # include <set>
 # include "User.hpp"
 # include "Action.hpp"
+# include "MasterUsers.hpp"
+
 namespace IRC
 {
 	class Users {
@@ -34,6 +36,7 @@ namespace IRC
 															const_reverse_view_type;
 		
 		Users();
+		Users(MasterUsers const &users);
 		Users(Users const &other);
 		Users &operator=(Users const &other);
 		~Users();
@@ -69,7 +72,12 @@ namespace IRC
 		template<typename Pred>
 		std::vector<User*> select(Pred pred);
 
-		Action notify(std::string const &msg);
+		template<typename Pred>
+		User *select_unique(Pred pred);
+
+		Action notify(std::string const &msg, User *sender = NULL);
+		// Action notify_server_mask(std::string const &msg, std::string const &mask, User *sender = NULL);
+		Action notify_host_mask(std::string const &msg, std::string const &mask, User *sender = NULL);
 	};
 
 	template<typename Pred>
@@ -98,6 +106,17 @@ namespace IRC
 				selected.push_back(user);
 		}
 		return selected;
+	}
+
+	template<typename Pred>
+	User *Users::select_unique(Pred pred){
+		iterator it = m_users.begin();
+
+		for ( ; it != m_users.end() ; ++it ) {
+			if ( pred(*it) )
+				return *it;
+		}
+		return NULL;
 	}
 }
 

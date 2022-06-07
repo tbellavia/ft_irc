@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:34:06 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/20 15:11:42 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/31 12:43:58 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,12 @@ namespace IRC
 		void set_key(std::string const &pass);
 		void set_topic(std::string const &topic);
 
+		bool is_user(User *user) const;
 		bool is_banned_user(User *user) const;
 		bool is_invited_user(User *user) const;
 		bool is_operator_user(User *user) const;
 		bool is_voices_user(User *user) const;
+		bool is_authorized(User *user) const;
 
 		/**
 		 * Getters for users:
@@ -74,6 +76,7 @@ namespace IRC
 		reverse_iterator rend();
 		const_reverse_iterator rend() const;
 
+
 		Users::view_type get_users();
 
 		std::string const &get_name() const;
@@ -87,6 +90,7 @@ namespace IRC
 		bool is_secret() const;
 		bool is_invite() const;
 		bool is_moderated() const;
+		bool is_outside_disable() const;
 
 		void subscribe(User *user);
 		void unsubscribe(User *user);
@@ -95,7 +99,7 @@ namespace IRC
 		void allowVoice(User *user);
 		void disallowVoice(User *user);
 
-		Action notify(std::string const &msg);
+		Action notify(std::string const &msg, User *sender = NULL);
 
 		static bool is_channel_name(std::string const &name);
 		static bool is_valid_name(std::string const &name);

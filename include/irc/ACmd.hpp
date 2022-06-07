@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ACmd.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 14:42:07 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/19 11:44:06 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/28 19:53:56 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 # include "Parse.hpp"
 # include "CmdParser.hpp"
 
-# define SERVER_NAME "ft_irc.com"
 # define Expected_args(n) (n + 1)
 
 namespace IRC
@@ -47,7 +46,7 @@ namespace IRC
 
 		User		*sender();
 		Channels	&channels();
-		MasterUsers	&users();
+		Users		&users();
 		std::string	const &server_pass();
 		std::string const &server_name();
 	};

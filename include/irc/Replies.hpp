@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:16 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/24 15:38:35 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/07 13:35:35 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ namespace IRC
 
 		std::string build_header_(int code);
 		std::string code_to_string_(int code);
-		std::string get_user_mode_symbol_(Channel *channel, User *user);
+		std::string get_user_mode_symbol_(User *user, Channel *channel = NULL);
 	public:
 		ReplyBuilder(std::string const &sender, User *target = NULL);
 		ReplyBuilder(ReplyBuilder const &other);
@@ -53,6 +53,13 @@ namespace IRC
 		std::string error_chan_o_privs_needed(std::string const &channel_name);
 		std::string error_unknown_mode(char mode);
 
+		// Sending errors
+		std::string error_no_recipient(std::string const &cmd);
+		std::string error_cannot_send_to_chan(std::string const &channel);
+		std::string error_wild_toplevel(std::string const &mask);
+		std::string error_no_toplevel(std::string const &mask);
+		std::string error_no_text_to_send();
+
 		// Channel replies
 		std::string reply_channel_mode_is(Channel const &channel);
 		std::string reply_channel_mode_is(
@@ -61,12 +68,14 @@ namespace IRC
 			std::vector<std::string> const &mode_parameters
 		);
 		std::string reply_topic(std::string const &channel, std::string const &topic);
+		std::string reply_notopic(std::string const &channel);
 		std::string reply_name_reply(Channel &channel);
 		std::string reply_end_of_names(std::string const &channel);
 		std::string reply_join(std::string const &channel);
 
-		std::string reply_who_reply(Channel *channel, User *user);
-		std::string reply_end_of_who(std::string const &name);
+		std::string reply_who_reply(User *user, Channel *channel = NULL);
+		std::string reply_end_of_who(Channel *channel = NULL);
+		std::string reply_end_of_who(std::string const &mask);
 
 		// User errors (mode etc...)
 		std::string error_users_dont_match();
@@ -79,6 +88,9 @@ namespace IRC
 		std::string reply_u_mode_is(
 			std::string const &user_name, std::string const &modes
 		);
+
+		std::string reply_privmsg(std::string const &cmd, std::string const &msg, std::string const &channel);
+		std::string reply_part(std::string const &channel, std::string const &message);
 
 		std::string error_no_oper_host();
 		std::string error_password_mismatch();

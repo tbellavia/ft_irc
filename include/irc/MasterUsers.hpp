@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MasterUsers.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 15:55:53 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/09 11:35:24 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/28 22:02:32 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ namespace IRC
 		User *create(Socket *socket);
 		void remove(Socket *socket);
 		User *find(Socket *socket);
+
+		std::map<int, User*> const &get_users() const;
 
 		template<typename Pred>
 		bool contains(Pred pred);

@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   User.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 14:36:26 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/19 11:47:44 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/01 15:50:39 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "User.hpp"
 # include "Network.hpp"
+# include "Masks.hpp"
 
 IRC::User::User() : 
 	m_username(),
@@ -120,6 +121,23 @@ IRC::User::get_socket() {
 std::string
 IRC::User::get_hostname() const{
 	return m_socket->hostname();
+}
+
+bool
+IRC::User::is_server_operator() const {
+	return this->mode_isset(MODE_OPERATOR);
+}
+
+bool
+IRC::User::is_invisible() const {
+	return this->mode_isset(MODE_INVISIBLE);
+}
+
+bool
+IRC::User::mask_match(std::string const &mask) {
+	return mask::match(this->get_hostname(), mask)
+		|| mask::match(this->get_realname(), mask)
+		|| mask::match(this->get_nickname(), mask);
 }
 
 bool

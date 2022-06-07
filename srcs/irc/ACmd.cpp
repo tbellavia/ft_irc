@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ACmd.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 21:55:45 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/19 12:12:52 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/05/28 19:52:28 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ IRC::ACmd::channels(){
 	return m_ctx.channels;
 }
 
-IRC::MasterUsers &
+IRC::Users &
 IRC::ACmd::users(){
 	return m_ctx.users;
 }

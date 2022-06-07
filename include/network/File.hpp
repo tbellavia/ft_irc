@@ -20,11 +20,25 @@
 # define CRLF "\r\n"
 
 class File {
+	class ResponseBuffer {
+		std::string				m_responses;
+		size_t					m_begin;
+	public:
+		ResponseBuffer();
+		ResponseBuffer(ResponseBuffer const &other);
+		ResponseBuffer &operator=(ResponseBuffer const &other);
+		~ResponseBuffer();
+
+		std::string pop();
+		void push(std::string const &response);
+		void seek(size_t offset);
+		bool available() const;
+	};
 	Socket					*m_socket;
 	int						m_events;
 	std::string				m_buffer;
 	std::queue<std::string> m_requests;
-	std::queue<std::string> m_responses;
+	ResponseBuffer			m_responses;
 public:
 	File();
 	File(Socket *socket, int events);
@@ -35,7 +49,9 @@ public:
 	Socket				*socket();
 	std::string const	&buffer() const;
 	
-	bool				isset(int event) const;
+	void				set_event(int event);
+	void				unset_event(int event);
+	bool				isset_event(int event) const;
 	void				clear();
 
 	// Request Queue Interface
@@ -45,8 +61,10 @@ public:
 	bool				available_request() const;
 	bool				available_response() const;
 
-	std::string						pop_request();
-	std::pair<bool, std::string>	pop_response();
+	std::string			pop_request();
+	std::string			pop_response();
+
+	void seek_response(size_t offset);
 };
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CmdJOIN.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 22:53:22 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/20 15:12:39 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/06 14:45:16 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,5 +103,9 @@ IRC::CmdJOIN::channel_joined_reply(ReplyBuilder &reply, Actions &actions, Channe
 	// RPL_ENDOFNAMES
 	actions.push(Action::send(this->sender(), reply.reply_end_of_names(name)));
 	// RPL_TOPIC
-	actions.push(Action::send(this->sender(), reply.reply_topic(name, channel.get_topic())));
+	std::string const &topic = channel.get_topic();
+	if ( topic.empty() )
+		actions.push(Action::send(this->sender(), reply.reply_notopic(name)));
+	else
+		actions.push(Action::send(this->sender(), reply.reply_topic(name, channel.get_topic())));
 }

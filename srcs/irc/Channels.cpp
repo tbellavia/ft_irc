@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channels.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:19:21 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/09 12:32:04 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/03 19:40:40 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,11 +70,42 @@ IRC::Channels::find(std::string const &name) {
 
 void
 IRC::Channels::remove_user(User *user){
-	std::map<std::string, Channel>::iterator it;
+	std::map<std::string, Channel>::iterator it = m_channels.begin();
 
 	for ( ; it != m_channels.end() ; ++it ){
 		it->second.unsubscribe(user);
 	}
+}
+
+/**
+ * Returns the first Channel where user is present.
+ */
+IRC::Channel*
+IRC::Channels::find_by_user(User *user) {
+	std::map<std::string, Channel>::reverse_iterator it = m_channels.rbegin();
+
+	for ( ; it != m_channels.rend() ; ++it ){
+		if ( (*it).second.is_user(user) )
+			return &it->second;
+	}
+	return NULL;
+}
+
+/**
+ * Notify all channels the `user' has subscribed to.
+ * 
+ */
+IRC::Actions
+IRC::Channels::notify_by_user(User *user, std::string const &message) {
+	std::map<std::string, Channel>::iterator it = m_channels.begin();
+	Actions actions;
+
+	for ( ; it != m_channels.end() ; ++it ){
+		if ( it->second.is_user(user) ){
+			actions.push(it->second.notify(message, user));
+		}
+	}
+	return actions;
 }
 
 /**
