@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/08 11:43:09 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/08 14:17:20 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,10 @@ IRC::ReplyBuilder::error_already_registered() {
 	reply.append(":You may not reregister");
 	return reply;
 }
+
+/*
+ * Connections replies
+*/
 
 std::string
 IRC::ReplyBuilder::reply_welcome(std::string const &user_mask) {
@@ -112,6 +116,31 @@ IRC::ReplyBuilder::connection_complete_replies(
 	);
 	return reply_queue;
 }
+
+/*
+ * Ping - Pong replies
+*/
+
+std::string
+IRC::ReplyBuilder::reply_ping(std::string const &name) {
+	std::string reply = this->build_header_();
+
+	return "PING " + name;
+}
+
+std::string
+IRC::ReplyBuilder::reply_pong(std::string const &name) {
+	return "PONG " + name;
+}
+
+std::string
+IRC::ReplyBuilder::error_no_origin() {
+	std::string reply = this->build_header_(NumericReplies::ERR_NOORIGIN);
+
+	reply += " :No origin specified";
+	return reply;
+}
+
 
 std::string IRC::ReplyBuilder::error_no_such_nick(std::string const &nickname)
 {
@@ -588,6 +617,23 @@ IRC::ReplyBuilder::build_header_(int code){
 	// TODO: Manage 0 padding.
 	s.append(this->code_to_string_(code));
 	s.append(" ");
+	if ( m_target == NULL )
+		s.append("*");
+	else
+		// TODO: For now, header is built with ip representation, should we use
+		// the hostname ? 
+		s.append(m_target->get_hostname());
+	return s;
+}
+
+std::string
+IRC::ReplyBuilder::build_header_(){
+	std::string s;
+
+	s.append(":");
+	s.append(m_sender);
+	s.append(" ");
+	// TODO: Manage 0 padding.
 	if ( m_target == NULL )
 		s.append("*");
 	else

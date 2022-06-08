@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:16 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/08 11:42:23 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/08 13:38:25 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ namespace IRC
 		User		*m_target;
 
 		std::string build_header_(int code);
+		std::string build_header_();
 		std::string code_to_string_(int code);
 		std::string get_user_mode_symbol_(User *user, Channel *channel = NULL);
 	public:
@@ -50,6 +51,11 @@ namespace IRC
 		IRC::Actions connection_complete_replies(
 			User *sender, ConfigServer const &config
 		);
+
+		// Ping - Pong
+		std::string reply_ping(std::string const &names);
+		std::string reply_pong(std::string const &names);
+		std::string error_no_origin();
 
 		// Nickname
 		std::string error_no_such_nick(std::string const &nickname);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CmdFactory.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 23:07:36 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/05 23:05:41 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/08 13:55:02 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ IRC::CmdFactory::CmdFactory() : ICmdFactory(), m_callbacks()
 	m_callbacks.insert(std::make_pair("OPER", &CmdFactory::create_oper_cmd));
 	m_callbacks.insert(std::make_pair("JOIN", &CmdFactory::create_join_cmd));
 	m_callbacks.insert(std::make_pair("WHO", &CmdFactory::create_who_cmd));
+	m_callbacks.insert(std::make_pair("PING", &CmdFactory::create_ping_cmd));
 	m_callbacks.insert(std::make_pair("PONG", &CmdFactory::create_pong_cmd));
 	m_callbacks.insert(std::make_pair("QUIT", &CmdFactory::create_quit_cmd));
 	m_callbacks.insert(std::make_pair("MODE", &CmdFactory::create_mode_cmd));
@@ -63,6 +64,11 @@ IRC::CmdFactory::create_nick_cmd(CmdCtx &ctx, std::string const &request) {
 IRC::ACmd*
 IRC::CmdFactory::create_user_cmd(CmdCtx &ctx, std::string const &request) {
 	return new CmdUSER(ctx, request);
+}
+
+IRC::ACmd*
+IRC::CmdFactory::create_ping_cmd(CmdCtx &ctx, std::string const &request) {
+	return new CmdPING(ctx, request);
 }
 
 IRC::ACmd*

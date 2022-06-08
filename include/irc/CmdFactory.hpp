@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CmdFactory.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 14:22:35 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/05 23:04:13 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/08 13:54:35 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include "cmd/CmdJOIN.hpp"
 # include "cmd/CmdPRIVMSG.hpp"
 # include "cmd/CmdWHO.hpp"
+# include "cmd/CmdPING.hpp"
 # include "cmd/CmdPONG.hpp"
 # include "cmd/CmdQUIT.hpp"
 # include "cmd/CmdMODE.hpp"
@@ -41,6 +42,7 @@ namespace IRC
 		ACmd *create_user_cmd(CmdCtx &ctx, std::string const &request);
 		ACmd *create_oper_cmd(CmdCtx &ctx, std::string const &request);
 		ACmd *create_join_cmd(CmdCtx &ctx, std::string const &request);
+		ACmd *create_ping_cmd(CmdCtx &ctx, std::string const &request);
 		ACmd *create_pong_cmd(CmdCtx &ctx, std::string const &request);
 		ACmd *create_quit_cmd(CmdCtx &ctx, std::string const &request);
 		ACmd *create_who_cmd(CmdCtx &ctx, std::string const &request);
