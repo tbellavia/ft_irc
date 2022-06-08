@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:52:41 by lperson-          #+#    #+#             */
-/*   Updated: 2022/06/07 17:14:44 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/08 15:49:57 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,12 +142,17 @@ IRC::Actions IRC::CmdMODE::execute_channel_mode_(
 			actions, reply, *channel, m_mode_lists[i]
 		);
 	}
-	Actions reply_action = channel->notify(
-		reply.reply_channel_mode_is(
-			m_target, m_mode_reply, m_mode_arguments_reply
-		)
-	);
-	actions.append(reply_action);
+
+	if (!m_mode_reply.empty())
+	{
+		ReplyBuilder user_reply(this->sender()->get_mask());
+		Actions reply_action = channel->notify(
+			user_reply.reply_channel_mode(
+				m_target, m_mode_reply, m_mode_arguments_reply
+			)
+		);
+		actions.append(reply_action);
+	}
 	return actions;
 }
 
@@ -489,10 +494,15 @@ IRC::Actions IRC::CmdMODE::execute_user_mode_(ReplyBuilder &reply)
 	{
 		this->execute_user_mode_list_(actions, reply, *sender, m_mode_lists[i]);
 	}
-	Actions reply_action = Actions::unique_send(
-		sender, reply.reply_u_mode_is(m_target, m_mode_reply)
-	);
-	actions.append(reply_action);
+
+	if (!m_mode_reply.empty())
+	{
+		ReplyBuilder user_reply(sender->get_mask());
+		Actions reply_action = Actions::unique_send(
+			sender, user_reply.reply_user_mode(m_target, m_mode_reply)
+		);
+		actions.append(reply_action);
+	}
 	return actions;
 }
 
