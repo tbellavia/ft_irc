@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:52:41 by lperson-          #+#    #+#             */
-/*   Updated: 2022/06/08 17:53:23 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/08 18:46:11 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,11 +130,6 @@ IRC::Actions IRC::CmdMODE::execute_channel_mode_(
 	if (m_arguments.size() == 2)
 		return channel->notify(reply.reply_channel_mode_is(*channel));
 
-	if (!channel->is_operator_user(sender))
-		return Actions::unique_send(
-			sender, reply.error_chan_o_privs_needed(channel_name)
-		);
-
 	Actions actions;
 	for (std::size_t i = 0; i < m_mode_lists.size(); ++i)
 	{
@@ -153,6 +148,8 @@ IRC::Actions IRC::CmdMODE::execute_channel_mode_(
 		);
 		actions.append(reply_action);
 	}
+	else if (actions.empty())
+		return Actions::unique_idle();
 	return actions;
 }
 
@@ -164,7 +161,7 @@ void IRC::CmdMODE::execute_channel_mode_list_(
 )
 {
 	std::string const delimiters = "+-";
-	bool is_add = true, already_written = false;
+	bool is_add = true, writted = false;
 	char correct_delimiter = '+';
 	std::size_t i = 0;
 	if (delimiters.find(mode_list[i]) != std::string::npos)
@@ -180,7 +177,6 @@ void IRC::CmdMODE::execute_channel_mode_list_(
 	for (; i < mode_list.length(); ++i)
 	{
 		Mode mode = parse_one_mode_(mode_list[i]);
-		std::size_t pos = m_parameter_modes.find(mode.litteral);
 		if (mode.value < 0)
 		{
 			actions.push(Action(
@@ -189,44 +185,71 @@ void IRC::CmdMODE::execute_channel_mode_list_(
 				reply.error_unknown_mode(mode_list[i])
 			));
 		}
-		else if (pos != std::string::npos)
+		else if (
+			this->execute_one_chan_mode_(is_add, mode, reply, actions, channel)
+		)
 		{
-			bool worked = (this->*m_parameters_func[pos])(
-				is_add, reply, actions, channel, mode.parameter
-			);
-			if (worked)
+			if (!writted)
 			{
-				if (!already_written)
-				{
-					already_written = true;
-					m_mode_reply.push_back(correct_delimiter);
-				}
-				m_mode_reply += mode.litteral;
-				if (mode.parameter)
-					m_mode_arguments_reply.push_back(*mode.parameter);
+				writted = true;
+				m_mode_reply += correct_delimiter;
 			}
-		}
-		else if (is_add && !(channel.get_mode() & mode.value))
-		{
-			if (!already_written)
-			{
-				already_written = true;
-				m_mode_reply.push_back(correct_delimiter);
-			}
-			channel.set_mode(mode.value);
+
 			m_mode_reply += mode.litteral;
-		}
-		else if (!is_add && channel.get_mode() & mode.value)
-		{
-			if (!already_written)
-			{
-				already_written = true;
-				m_mode_reply.push_back(correct_delimiter);
-			}
-			channel.unset_mode(mode.value);
-			m_mode_reply += mode.litteral;
+			if (mode.parameter)
+				m_mode_arguments.push_back(*mode.parameter);
 		}
 	}
+}
+
+bool IRC::CmdMODE::execute_one_chan_mode_(
+	bool to_add, Mode mode, ReplyBuilder &reply,
+	Actions &actions, Channel &channel
+)
+{
+	if (m_parameter_modes.find(mode.litteral) != std::string::npos)
+	{
+		if (mode.parameter && !channel.is_operator_user(this->sender()))
+		{
+			actions.push(IRC::Action(
+				IRC::Event::SEND, this->sender(),
+				reply.error_chan_o_privs_needed(channel.get_name())
+			));
+			return false;
+		}
+
+		for (std::size_t i = 0; i < m_parameter_modes.length(); ++i)
+		{
+			if (m_parameter_modes[i] == mode.litteral)
+				return (this->*m_parameters_func[i])(
+					to_add, reply, actions, channel, mode.parameter
+				);
+		}
+	}
+	else if (this->can_modified(to_add, mode, channel))
+	{
+		if (!channel.is_operator_user(this->sender()))
+		{
+			actions.push(IRC::Action(
+				IRC::Event::SEND, this->sender(),
+				reply.error_chan_o_privs_needed(channel.get_name())
+			));
+			return false;
+		}
+		if (!to_add)
+			channel.unset_mode(mode.value);
+		else
+			channel.set_mode(mode.value);
+		return true;
+	}
+	return false;
+}
+
+bool IRC::CmdMODE::can_modified(
+	bool is_add, Mode const &mode, Channel const &channel
+)
+{
+	return is_add != (channel.get_mode() & mode.value);
 }
 
 bool IRC::CmdMODE::set_channel_op_(
@@ -334,7 +357,7 @@ bool IRC::CmdMODE::set_channel_ban_mask_(
 		actions.push(
 			channel.notify(reply.reply_end_of_ban_list(channel.get_name()))
 		);
-		return true;
+		return false;
 	}
 
 	if (!to_add && !parameter)
