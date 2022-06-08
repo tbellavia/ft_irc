@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:34:06 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/07 17:12:19 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/08 17:35:48 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,8 @@ namespace IRC
 		void deleteBanMask(std::string const &ban_mask);
 		void allowVoice(User *user);
 		void disallowVoice(User *user);
+		void inviteUser(User *user);
+		void uninviteUser(User *user);
 
 		Action notify(std::string const &msg, User *sender = NULL);
 

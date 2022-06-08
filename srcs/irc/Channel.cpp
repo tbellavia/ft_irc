@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:38:55 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/07 17:14:50 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/08 17:37:32 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -314,6 +314,16 @@ IRC::Channel::allowVoice(User *user) {
 void
 IRC::Channel::disallowVoice(User *user) {
 	m_voices.remove(user);
+}
+
+void
+IRC::Channel::inviteUser(User *user) {
+	m_invites.add(user);
+}
+
+void
+IRC::Channel::uninviteUser(User *user) {
+	m_invites.remove(user);
 }
 
 IRC::Action

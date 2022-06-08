@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/08 16:16:56 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/08 17:31:15 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,8 +123,6 @@ IRC::ReplyBuilder::connection_complete_replies(
 
 std::string
 IRC::ReplyBuilder::reply_ping(std::string const &name) {
-	std::string reply = this->build_header_();
-
 	return "PING " + name;
 }
 
@@ -141,6 +139,27 @@ IRC::ReplyBuilder::error_no_origin() {
 	return reply;
 }
 
+/*
+ * Invite
+*/
+
+std::string
+IRC::ReplyBuilder::reply_invite(
+	std::string const &nickname, std::string const &channel_name
+) {
+	std::string reply = this->build_header_();
+	
+	return reply + " INVITE " + nickname + " " + channel_name;
+}
+
+std::string
+IRC::ReplyBuilder::reply_inviting(
+	std::string const &nickname, std::string const &channel_name
+) {
+	std::string reply = this->build_header_(NumericReplies::RPL_INVITING);
+
+	return reply + " " + channel_name + nickname;
+}
 
 std::string IRC::ReplyBuilder::error_no_such_nick(std::string const &nickname)
 {
@@ -262,6 +281,17 @@ IRC::ReplyBuilder::error_channel_is_full(std::string const &channel){
 	reply.append(" ");
 	reply.append(channel);
 	reply.append(" :Cannot join channel (+l)");
+	return reply;
+}
+
+
+std::string
+IRC::ReplyBuilder::error_user_on_channel(
+	std::string const &nickname, std::string const &channel_name
+) {
+	std::string reply = this->build_header_(NumericReplies::ERR_USERONCHANNEL);
+
+	reply += " " + nickname + " " + channel_name + " :is already on channel";
 	return reply;
 }
 
@@ -466,6 +496,10 @@ IRC::ReplyBuilder::reply_name_reply(Channel &channel){
 		// `@` -> channel operator
 		// `+` -> channel voices
 		User *user = *users.first;
+
+		if (users.first != channel.begin()){
+			reply.append(" ");
+		}
 
 		reply.append(get_user_mode_symbol_(user, &channel));
 		reply.append(user->get_nickname());

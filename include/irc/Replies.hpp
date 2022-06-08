@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:16 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/08 15:47:48 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/08 16:48:35 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,15 @@ namespace IRC
 		std::string reply_pong(std::string const &names);
 		std::string error_no_origin();
 
+
+		// Invite
+		std::string reply_invite(
+			std::string const &nickname, std::string const &channel_name
+		);
+		std::string reply_inviting(
+			std::string const &nickname, std::string const &channel_name
+		);
+
 		// Nickname
 		std::string error_no_such_nick(std::string const &nickname);
 		std::string error_no_nickname_given();
@@ -71,6 +80,9 @@ namespace IRC
 		std::string error_banned_from_channel(std::string const &channel);
 		std::string error_invite_only_channel(std::string const &channel);
 		std::string error_channel_is_full(std::string const &channel);
+		std::string error_user_on_channel(
+			std::string const &nickname, std::string const &channel_name
+		);
 		std::string	error_not_on_channel(std::string const &channel_name);
 		std::string error_chan_o_privs_needed(std::string const &channel_name);
 		std::string error_unknown_mode(char mode);
