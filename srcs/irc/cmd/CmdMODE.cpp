@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:52:41 by lperson-          #+#    #+#             */
-/*   Updated: 2022/06/08 15:49:57 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/08 17:53:23 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,13 +127,13 @@ IRC::Actions IRC::CmdMODE::execute_channel_mode_(
 			sender, reply.error_not_on_channel(channel_name)
 		);
 
+	if (m_arguments.size() == 2)
+		return channel->notify(reply.reply_channel_mode_is(*channel));
+
 	if (!channel->is_operator_user(sender))
 		return Actions::unique_send(
 			sender, reply.error_chan_o_privs_needed(channel_name)
 		);
-
-	if (m_arguments.size() == 2)
-		return channel->notify(reply.reply_channel_mode_is(*channel));
 
 	Actions actions;
 	for (std::size_t i = 0; i < m_mode_lists.size(); ++i)
