@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:58:06 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/24 15:16:47 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/08 10:04:21 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,11 @@ namespace IRC
 	namespace NumericReplies
 	{
 		enum {
+			/** Connections Replies **/
+			RPL_WELCOME = 001,
+			RPL_YOURHOST,
+			RPL_CREATED,
+			RPL_MYINFO,
 			/** Message Replies **/
 			RPL_NONE = 300,
 			RPL_USERHOST = 302,

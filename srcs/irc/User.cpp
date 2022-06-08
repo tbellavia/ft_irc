@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 14:36:26 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/07 13:52:20 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/08 11:28:11 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,14 +150,14 @@ IRC::User::connected() const {
 
 bool
 IRC::User::connection_complete() const {
-	return mode_isset(MODE_PASS_) && mode_isset(MODE_NICK_) && mode_isset(MODE_USER_);
+	return \
+		mode_isset(MODE_PASS_) && mode_isset(MODE_NICK_) && mode_isset(MODE_USER_);
 }
 
 bool
 IRC::User::pass_accepted() const {
 	return mode_isset(MODE_PASS_);
 }
-
 void
 IRC::User::update(std::string const &msg) {
 	m_socket->send(net::ston(msg));

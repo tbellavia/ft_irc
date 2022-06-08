@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:16 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/07 17:07:25 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/08 11:42:23 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,10 @@
 # include "NumericReplies.hpp"
 # include "User.hpp"
 # include "Channel.hpp"
+
+# include "Config.hpp"
+# include "Actions.hpp"
+
 # define TO_CHAR(n) ('0' + (n % 10))
 
 namespace IRC
@@ -34,7 +38,19 @@ namespace IRC
 
 		std::string error_need_more_params(std::string const &command);
 		std::string error_already_registered();
-		
+
+		// Connection replies
+		std::string reply_welcome(std::string const &user_mask);
+		std::string reply_your_host(
+			std::string const &server_name, std::string const &version
+		);
+		std::string reply_created(std::string const &date);
+		std::string reply_my_info(ConfigServer const &config);
+
+		IRC::Actions connection_complete_replies(
+			User *sender, ConfigServer const &config
+		);
+
 		// Nickname
 		std::string error_no_such_nick(std::string const &nickname);
 		std::string error_no_nickname_given();

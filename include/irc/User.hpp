@@ -6,12 +6,12 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 14:22:35 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/07 13:51:39 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/08 11:32:51 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef USER_HPP
-#define USER_HPP
+# define USER_HPP
 
 # include <string>
 # include "Role.hpp"
@@ -28,7 +28,6 @@ namespace IRC
 		int			m_mode;
 		Socket		*m_socket;
 
-		void update_full_name_();
 	public:
 		User();
 		User(std::string const &pseudo, std::string const &nick, 

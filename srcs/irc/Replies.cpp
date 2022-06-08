@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/07 17:18:01 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/08 11:43:09 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,76 @@ IRC::ReplyBuilder::error_need_more_params(std::string const &command){
 
 std::string
 IRC::ReplyBuilder::error_already_registered() {
-	std::string reply = this->build_header_(NumericReplies::ERR_ALREADYREGISTRED);
+	std::string reply = this->build_header_(
+		NumericReplies::ERR_ALREADYREGISTRED
+	);
 	
 	reply.append(" ");
 	reply.append(":You may not reregister");
 	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::reply_welcome(std::string const &user_mask) {
+	std::string reply = this->build_header_(NumericReplies::RPL_WELCOME);
+
+	reply += " Welcome to the Internet Relay Network " + user_mask;
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::reply_your_host(
+	std::string const &hostname, std::string const &version
+) {
+	std::string reply = this->build_header_(NumericReplies::RPL_YOURHOST);
+
+	reply += "Your host is " + hostname + ", running version " + version;
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::reply_created(std::string const &date) {
+	std::string reply = this->build_header_(NumericReplies::RPL_CREATED);
+
+	reply += "This server was created " + date;
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::reply_my_info(ConfigServer const &config) {
+	std::string reply = this->build_header_(NumericReplies::RPL_MYINFO);
+
+	reply +=
+		" " + config.server_name + " " + config.server_version +
+		" " + IRC_USER_MODE_STRING + " " + IRC_CHANNEL_MODE_STRING;
+	return reply;
+}
+
+IRC::Actions
+IRC::ReplyBuilder::connection_complete_replies(
+	User *sender, ConfigServer const &config
+) {
+	IRC::Actions reply_queue;
+
+	reply_queue.push(
+		IRC::Action(IRC::Event::SEND, sender, this->reply_welcome(
+			sender->get_mask()
+		))
+	);
+	reply_queue.push(
+		IRC::Action(IRC::Event::SEND, sender, this->reply_your_host(
+			config.server_name, config.server_version
+		))
+	);
+	reply_queue.push(
+		IRC::Action(IRC::Event::SEND, sender, this->reply_created(
+			config.server_creation_date
+		))
+	);
+	reply_queue.push(
+		IRC::Action(IRC::Event::SEND, sender, this->reply_my_info(config))
+	);
+	return reply_queue;
 }
 
 std::string IRC::ReplyBuilder::error_no_such_nick(std::string const &nickname)
