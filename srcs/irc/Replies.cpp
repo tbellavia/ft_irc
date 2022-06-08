@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/08 17:31:15 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/08 17:48:09 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -489,7 +489,7 @@ IRC::ReplyBuilder::reply_name_reply(Channel &channel){
 	std::string reply = this->build_header_(NumericReplies::RPL_NAMREPLY);
 	Users::view_type users = channel.get_users();
 
-	reply.append(" ");
+	reply.append(" = ");
 	reply.append(channel.get_name());
 	reply.append(" :");
 	for ( ; users.first != users.second ; ++users.first ){
