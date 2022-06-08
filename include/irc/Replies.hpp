@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:16 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/08 13:38:25 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/08 15:47:48 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ namespace IRC
 
 		// Channel replies
 		std::string reply_channel_mode_is(Channel const &channel);
-		std::string reply_channel_mode_is(
+		std::string reply_channel_mode(
 			std::string const &channel_name,
 			std::string const &modes,
 			std::vector<std::string> const &mode_parameters
@@ -112,7 +112,7 @@ namespace IRC
 		std::string reply_u_mode_is(
 			std::string const &user_name, int user_mode
 		);
-		std::string reply_u_mode_is(
+		std::string reply_user_mode(
 			std::string const &user_name, std::string const &modes
 		);
 

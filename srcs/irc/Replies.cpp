@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/08 14:17:20 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/08 15:53:11 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -326,12 +326,12 @@ IRC::ReplyBuilder::reply_u_mode_is(
 }
 
 std::string
-IRC::ReplyBuilder::reply_u_mode_is(
+IRC::ReplyBuilder::reply_user_mode(
 	std::string const &user_name, std::string const &modes
 ) {
-	std::string reply = this->build_header_(NumericReplies::RPL_UMODEIS);
+	std::string reply = this->build_header_();
 
-	reply += " " + user_name + " " + modes;
+	reply += " MODE " + user_name + " " + modes;
 	return reply;
 }
 
@@ -419,15 +419,15 @@ IRC::ReplyBuilder::reply_channel_mode_is(Channel const &channel)
 }
 
 std::string
-IRC::ReplyBuilder::reply_channel_mode_is(
+IRC::ReplyBuilder::reply_channel_mode(
 	std::string const &channel_name,
 	std::string const &modes,
 	std::vector<std::string> const &mode_parameters
 )
 {
-	std::string reply = this->build_header_(NumericReplies::RPL_CHANNELMODEIS);
+	std::string reply = this->build_header_();
 
-	reply += " " + channel_name + " " + modes;
+	reply += " MODE " + channel_name + " " + modes;
 	for (std::size_t i = 0; i < mode_parameters.size(); ++i)
 		reply += " " + mode_parameters[i];
 	return reply;
@@ -622,7 +622,7 @@ IRC::ReplyBuilder::build_header_(int code){
 	else
 		// TODO: For now, header is built with ip representation, should we use
 		// the hostname ? 
-		s.append(m_target->get_hostname());
+		s.append(m_target->get_nickname());
 	return s;
 }
 
@@ -632,14 +632,11 @@ IRC::ReplyBuilder::build_header_(){
 
 	s.append(":");
 	s.append(m_sender);
-	s.append(" ");
 	// TODO: Manage 0 padding.
-	if ( m_target == NULL )
-		s.append("*");
-	else
+	if ( m_target )
 		// TODO: For now, header is built with ip representation, should we use
 		// the hostname ? 
-		s.append(m_target->get_hostname());
+		s += " " + m_target->get_nickname();
 	return s;
 }
 
