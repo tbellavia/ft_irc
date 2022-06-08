@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 18:47:47 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/27 22:37:46 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/08 10:33:05 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ void IRC::Server::bind() const {
 
 void IRC::Server::serve_forever() {
 	m_selector.add(m_server, Selector::READ);
+	m_config.update_creation_date();
 
 	while ( true ){
 		this->select_();

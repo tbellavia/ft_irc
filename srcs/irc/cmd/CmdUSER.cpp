@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 00:53:55 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/19 13:02:02 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/08 11:44:04 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ IRC::CmdUSER::execute() {
 	if ( user->connection_complete() ){
 		std::cout << "Connection completed!" << std::endl;
 		user->unset_mode(MODE_RESTRICTED_);
+		return reply.connection_complete_replies(user, m_ctx.config);
 	}
 	return Actions::unique_idle();
 }

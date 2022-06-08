@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Replies.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/06 14:46:11 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/08 17:48:09 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,131 @@ IRC::ReplyBuilder::error_need_more_params(std::string const &command){
 
 std::string
 IRC::ReplyBuilder::error_already_registered() {
-	std::string reply = this->build_header_(NumericReplies::ERR_ALREADYREGISTRED);
+	std::string reply = this->build_header_(
+		NumericReplies::ERR_ALREADYREGISTRED
+	);
 	
 	reply.append(" ");
 	reply.append(":You may not reregister");
+	return reply;
+}
+
+/*
+ * Connections replies
+*/
+
+std::string
+IRC::ReplyBuilder::reply_welcome(std::string const &user_mask) {
+	std::string reply = this->build_header_(NumericReplies::RPL_WELCOME);
+
+	reply += " Welcome to the Internet Relay Network " + user_mask;
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::reply_your_host(
+	std::string const &hostname, std::string const &version
+) {
+	std::string reply = this->build_header_(NumericReplies::RPL_YOURHOST);
+
+	reply += "Your host is " + hostname + ", running version " + version;
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::reply_created(std::string const &date) {
+	std::string reply = this->build_header_(NumericReplies::RPL_CREATED);
+
+	reply += "This server was created " + date;
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::reply_my_info(ConfigServer const &config) {
+	std::string reply = this->build_header_(NumericReplies::RPL_MYINFO);
+
+	reply +=
+		" " + config.server_name + " " + config.server_version +
+		" " + IRC_USER_MODE_STRING + " " + IRC_CHANNEL_MODE_STRING;
+	return reply;
+}
+
+IRC::Actions
+IRC::ReplyBuilder::connection_complete_replies(
+	User *sender, ConfigServer const &config
+) {
+	IRC::Actions reply_queue;
+
+	reply_queue.push(
+		IRC::Action(IRC::Event::SEND, sender, this->reply_welcome(
+			sender->get_mask()
+		))
+	);
+	reply_queue.push(
+		IRC::Action(IRC::Event::SEND, sender, this->reply_your_host(
+			config.server_name, config.server_version
+		))
+	);
+	reply_queue.push(
+		IRC::Action(IRC::Event::SEND, sender, this->reply_created(
+			config.server_creation_date
+		))
+	);
+	reply_queue.push(
+		IRC::Action(IRC::Event::SEND, sender, this->reply_my_info(config))
+	);
+	return reply_queue;
+}
+
+/*
+ * Ping - Pong replies
+*/
+
+std::string
+IRC::ReplyBuilder::reply_ping(std::string const &name) {
+	return "PING " + name;
+}
+
+std::string
+IRC::ReplyBuilder::reply_pong(std::string const &name) {
+	return "PONG " + name;
+}
+
+std::string
+IRC::ReplyBuilder::error_no_origin() {
+	std::string reply = this->build_header_(NumericReplies::ERR_NOORIGIN);
+
+	reply += " :No origin specified";
+	return reply;
+}
+
+/*
+ * Invite
+*/
+
+std::string
+IRC::ReplyBuilder::reply_invite(
+	std::string const &nickname, std::string const &channel_name
+) {
+	std::string reply = this->build_header_();
+	
+	return reply + " INVITE " + nickname + " " + channel_name;
+}
+
+std::string
+IRC::ReplyBuilder::reply_inviting(
+	std::string const &nickname, std::string const &channel_name
+) {
+	std::string reply = this->build_header_(NumericReplies::RPL_INVITING);
+
+	return reply + " " + channel_name + nickname;
+}
+
+std::string IRC::ReplyBuilder::error_no_such_nick(std::string const &nickname)
+{
+	std::string reply = this->build_header_(NumericReplies::ERR_NOSUCKNICK);
+
+	reply += " " + nickname + " :No such nick/channel";
 	return reply;
 }
 
@@ -163,6 +284,17 @@ IRC::ReplyBuilder::error_channel_is_full(std::string const &channel){
 	return reply;
 }
 
+
+std::string
+IRC::ReplyBuilder::error_user_on_channel(
+	std::string const &nickname, std::string const &channel_name
+) {
+	std::string reply = this->build_header_(NumericReplies::ERR_USERONCHANNEL);
+
+	reply += " " + nickname + " " + channel_name + " :is already on channel";
+	return reply;
+}
+
 std::string
 IRC::ReplyBuilder::error_not_on_channel(std::string const &channel_name) {
 	std::string reply = this->build_header_(NumericReplies::ERR_NOTONCHANNEL);
@@ -182,24 +314,6 @@ IRC::ReplyBuilder::error_chan_o_privs_needed(std::string const &channel_name) {
 	reply.append(" ");
 	reply.append(channel_name);
 	reply.append(" :You're not channel operator");
-	return reply;
-}
-
-// Channel replies
-std::string
-IRC::ReplyBuilder::reply_channel_mode_is(Channel &channel) {
-	std::string reply = this->build_header_(NumericReplies::RPL_CHANNELMODEIS);
-
-	reply.append(" ");
-	reply.append(channel.get_name());
-	reply.append(" :+");
-
-	int channel_mode = channel.get_mode();
-	char const string_channel_modes[] = "opsitnmlbvk";
-	for ( std::size_t i = 0; i < sizeof(string_channel_modes); ++i ) {
-		if ( channel_mode & (0x01 << i) )
-			reply.push_back(string_channel_modes[i]);
-	}
 	return reply;
 }
 
@@ -242,12 +356,12 @@ IRC::ReplyBuilder::reply_u_mode_is(
 }
 
 std::string
-IRC::ReplyBuilder::reply_u_mode_is(
+IRC::ReplyBuilder::reply_user_mode(
 	std::string const &user_name, std::string const &modes
 ) {
-	std::string reply = this->build_header_(NumericReplies::RPL_UMODEIS);
+	std::string reply = this->build_header_();
 
-	reply += " " + user_name + " " + modes;
+	reply += " MODE " + user_name + " " + modes;
 	return reply;
 }
 
@@ -259,6 +373,13 @@ IRC::ReplyBuilder::error_unknown_mode(char mode)
 	reply += " ";
 	reply.push_back(mode);
 	reply += " :is unknown to me";
+	return reply;
+}
+std::string
+IRC::ReplyBuilder::error_key_set(std::string const &channel_name) {
+	std::string reply = this->build_header_(NumericReplies::ERR_KEYSET);
+
+	reply += " " + channel_name + " :Channel key already set";
 	return reply;
 }
 
@@ -304,16 +425,6 @@ IRC::ReplyBuilder::error_no_toplevel(std::string const &mask) {
 }
 
 std::string
-IRC::ReplyBuilder::error_no_such_nick(std::string const &nick) {
-	std::string reply = this->build_header_(NumericReplies::ERR_WILDTOPLEVEL);
-
-	reply.append(" ");
-	reply.append(nick);
-	reply.append(" :No such nick/channel");
-	return reply;
-}
-
-std::string
 IRC::ReplyBuilder::error_no_text_to_send() {
 	std::string reply = this->build_header_(NumericReplies::ERR_NOTEXTTOSEND);
 
@@ -338,15 +449,15 @@ IRC::ReplyBuilder::reply_channel_mode_is(Channel const &channel)
 }
 
 std::string
-IRC::ReplyBuilder::reply_channel_mode_is(
+IRC::ReplyBuilder::reply_channel_mode(
 	std::string const &channel_name,
 	std::string const &modes,
 	std::vector<std::string> const &mode_parameters
 )
 {
-	std::string reply = this->build_header_(NumericReplies::RPL_CHANNELMODEIS);
+	std::string reply = this->build_header_();
 
-	reply += " " + channel_name + " " + modes;
+	reply += " MODE " + channel_name + " " + modes;
 	for (std::size_t i = 0; i < mode_parameters.size(); ++i)
 		reply += " " + mode_parameters[i];
 	return reply;
@@ -378,13 +489,17 @@ IRC::ReplyBuilder::reply_name_reply(Channel &channel){
 	std::string reply = this->build_header_(NumericReplies::RPL_NAMREPLY);
 	Users::view_type users = channel.get_users();
 
-	reply.append(" ");
+	reply.append(" = ");
 	reply.append(channel.get_name());
 	reply.append(" :");
 	for ( ; users.first != users.second ; ++users.first ){
 		// `@` -> channel operator
 		// `+` -> channel voices
 		User *user = *users.first;
+
+		if (users.first != channel.begin()){
+			reply.append(" ");
+		}
 
 		reply.append(get_user_mode_symbol_(user, &channel));
 		reply.append(user->get_nickname());
@@ -399,6 +514,24 @@ IRC::ReplyBuilder::reply_end_of_names(std::string const &channel){
 	reply.append(" ");
 	reply.append(channel);
 	reply.append(" :End of /NAMES list");
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::reply_ban_list(
+	std::string const &channel_name, std::string const &banid
+){
+	std::string reply = this->build_header_(NumericReplies::RPL_BANLIST);
+
+	reply += " " + channel_name + " " + banid;
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::reply_end_of_ban_list(std::string const &channel_name){
+	std::string reply = this->build_header_(NumericReplies::RPL_ENDOFBANLIST);
+
+	reply += " " + channel_name + " :End of ban list";
 	return reply;
 }
 
@@ -484,7 +617,7 @@ IRC::ReplyBuilder::reply_privmsg(std::string const &cmd, std::string const &msg,
 	std::string reply;
 
 	reply.append(":");
-	reply.append(m_target->get_fullname());
+	reply.append(m_target->get_mask());
 	reply.append(" ");
 	reply.append(cmd);
 	reply.append(" ");
@@ -499,7 +632,7 @@ IRC::ReplyBuilder::reply_part(std::string const &name, std::string const &messag
 	std::string reply;
 
 	reply.append(":");
-	reply.append( m_target->get_fullname() );
+	reply.append( m_target->get_mask() );
 	reply.append(" PART ");
 	reply.append(name);
 	reply.append(" :\"");
@@ -523,7 +656,27 @@ IRC::ReplyBuilder::build_header_(int code){
 	else
 		// TODO: For now, header is built with ip representation, should we use
 		// the hostname ? 
-		s.append(m_target->get_hostname());
+		s.append(m_target->get_nickname());
+	return s;
+}
+
+/**
+ * @brief Build header for non-numeric replies
+ * 
+ * @return std::string 
+ */
+
+std::string
+IRC::ReplyBuilder::build_header_(){
+	std::string s;
+
+	s.append(":");
+	s.append(m_sender);
+	// TODO: Manage 0 padding.
+	if ( m_target )
+		// TODO: For now, header is built with ip representation, should we use
+		// the hostname ? 
+		s += " " + m_target->get_nickname();
 	return s;
 }
 

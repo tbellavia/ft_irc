@@ -3,68 +3,84 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:38:55 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/31 12:51:17 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/08 17:37:32 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <algorithm>
 #include "Channel.hpp"
+#include "Masks.hpp"
 
 IRC::Channel::Channel() : 
 	m_users(), 
 	m_voices(),
-	m_bans(),
 	m_invites(),
 	m_operators(),
 	m_creator(NULL),
+	m_ban_masks(),
 	m_name(),
-	m_key(),
+	m_key(NULL),
+	m_limit(-1),
 	m_topic(),
 	m_mode(0) { }
 
 IRC::Channel::Channel(std::string const &name, User *creator, int mode) :
 	m_users(), 
 	m_voices(),
-	m_bans(),
 	m_invites(),
 	m_operators(),
 	m_creator(creator),
+	m_ban_masks(),
 	m_name(name),
-	m_key(),
+	m_key(NULL),
+	m_limit(-1),
 	m_topic(),
 	m_mode(mode) { }
 
 IRC::Channel::Channel(Channel const &other) :
 	m_users(other.m_users),
 	m_voices(other.m_voices),
-	m_bans(other.m_bans),
 	m_invites(other.m_invites),
 	m_operators(other.m_operators),
 	m_creator(other.m_creator),
+	m_ban_masks(other.m_ban_masks),
 	m_name(other.m_name),
-	m_key(other.m_key),
+	m_key(NULL),
+	m_limit(other.m_limit),
 	m_topic(other.m_topic),
-	m_mode(other.m_mode) { }
+	m_mode(other.m_mode) {
+	if (other.m_key)
+		m_key = new std::string(*other.m_key);
+}
 
 IRC::Channel &IRC::Channel::operator=(IRC::Channel const &other) {
 	if ( &other == this )
 		return *this;
 	m_users = other.m_users;
 	m_voices = other.m_voices;
-	m_bans = other.m_bans;
 	m_invites = other.m_invites;
 	m_operators = other.m_operators;
 	m_creator = other.m_creator;
+	m_ban_masks = other.m_ban_masks;
 	m_name = other.m_name;
-	m_key = other.m_key;
+	if ( m_key )
+		delete m_key;
+	m_key = NULL;
+	if ( other.m_key )
+		m_key = new std::string(*other.m_key);
+	m_limit = other.m_limit;
 	m_topic = other.m_topic;
 	m_mode = other.m_mode;
 	return *this;
 }
 
-IRC::Channel::~Channel() { }
+IRC::Channel::~Channel() {
+	if ( m_key )
+		delete m_key;
+}
 
 void
 IRC::Channel::set_name(std::string const &name) {
@@ -83,7 +99,22 @@ IRC::Channel::unset_mode(int mode) {
 
 void
 IRC::Channel::set_key(std::string const &pass) {
-	m_key = pass;
+	if ( m_key )
+		delete m_key;
+	m_key = new std::string(pass);
+}
+
+void
+IRC::Channel::unset_key(std::string const &pass) {
+	if ( m_key && *m_key == pass ) {
+		delete m_key;
+		m_key = NULL;
+	}
+}
+
+void
+IRC::Channel::set_limit(int limit) {
+	m_limit = limit;
 }
 
 void
@@ -101,14 +132,24 @@ IRC::Channel::get_mode() const {
 	return m_mode;
 }
 
-std::string const&
+std::string const*
 IRC::Channel::get_key() const {
 	return m_key;
+}
+
+int
+IRC::Channel::get_limit() const {
+	return m_limit;
 }
 
 std::string const&
 IRC::Channel::get_topic() const {
 	return m_topic;
+}
+
+std::vector<std::string> const&
+IRC::Channel::get_ban_masks() const {
+	return m_ban_masks;
 }
 
 bool
@@ -118,7 +159,11 @@ IRC::Channel::is_user(User *user) const {
 
 bool
 IRC::Channel::is_banned_user(User *user) const {
-	return m_bans.has(user);
+	for ( std::size_t i = 0; i < m_ban_masks.size(); ++i ) {
+		if ( user->mask_match(m_ban_masks[i]) )
+			return true;
+	}
+	return false;
 }
 
 bool
@@ -155,7 +200,7 @@ IRC::Channel::is_authorized(User *user) const {
 
 bool
 IRC::Channel::equal_key(std::string const &key) const {
-	return m_key == key;
+	return m_key && *m_key == key;
 }
 
 /**
@@ -242,6 +287,21 @@ IRC::Channel::setOperator(User *user) {
 }
 
 void
+IRC::Channel::addBanMask(std::string const &ban_mask) {
+	m_ban_masks.push_back(ban_mask);
+}
+
+void
+IRC::Channel::deleteBanMask(std::string const &ban_mask) {
+	std::vector<std::string>::iterator it = std::find(
+		m_ban_masks.begin(), m_ban_masks.end(), ban_mask
+	);
+
+	if (it != m_ban_masks.end())
+		m_ban_masks.erase(it);
+}
+
+void
 IRC::Channel::unsetOperator(User *user) {
 	m_operators.remove(user);
 }
@@ -254,6 +314,16 @@ IRC::Channel::allowVoice(User *user) {
 void
 IRC::Channel::disallowVoice(User *user) {
 	m_voices.remove(user);
+}
+
+void
+IRC::Channel::inviteUser(User *user) {
+	m_invites.add(user);
+}
+
+void
+IRC::Channel::uninviteUser(User *user) {
+	m_invites.remove(user);
 }
 
 IRC::Action
