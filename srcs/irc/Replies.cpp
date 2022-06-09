@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/09 12:22:31 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/09 14:57:16 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -384,6 +384,18 @@ IRC::ReplyBuilder::error_key_set(std::string const &channel_name) {
 }
 
 std::string
+IRC::ReplyBuilder::error_user_not_in_channel(
+	std::string const &nickname, std::string const &channel_name
+) {
+	std::string reply = this->build_header_(
+		NumericReplies::ERR_USERNOTINCHANNEL
+	);
+
+	return reply + " " + nickname + " " + channel_name + 
+			" :They aren't on that channel";
+}
+
+std::string
 IRC::ReplyBuilder::error_no_recipient(std::string const &cmd) {
 	std::string reply = this->build_header_(NumericReplies::ERR_NORECIPIENT);
 
@@ -620,6 +632,27 @@ IRC::ReplyBuilder::reply_end_of_who(std::string const &mask) {
 	reply.append(mask);
 	reply.append(" :End of /WHO list.");
 	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::reply_kick(
+	User *sender,
+	std::string const &channel_name,
+	std::string const &user
+) {
+	return ":" + sender->get_mask() + " KICK " + channel_name + " " + user;
+}
+
+std::string
+IRC::ReplyBuilder::reply_kick(
+	User *sender,
+	std::string const &channel_name,
+	std::string const &user,
+	std::string const &comment
+) {
+	return 
+		":" + sender->get_mask() + " KICK " +
+		channel_name + " " + user + " " + comment;
 }
 
 std::string
