@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/09 11:36:25 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/09 11:52:36 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -628,16 +628,17 @@ IRC::ReplyBuilder::reply_privmsg(std::string const &cmd, std::string const &msg,
 }
 
 std::string
-IRC::ReplyBuilder::reply_part(std::string const &name, std::string const &message) {
+IRC::ReplyBuilder::reply_part(
+	std::string const &channel_name, std::string const &message
+) {
 	std::string reply;
 
 	reply.append(":");
 	reply.append( m_target->get_mask() );
 	reply.append(" PART ");
-	reply.append(name);
-	reply.append(" :\"");
+	reply.append(channel_name);
+	reply.append(" :");
 	reply.append(message);
-	reply.append("\"");
 	return reply;
 }
 

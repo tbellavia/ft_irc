@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CmdPART.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 11:00:35 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/02 15:33:19 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/09 11:54:31 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,11 @@ IRC::CmdPART::execute() {
 
 		if ( channel != NULL ){
 			if ( channel->is_user(sender) ){
-				actions.push(Action::send(sender, reply.reply_part(*it, message)));
+				actions.push(
+					channel->notify(
+						reply.reply_part(channel->get_name(), message)
+					)
+				);
 				channel->unsubscribe(sender);
 			} else {
 				actions.push(Action::send(sender, reply.error_not_on_channel(*it)));
