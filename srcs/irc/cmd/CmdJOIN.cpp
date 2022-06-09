@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CmdJOIN.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 22:53:22 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/06 14:45:16 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/09 11:00:18 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,9 @@ IRC::CmdJOIN::execute() {
 					return Actions::unique_send(user, reply.error_invite_only_channel(name));
 				channel->subscribe(user);
 
+				// Delete invitation once user has joined if it was invited
+				if (channel->is_invited_user(user))
+					channel->uninviteUser(user);
 				this->channel_joined_reply(reply, actions, *channel);
 				std::cout << "Join channel: " << name << std::endl;
 			} else {
