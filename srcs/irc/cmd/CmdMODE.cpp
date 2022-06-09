@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:52:41 by lperson-          #+#    #+#             */
-/*   Updated: 2022/06/08 18:46:11 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/09 11:46:36 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ IRC::Actions IRC::CmdMODE::execute_channel_mode_(
 		);
 
 	if (m_arguments.size() == 2)
-		return channel->notify(reply.reply_channel_mode_is(*channel));
+		return Action::send(sender, reply.reply_channel_mode_is(*channel));
 
 	Actions actions;
 	for (std::size_t i = 0; i < m_mode_lists.size(); ++i)
@@ -349,13 +349,16 @@ bool IRC::CmdMODE::set_channel_ban_mask_(
 		for (std::size_t i = 0; i < ban_masks.size(); ++i)
 		{
 			actions.push(
-				channel.notify(
+				Action::send(
+					this->sender(),
 					reply.reply_ban_list(channel.get_name() ,ban_masks[i])
 				)
 			);
 		}
 		actions.push(
-			channel.notify(reply.reply_end_of_ban_list(channel.get_name()))
+			Action::send(
+				this->sender(), reply.reply_end_of_ban_list(channel.get_name())
+			)
 		);
 		return false;
 	}
