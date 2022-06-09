@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 14:22:35 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/08 16:26:35 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/09 13:56:24 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include "cmd/CmdOPER.hpp"
 # include "cmd/CmdJOIN.hpp"
 # include "cmd/CmdINVITE.hpp"
+# include "cmd/CmdKICK.hpp"
 # include "cmd/CmdPRIVMSG.hpp"
 # include "cmd/CmdWHO.hpp"
 # include "cmd/CmdPING.hpp"
@@ -44,6 +45,7 @@ namespace IRC
 		ACmd *create_oper_cmd(CmdCtx &ctx, std::string const &request);
 		ACmd *create_join_cmd(CmdCtx &ctx, std::string const &request);
 		ACmd *create_invite_cmd(CmdCtx &ctx, std::string const &request);
+		ACmd *create_kick_cmd(CmdCtx &ctx, std::string const &request);
 		ACmd *create_ping_cmd(CmdCtx &ctx, std::string const &request);
 		ACmd *create_pong_cmd(CmdCtx &ctx, std::string const &request);
 		ACmd *create_quit_cmd(CmdCtx &ctx, std::string const &request);
