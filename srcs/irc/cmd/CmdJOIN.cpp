@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 22:53:22 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/09 11:00:18 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/09 11:35:35 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ IRC::CmdJOIN::channel_joined_reply(ReplyBuilder &reply, Actions &actions, Channe
 	std::string name = channel.get_name();
 	
 	// JOIN response
-	actions.push(Action::send(this->sender(), reply.reply_join(channel.get_name())));
+	actions.push(channel.notify(reply.reply_join(channel.get_name())));
 	// RPL_NAMEREPLY
 	actions.push(Action::send(this->sender(), reply.reply_name_reply(channel)));
 	// RPL_ENDOFNAMES

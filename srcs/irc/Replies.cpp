@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/08 17:48:09 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/09 11:36:25 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -693,8 +693,7 @@ IRC::ReplyBuilder::reply_join(std::string const &channel){
 		+ "@" 
 		+ m_target->get_socket()->hostname()
 		+ " JOIN "
-		+ channel
-		+ " * :realname";
+		+ channel;
 	return reply;
 }
 
