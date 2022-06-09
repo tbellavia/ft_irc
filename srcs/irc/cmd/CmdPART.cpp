@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 11:00:35 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/09 11:54:31 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/09 16:33:16 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,9 @@ IRC::CmdPART::execute() {
 					)
 				);
 				channel->unsubscribe(sender);
+				if (channel->empty()) {
+					m_ctx.channels.remove(channel->get_name());
+				}
 			} else {
 				actions.push(Action::send(sender, reply.error_not_on_channel(*it)));
 			}

@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:34:06 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/08 17:35:48 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/09 16:24:24 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,9 @@ namespace IRC
 		reverse_iterator rend();
 		const_reverse_iterator rend() const;
 
-
 		Users::view_type get_users();
+
+		bool empty() const;
 
 		std::string const &get_name() const;
 		int get_mode() const;

@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:38:55 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/08 17:37:32 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/09 16:26:03 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,6 +260,11 @@ IRC::Channel::rend() const {
 IRC::Users::view_type
 IRC::Channel::get_users() {
 	return m_users.get_view();
+}
+
+bool
+IRC::Channel::empty() const {
+	return m_users.empty();
 }
 
 /**
