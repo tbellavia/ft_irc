@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:16 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/08 16:48:35 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/09 12:19:13 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ namespace IRC
 		std::string reply_pong(std::string const &names);
 		std::string error_no_origin();
 
-
 		// Invite
 		std::string reply_invite(
 			std::string const &nickname, std::string const &channel_name
@@ -101,6 +100,10 @@ namespace IRC
 			std::string const &channel_name,
 			std::string const &modes,
 			std::vector<std::string> const &mode_parameters
+		);
+		std::string reply_new_topic(
+			User *user, std::string const &channel_name,
+			std::string const &topic
 		);
 		std::string reply_topic(std::string const &channel, std::string const &topic);
 		std::string reply_notopic(std::string const &channel);

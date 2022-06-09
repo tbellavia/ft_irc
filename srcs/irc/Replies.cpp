@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/09 11:52:36 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/09 12:22:31 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -464,7 +464,17 @@ IRC::ReplyBuilder::reply_channel_mode(
 }
 
 std::string
-IRC::ReplyBuilder::reply_topic(std::string const &channel, std::string const &topic){
+IRC::ReplyBuilder::reply_new_topic(
+	User *user, std::string const &channel_name, std::string const &topic
+)
+{
+	return ":" + user->get_mask() + " TOPIC " + channel_name + " " + topic;
+}
+
+std::string
+IRC::ReplyBuilder::reply_topic(
+	std::string const &channel, std::string const &topic
+){
 	std::string reply = this->build_header_(NumericReplies::RPL_TOPIC);
 
 	reply.append(" ");
