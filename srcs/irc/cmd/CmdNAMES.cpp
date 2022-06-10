@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 23:07:09 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/10 14:51:48 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/10 15:15:10 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ IRC::CmdNAMES::execute() {
 	if ( !user->connected() )
 		return Actions::unique_idle();
 	if ( m_arguments.size() == Expected_args(0) )
-		return Actions::unique_idle();
+		return Actions::unique_send(user, reply.reply_end_of_names("*"));
 	std::vector<std::string> names = ft::split(m_arguments[1], ",");
 	std::vector<std::string>::iterator it = names.begin();
 
@@ -35,9 +35,11 @@ IRC::CmdNAMES::execute() {
 		channel = this->channels().find(*it);
 		
 		if ( channel != NULL ){
-			actions.push(Action::send(user, reply.reply_name_reply(*channel)));
-			actions.push(Action::send(user, reply.reply_end_of_names(*it)));
+			if ( channel->is_user(user) && (!channel->is_private() || !channel->is_secret())){
+				actions.push(Action::send(user, reply.reply_name_reply(*channel)));
+			}
 		}
+		actions.push(Action::send(user, reply.reply_end_of_names(*it)));
 	}
 	return actions;
 }
