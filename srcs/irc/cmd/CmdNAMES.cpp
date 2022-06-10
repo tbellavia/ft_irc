@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 23:07:09 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/06 23:08:29 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/10 14:51:48 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,5 +19,25 @@ IRC::CmdNAMES::~CmdNAMES() { }
 
 IRC::Actions
 IRC::CmdNAMES::execute() {
-	return Actions::unique_idle();
+	User			*user = this->sender();
+	ReplyBuilder	reply(this->server_name(), user);
+	Actions			actions;
+	Channel			*channel;
+
+	if ( !user->connected() )
+		return Actions::unique_idle();
+	if ( m_arguments.size() == Expected_args(0) )
+		return Actions::unique_idle();
+	std::vector<std::string> names = ft::split(m_arguments[1], ",");
+	std::vector<std::string>::iterator it = names.begin();
+
+	for ( ; it != names.end() ; ++it ){
+		channel = this->channels().find(*it);
+		
+		if ( channel != NULL ){
+			actions.push(Action::send(user, reply.reply_name_reply(*channel)));
+			actions.push(Action::send(user, reply.reply_end_of_names(*it)));
+		}
+	}
+	return actions;
 }
