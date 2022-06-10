@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CmdTOPIC.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/05 23:00:36 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/06 15:31:09 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/09 12:25:02 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,15 @@ IRC::CmdTOPIC::execute() {
 		return Actions::unique_send(user, reply.reply_topic(name, topic));
 	}
 	// Set topic
-	if ( !channel->is_operator_user(user) )
+	if (
+		channel->get_mode() & CHAN_MODE_TOPIC_BY_OP &&
+		!channel->is_operator_user(user)
+	)
 		return Actions::unique_send(user, reply.error_chan_o_privs_needed(name));
-	std::string new_topic =  ft::popfirst(m_arguments[2]);
+	std::string new_topic = m_arguments[2];
 
 	channel->set_topic(new_topic);
-	if ( new_topic.empty() )
-		return Actions::unique_send(user, reply.reply_topic(name, new_topic));
-	return Actions::unique_send(user, reply.reply_topic(name, new_topic));
+	return channel->notify(reply.reply_new_topic(
+		this->sender(), channel->get_name(), new_topic
+	));
 }

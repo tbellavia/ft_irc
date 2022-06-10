@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Utils.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 18:31:44 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/28 20:05:11 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/08 11:41:26 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,8 @@ namespace ft {
 		return false;
 	}
 
-	void						debug_notice(std::string const &msg);
+	void debug_notice(std::string const &msg);
+
 }
 
 
