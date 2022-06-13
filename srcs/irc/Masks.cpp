@@ -159,7 +159,6 @@ IRC::mask::construct_mask(std::string const &mask) {
 	if ( net_sep_pos == std::string::npos )
 		user_network = user_id;
 	else {
-		// user_id.erase(user_id.length() - 1);
 		user_network = mask.substr(net_sep_pos + 1);
 	}
 
@@ -168,7 +167,6 @@ IRC::mask::construct_mask(std::string const &mask) {
 	std::string::size_type namespace_set_pos = user_id.find('.');
 	if ( nick_set_pos != std::string::npos ) {
 		nickname = user_id.substr(0, nick_set_pos);
-		// nickname.erase(nickname.length() - 1);
 		username = user_id.substr(nick_set_pos + 1);
 	} else {
 		if ( namespace_set_pos != std::string::npos ) {
