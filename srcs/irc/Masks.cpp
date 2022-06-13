@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Masks.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/27 21:56:31 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/01 13:39:00 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/13 10:38:22 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,4 +136,73 @@ bool
 IRC::mask::is_mask(std::string const &mask) {
 	return mask.find(MASK_SYM_SELECTOR_ALL) != std::string::npos
 		|| mask.find(MASK_SYM_SELECTOR_OPT) != std::string::npos;
+}
+
+/**
+ * @brief Construct mask from partial mask
+ * 
+ * Example: eassouli => eassouli!*@*
+ * 			!localhost => *!localhost@*
+ * 			localhost@ => *!locahost@*
+ * 			etc...
+ * 
+ * @param mask the partial mask
+ * @return std::string the complete mask
+ */
+
+std::string
+IRC::mask::construct_mask(std::string const &mask) {
+	std::string mask_separators = MASK_USER_SEPARATOR;
+	int delimiters = 0;
+
+	for (
+		std::size_t pos, i = 0;
+		i < mask.length();
+		++i
+	) {
+		// Check if separators are presents in correct orders
+		pos = mask_separators.find(mask[i]);
+		if ( pos != std::string::npos ) {
+			int flag = 1UL << pos;
+
+			if ( flag == NICKNAME_SEP && delimiters == 0 ) {
+				delimiters |= flag;
+			}
+			else if (
+				flag == NETWORK_SEP &&
+				!(delimiters & NAMESPACE_SEP)
+			) {
+				delimiters |= flag;
+			}
+			else if ( flag == NAMESPACE_SEP ) {
+				delimiters |= flag;
+			}
+		}
+	}
+
+	// Add missing separators
+	if ( delimiters == 0 ) {
+		return mask + "!*@*";
+	}
+
+	std::string new_mask;
+	if ( !(delimiters & NICKNAME_SEP) ) {
+		new_mask = "*!";
+	}
+
+	if ( !(delimiters & NETWORK_SEP) ) {
+		new_mask += "@";
+	}
+	else {
+		new_mask += mask;
+	}
+
+	if ( !(delimiters & NAMESPACE_SEP) ) {
+		new_mask += "*";
+	}
+	else if ( !(delimiters & NETWORK_SEP) ) {
+		new_mask += mask;
+	}
+
+	return new_mask;
 }

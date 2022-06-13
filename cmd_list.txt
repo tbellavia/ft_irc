@@ -8,12 +8,12 @@
 [Channel Operations]
 	- JOIN    [x]
 	- PART    [x]
-	- MODE    []
+	- MODE    [x]
 	- TOPIC   [X]
 	- NAMES   []
 	- LIST    []
-	- INVITE  []
-	- KICK    []
+	- INVITE  [x]
+	- KICK    [x]
 
 [Sending Messages]
 	- PRIVMSG [x]
@@ -25,8 +25,8 @@
 
 [Miscellaneous]
 	- KILL []
-	- PING []
-	- PONG []
+	- PING [x]
+	- PONG [x]
 
 
 [User modes]
