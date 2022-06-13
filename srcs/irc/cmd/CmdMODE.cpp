@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:52:41 by lperson-          #+#    #+#             */
-/*   Updated: 2022/06/13 11:11:03 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/13 16:05:53 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -598,7 +598,7 @@ void IRC::CmdMODE::execute_user_mode_list_(
 IRC::Mode IRC::CmdMODE::parse_one_mode_(char c)
 {
 	int value = char_to_mode_(c);
-	std::string const *parameter = NULL;
+	std::string *parameter = NULL;
 
 	if (
 		m_parameter_modes.find(c) != std::string::npos 

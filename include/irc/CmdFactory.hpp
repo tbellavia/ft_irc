@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 14:22:35 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/13 14:36:38 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/13 15:44:18 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ namespace IRC
 {
 	class CmdFactory : public ICmdFactory {
 		typedef ACmd *(CmdFactory::*callback_t)(CmdCtx&, std::string const&);
-		std::map<std::string, callback_t> m_callbacks;
+		std::map<std::string, callback_t>	m_callbacks;
 
 		ACmd *create_pass_cmd(CmdCtx &ctx, std::string const &request);
 		ACmd *create_nick_cmd(CmdCtx &ctx, std::string const &request);
@@ -61,7 +61,9 @@ namespace IRC
 		CmdFactory(CmdFactory const &copy);
 		virtual ~CmdFactory();
 
-		ACmd *create_cmd(CmdCtx &ctx, std::string const &request);
+		ACmd *create_cmd(
+			std::string const &name, CmdCtx &ctx, std::string const &request
+		);
 
 		CmdFactory &operator=(CmdFactory const &rhs);
 	};

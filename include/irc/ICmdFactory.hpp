@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 14:26:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/09 09:46:23 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/13 15:49:07 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@ namespace IRC
 	struct ICmdFactory {
 		ICmdFactory();
 		ICmdFactory(ICmdFactory const &copy);
-		virtual ACmd *create_cmd(CmdCtx &ctx, std::string const &request) = 0;
+		virtual ACmd *create_cmd(
+			std::string const &name, CmdCtx &ctx, std::string const &request
+		) = 0;
 		virtual ~ICmdFactory();
 
 		ICmdFactory &operator=(ICmdFactory const &rhs);

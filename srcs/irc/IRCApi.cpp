@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   IRCApi.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 04:11:43 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/03 19:14:58 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/13 16:02:27 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,23 @@
 # include "CmdFactory.hpp"
 # include <iostream>
 
+
 IRC::Api::Api(ConfigServer &config) : 
 	m_users(),
 	m_channels(),
 	m_config(config),
-	m_cmd_factory(new CmdFactory) { }
+	m_cmd_factory(new CmdFactory) {
+	m_register_exceptions_cmds.insert("PASS");
+	m_register_exceptions_cmds.insert("NICK");
+	m_register_exceptions_cmds.insert("USER");
+	m_register_exceptions_cmds.insert("QUIT");
+}
 
 IRC::Api::Api(Api const &other) :
 	m_users(other.m_users),
 	m_channels(other.m_channels),
 	m_config(other.m_config),
+	m_register_exceptions_cmds(other.m_register_exceptions_cmds),
 	m_cmd_factory(new CmdFactory) { }
 
 IRC::Api&
@@ -33,6 +40,7 @@ IRC::Api::operator=(Api const &other){
 		return *this;
 	m_users = other.m_users;
 	m_channels = other.m_channels;
+	m_register_exceptions_cmds = other.m_register_exceptions_cmds;
 	m_config = other.m_config;
 	return *this;
 }
@@ -68,9 +76,18 @@ IRC::Api::process_request(Socket *socket, std::string const &request) {
 
 		if ( user != NULL ) {
 			CmdCtx ctx(user, m_channels, m_users, m_config);
+			std::vector<std::string> const cmd_name = ft::split_one(request);
+			ReplyBuilder reply(m_config.server_name, user);
+			if (
+				m_register_exceptions_cmds.find(cmd_name[0]) ==
+				m_register_exceptions_cmds.end() && !user->connection_complete()
+			) {
+				return Actions::unique_send(user, reply.error_not_registered());
+			}
 
-			cmd = m_cmd_factory->create_cmd(ctx, request);
+			cmd = m_cmd_factory->create_cmd(cmd_name[0], ctx, request);
 			if ( cmd != NULL ) {
+
 				Actions actions = cmd->execute();
 				delete cmd;
 				return actions;

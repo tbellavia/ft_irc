@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/01 20:24:52 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/13 10:40:22 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/13 16:05:14 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ namespace IRC
 		std::string			*parameter;
 
 		Mode();
-		Mode(int value, char litteral, std::string const *parameter);
+		Mode(int value, char litteral, std::string *parameter);
 		Mode(Mode const &copy);
 		~Mode();
 

@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/13 15:31:24 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/13 16:13:19 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,13 @@ IRC::ReplyBuilder::error_need_more_params(std::string const &command){
 	reply.append(command);
 	reply.append(" :Not enough parameters");
 	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::error_not_registered(){
+	std::string reply = this->build_header_(NumericReplies::ERR_NOTREGISTERED);
+
+	return reply += " :You have not registered";
 }
 
 std::string
@@ -718,10 +725,16 @@ IRC::ReplyBuilder::build_header_(int code){
 	s.append(" ");
 	if ( m_target == NULL )
 		s.append("*");
-	else
+	else {
 		// TODO: For now, header is built with ip representation, should we use
 		// the hostname ? 
-		s.append(m_target->get_nickname());
+		if ( !m_target->get_nickname().empty() ) {
+			s += m_target->get_nickname();
+		}
+		else {
+			s += "*";
+		}
+	}
 	return s;
 }
 
@@ -738,10 +751,14 @@ IRC::ReplyBuilder::build_header_(){
 	s.append(":");
 	s.append(m_sender);
 	// TODO: Manage 0 padding.
-	if ( m_target )
-		// TODO: For now, header is built with ip representation, should we use
-		// the hostname ? 
-		s += " " + m_target->get_nickname();
+	if ( m_target ) {
+		if ( !m_target->get_nickname().empty() ) {
+			s += " " + m_target->get_nickname();
+		}
+		else {
+			s += " *";
+		}
+	}
 	return s;
 }
 

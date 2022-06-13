@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:16 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/13 15:01:34 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/13 15:58:25 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,10 @@ namespace IRC
 
 		std::string error_need_more_params(std::string const &command);
 		std::string error_already_registered();
+
+
+		// General replies - errors
+		std::string error_not_registered();
 
 		// Connection replies
 		std::string reply_welcome(std::string const &user_mask);

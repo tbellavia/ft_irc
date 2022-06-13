@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 23:07:36 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/13 14:36:30 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/13 15:45:01 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,13 @@ IRC::CmdFactory::CmdFactory(CmdFactory const &copy) :
 IRC::CmdFactory::~CmdFactory() { }
 
 IRC::ACmd*
-IRC::CmdFactory::create_cmd(CmdCtx &ctx, std::string const &request) {
+IRC::CmdFactory::create_cmd(
+	std::string const &name, CmdCtx &ctx, std::string const &request
+) {
 	std::map<std::string, callback_t>::iterator found;
-	std::string command = ft::split_one(request)[0];
 
-	std::cout << "COMMAND: " << command << std::endl;
-	if ( (found = m_callbacks.find(command)) != m_callbacks.end() ){
+	std::cout << "COMMAND: " << name << std::endl;
+	if ( (found = m_callbacks.find(name)) != m_callbacks.end() ){
 		return (this->*found->second)(ctx, request);
 	}
 	return NULL;

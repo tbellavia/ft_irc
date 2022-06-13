@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 13:29:20 by lperson-          #+#    #+#             */
-/*   Updated: 2022/06/08 18:32:45 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/13 16:04:53 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ IRC::Mode::Mode():
 {
 }
 
-IRC::Mode::Mode(int value, char litteral, std::string const *parameter):
+IRC::Mode::Mode(int value, char litteral, std::string *parameter):
 		value(value),
 		litteral(litteral),
 		parameter(parameter)

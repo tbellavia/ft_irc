@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ACmd.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 21:55:45 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/28 19:52:28 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/13 15:50:42 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,11 @@ IRC::ACmd::server_pass(){
 std::string const &
 IRC::ACmd::server_name(){
 	return m_ctx.config.server_name;
+}
+
+std::string const &
+IRC::ACmd::name() const{
+	return m_name;
 }
 
 IRC::ACmd &

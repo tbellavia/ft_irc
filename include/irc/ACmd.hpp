@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ACmd.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 14:42:07 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/28 19:53:56 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/13 15:50:17 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ namespace IRC
 		Users		&users();
 		std::string	const &server_pass();
 		std::string const &server_name();
+		std::string const &name() const;
 	};
 }
 
