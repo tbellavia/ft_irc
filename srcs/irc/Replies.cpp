@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/13 16:13:19 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/13 16:26:24 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,25 @@ IRC::ReplyBuilder::error_already_registered() {
 	reply.append(":You may not reregister");
 	return reply;
 }
+
+std::string
+IRC::ReplyBuilder::error_summon_disabled() {
+	std::string reply = this->build_header_(
+		NumericReplies::ERR_SUMMONDISABLED
+	);
+
+	return reply + " :SUMMON has been disabled";
+}
+
+std::string
+IRC::ReplyBuilder::error_users_disabled() {
+	std::string reply = this->build_header_(
+		NumericReplies::ERR_USERSDISABLED
+	);
+
+	return reply + " :USERS has been disabled";
+}
+
 
 /*
  * Connections replies

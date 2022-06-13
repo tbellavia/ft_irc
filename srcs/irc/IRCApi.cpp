@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 04:11:43 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/13 16:02:27 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/13 17:24:22 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ IRC::Api::process_request(Socket *socket, std::string const &request) {
 		user = m_users.find(socket);
 
 		if ( user != NULL ) {
-			CmdCtx ctx(user, m_channels, m_users, m_config);
 			std::vector<std::string> const cmd_name = ft::split_one(request);
 			ReplyBuilder reply(m_config.server_name, user);
 			if (
@@ -85,9 +84,18 @@ IRC::Api::process_request(Socket *socket, std::string const &request) {
 				return Actions::unique_send(user, reply.error_not_registered());
 			}
 
+			if (cmd_name[0] == "SUMMON")
+				return Actions::unique_send(
+					user, reply.error_summon_disabled()
+				);
+			if (cmd_name[0] == "USERS")
+				return Actions::unique_send(
+					user, reply.error_users_disabled()
+				);
+
+			CmdCtx ctx(user, m_channels, m_users, m_config);
 			cmd = m_cmd_factory->create_cmd(cmd_name[0], ctx, request);
 			if ( cmd != NULL ) {
-
 				Actions actions = cmd->execute();
 				delete cmd;
 				return actions;
