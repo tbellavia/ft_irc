@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:52:41 by lperson-          #+#    #+#             */
-/*   Updated: 2022/06/09 13:52:18 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/13 11:11:03 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "irc/Mode.hpp"
 #include <iostream>
 #include <sstream>
+#include "Masks.hpp"
 
 IRC::CmdMODE::setter_t const IRC::CmdMODE::m_parameters_func[
 	IRC_CHANNEL_PARAMETERS_MODE_LEN
@@ -197,13 +198,13 @@ void IRC::CmdMODE::execute_channel_mode_list_(
 
 			m_mode_reply += mode.litteral;
 			if (mode.parameter)
-				m_mode_arguments.push_back(*mode.parameter);
+				m_mode_arguments_reply.push_back(*mode.parameter);
 		}
 	}
 }
 
 bool IRC::CmdMODE::execute_one_chan_mode_(
-	bool to_add, Mode mode, ReplyBuilder &reply,
+	bool to_add, Mode &mode, ReplyBuilder &reply,
 	Actions &actions, Channel &channel
 )
 {
@@ -221,9 +222,11 @@ bool IRC::CmdMODE::execute_one_chan_mode_(
 		for (std::size_t i = 0; i < m_parameter_modes.length(); ++i)
 		{
 			if (m_parameter_modes[i] == mode.litteral)
+			{
 				return (this->*m_parameters_func[i])(
 					to_add, reply, actions, channel, mode.parameter
 				);
+			}
 		}
 	}
 	else if (this->can_modified(to_add, mode, channel))
@@ -254,7 +257,7 @@ bool IRC::CmdMODE::can_modified(
 
 bool IRC::CmdMODE::set_channel_op_(
 	bool to_add, ReplyBuilder &reply, Actions &actions,
-	Channel &channel, std::string const *parameter
+	Channel &channel, std::string *parameter
 )
 {
 	if (!parameter)
@@ -300,7 +303,7 @@ bool IRC::CmdMODE::set_channel_op_(
 
 bool IRC::CmdMODE::set_channel_limit_(
 	bool to_add, ReplyBuilder &reply, Actions &actions,
-	Channel &channel, std::string const *parameter
+	Channel &channel, std::string *parameter
 )
 {
 	(void)reply;
@@ -339,7 +342,7 @@ bool IRC::CmdMODE::set_channel_limit_(
 
 bool IRC::CmdMODE::set_channel_ban_mask_(
 	bool to_add, ReplyBuilder &reply, Actions &actions,
-	Channel &channel, std::string const *parameter
+	Channel &channel, std::string *parameter
 )
 {
 	// List ban masks
@@ -371,6 +374,7 @@ bool IRC::CmdMODE::set_channel_ban_mask_(
 	// Add ban mask
 	if (to_add && parameter)
 	{
+		*parameter = mask::construct_mask(*parameter);
 		std::vector<std::string> const &ban_masks = channel.get_ban_masks();
 		std::vector<std::string>::const_iterator it = std::find(
 			ban_masks.begin(), ban_masks.end(), *parameter
@@ -378,10 +382,9 @@ bool IRC::CmdMODE::set_channel_ban_mask_(
 		if (it == ban_masks.end())
 		{
 			channel.addBanMask(*parameter);
+			return true;
 		}
-		else
-			return false;
-		return true;
+		return false;
 	}
 
 	// Delete ban mask
@@ -402,7 +405,7 @@ bool IRC::CmdMODE::set_channel_ban_mask_(
 
 bool IRC::CmdMODE::set_channel_voice_user_(
 	bool to_add, ReplyBuilder &reply, Actions &actions,
-	Channel &channel, std::string const *parameter
+	Channel &channel, std::string *parameter
 )
 {
 	if (!parameter)
@@ -448,7 +451,7 @@ bool IRC::CmdMODE::set_channel_voice_user_(
 
 bool IRC::CmdMODE::set_channel_key_(
 	bool to_add, ReplyBuilder &reply, Actions &actions,
-	Channel &channel, std::string const *parameter
+	Channel &channel, std::string *parameter
 )
 {
 	if (to_add && parameter)

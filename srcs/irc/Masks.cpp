@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/27 21:56:31 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/13 10:38:22 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/13 11: by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,57 +152,47 @@ IRC::mask::is_mask(std::string const &mask) {
 
 std::string
 IRC::mask::construct_mask(std::string const &mask) {
-	std::string mask_separators = MASK_USER_SEPARATOR;
-	int delimiters = 0;
+	std::string user_id, user_network;
+	std::string::size_type net_sep_pos = mask.find('@');
 
-	for (
-		std::size_t pos, i = 0;
-		i < mask.length();
-		++i
-	) {
-		// Check if separators are presents in correct orders
-		pos = mask_separators.find(mask[i]);
-		if ( pos != std::string::npos ) {
-			int flag = 1UL << pos;
+	user_id = mask.substr(0, net_sep_pos);
+	if ( net_sep_pos == std::string::npos )
+		user_network = user_id;
+	else {
+		// user_id.erase(user_id.length() - 1);
+		user_network = mask.substr(net_sep_pos + 1);
+	}
 
-			if ( flag == NICKNAME_SEP && delimiters == 0 ) {
-				delimiters |= flag;
-			}
-			else if (
-				flag == NETWORK_SEP &&
-				!(delimiters & NAMESPACE_SEP)
-			) {
-				delimiters |= flag;
-			}
-			else if ( flag == NAMESPACE_SEP ) {
-				delimiters |= flag;
-			}
+	std::string nickname, username, hostname;
+	std::string::size_type nick_set_pos = user_id.find('!');
+	std::string::size_type namespace_set_pos = user_id.find('.');
+	if ( nick_set_pos != std::string::npos ) {
+		nickname = user_id.substr(0, nick_set_pos);
+		// nickname.erase(nickname.length() - 1);
+		username = user_id.substr(nick_set_pos + 1);
+	} else {
+		if ( namespace_set_pos != std::string::npos ) {
+			nickname = "*";
+			username = "*";
+		} else if ( net_sep_pos != std::string::npos ) {
+			nickname = "*";
+			username = user_id;
+		} else {
+			nickname = user_id;
+			username = "*";
 		}
 	}
 
-	// Add missing separators
-	if ( delimiters == 0 ) {
-		return mask + "!*@*";
+	if ( 
+		net_sep_pos != std::string::npos ||
+		(nick_set_pos == std::string::npos &&
+		namespace_set_pos != std::string::npos)
+	) {
+		hostname = user_network;
+		hostname = user_network;
+	} else {
+		hostname = "*";
 	}
 
-	std::string new_mask;
-	if ( !(delimiters & NICKNAME_SEP) ) {
-		new_mask = "*!";
-	}
-
-	if ( !(delimiters & NETWORK_SEP) ) {
-		new_mask += "@";
-	}
-	else {
-		new_mask += mask;
-	}
-
-	if ( !(delimiters & NAMESPACE_SEP) ) {
-		new_mask += "*";
-	}
-	else if ( !(delimiters & NETWORK_SEP) ) {
-		new_mask += mask;
-	}
-
-	return new_mask;
+	return nickname + "!" + username + "@" + hostname;
 }
