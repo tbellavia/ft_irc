@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 11:00:35 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/09 16:33:16 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/09 16:37:59 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,11 @@ IRC::CmdPART::execute() {
 	ReplyBuilder	reply(this->server_name(), sender);
 	Actions			actions;
 	std::string		message;
-	
+
 	if ( m_arguments.size() == Expected_args(0) )
 		return Actions::unique_send(sender, reply.error_need_more_params(m_name));
 	if ( m_arguments.size() == Expected_args(2) )
-		message = ft::popfirst(m_arguments[2]);
+		message = m_arguments[2];
 	else
 		message = "Leaving";
 	std::vector<std::string> targets = ft::split(m_arguments[1], ",");
