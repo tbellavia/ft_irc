@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 04:11:43 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/13 17:24:22 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/13 17:38:04 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,10 @@ IRC::Api::process_request(Socket *socket, std::string const &request) {
 				Actions actions = cmd->execute();
 				delete cmd;
 				return actions;
+			} else {
+				return Actions::unique_send(
+					user, reply.error_unknown_command(cmd_name[0])
+				);
 			}
 		}
 	}

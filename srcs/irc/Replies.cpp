@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/13 16:26:24 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/13 17:35:28 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,12 @@ IRC::ReplyBuilder::error_users_disabled() {
 	return reply + " :USERS has been disabled";
 }
 
+std::string
+IRC::ReplyBuilder::error_unknown_command(std::string const &name) {
+	std::string reply = this->build_header_(NumericReplies::ERR_UNKNOWNCOMMAND);
+
+	return reply + " " + name + " :Unknown command";
+}
 
 /*
  * Connections replies

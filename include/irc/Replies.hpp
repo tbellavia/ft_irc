@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:16 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/13 16:24:25 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/13 17:33:27 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ namespace IRC
 		std::string error_not_registered();
 		std::string error_summon_disabled();
 		std::string error_users_disabled();
+		std::string error_unknown_command(std::string const &name);
 
 		// Connection replies
 		std::string reply_welcome(std::string const &user_mask);
