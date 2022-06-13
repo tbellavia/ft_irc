@@ -6,11 +6,12 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/13 13:56:41 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/13 15:18:43 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Replies.hpp"
+#include <sstream>
 
 IRC::ReplyBuilder::ReplyBuilder(std::string const &sender, User *target) :
 	m_sender(sender), m_target(target) { }
@@ -449,14 +450,8 @@ IRC::ReplyBuilder::reply_channel_mode_is(Channel const &channel)
 {
 	std::string reply = this->build_header_(NumericReplies::RPL_CHANNELMODEIS);
 
-	reply += " " + channel.get_name() + " :+";
+	reply += " " + channel.get_name() + " :+" + channel.get_mode_string();
 
-	std::string const mode_string = IRC_CHANNEL_MODE_STRING;
-	for (std::string::size_type i = 0 ; i < mode_string.length(); ++i)
-	{
-		if (channel.get_mode() & (0x01 << i))
-			reply += mode_string[i];
-	}
 	return reply;
 }
 
@@ -632,6 +627,32 @@ IRC::ReplyBuilder::reply_end_of_who(std::string const &mask) {
 	reply.append(mask);
 	reply.append(" :End of /WHO list.");
 	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::reply_list_start() {
+	std::string reply = this->build_header_(NumericReplies::RPL_LISTSTART);
+	return reply + " Channel :Users Name";
+}
+
+std::string
+IRC::ReplyBuilder::reply_list(Channel const &channel) {
+	std::string reply = this->build_header_(NumericReplies::RPL_LIST);
+	std::stringstream convert;
+
+	std::string channel_size;
+	convert << channel.size();
+	convert >> channel_size;
+
+	return reply + " " + channel.get_name() + " " + channel_size +
+		" :[+" + channel.get_mode_string() + "] " + channel.get_topic();
+}
+
+std::string
+IRC::ReplyBuilder::reply_list_end() {
+	std::string reply = this->build_header_(NumericReplies::RPL_LISTEND);
+
+	return reply + " :End of /LIST";
 }
 
 std::string

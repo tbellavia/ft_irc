@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 15:22:18 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/09 16:25:26 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/13 15:06:14 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ namespace IRC
 		const_reverse_iterator rbegin() const;
 		const_reverse_iterator rend() const;
 
+		std::size_t size() const;
 		bool empty() const;
 
 		template<typename Pred>
