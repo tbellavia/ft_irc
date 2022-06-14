@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 18:31:32 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/12 16:43:01 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/14 18:02:26 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 
 # include "Network.hpp"
 # include "../Utils.hpp"
+# include "IFileObj.hpp"
 
 
 // TODO: Remove this includes
@@ -40,7 +41,7 @@
 
 void *get_in_addr(sockaddr *sa);
 
-class Socket {
+class Socket : public IFileObj {
 public:
 	/* Internal implementation */
 	struct SocketStorage {

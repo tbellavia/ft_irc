@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 18:47:47 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/08 10:33:05 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/14 18:15:38 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ IRC::Server::read_requests_() {
 
 	for ( it = m_readers.begin() ; it != m_readers.end() ; ++it ){
 		File		*file = *it;
-		Socket		*socket = file->socket();
+		Socket		*socket = reinterpret_cast<Socket *>(file->fileobj());
 		std::string	buffer;
 
 		if ( *socket == *m_server ){
@@ -125,7 +125,9 @@ IRC::Server::write_responses_() {
 
 		if ( file->available_response() ){
 			response = file->pop_response();
-			bytes = file->socket()->send( response );
+			bytes = reinterpret_cast<Socket *>(
+				file->fileobj()
+			)->send( response );
 			file->seek_response(bytes);
 		}
 	}
@@ -138,7 +140,7 @@ IRC::Server::finish_requests_() {
 
 	for ( it = entries.begin() ; it != entries.end() ; ++it ){
 		File *file = it->second;
-		Socket *socket = file->socket();
+		Socket *socket = reinterpret_cast<Socket *>(file->fileobj());
 
 		if ( file->isset_event(Selector::DISCONNECT) && !file->available_response() ){
 			// WARN: this line is super important, do not touch !!!

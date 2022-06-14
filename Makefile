@@ -6,7 +6,7 @@
 #    By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/12 19:27:05 by bbellavi          #+#    #+#              #
-#    Updated: 2022/06/13 14:39:28 by lperson-         ###   ########.fr        #
+#    Updated: 2022/06/14 18:00:54 by lperson-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,7 @@ SRCS		=	main.cpp								\
 				srcs/network/File.cpp					\
 				srcs/network/Socket.cpp					\
 				srcs/network/Network.cpp				\
+				srcs/network/IFileObj.cpp				\
 				srcs/irc/ICmdFactory.cpp				\
 				srcs/irc/CmdFactory.cpp					\
 				srcs/irc/CmdCtx.cpp						\
