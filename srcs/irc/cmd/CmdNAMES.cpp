@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 23:07:09 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/10 15:15:10 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/14 16:37:29 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,6 @@ IRC::CmdNAMES::execute() {
 	Actions			actions;
 	Channel			*channel;
 
-	if ( !user->connected() )
-		return Actions::unique_idle();
 	if ( m_arguments.size() == Expected_args(0) )
 		return Actions::unique_send(user, reply.reply_end_of_names("*"));
 	std::vector<std::string> names = ft::split(m_arguments[1], ",");
