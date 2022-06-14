@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 02:13:43 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/19 10:33:26 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/13 15:27:01 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ std::string
 IRC::CmdParser::parse_end_token(){
 	while (!is_at_end())
 		advance();
-	std::string token = m_request.substr(m_start, m_current - m_start);
+	std::string token = m_request.substr(m_start + 1, m_current - m_start);
 	m_start = m_current;
 	return token;
 }

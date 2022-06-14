@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channels.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:19:21 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/03 19:40:40 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/09 16:29:15 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,15 @@ IRC::Channels::find(std::string const &name) {
 void
 IRC::Channels::remove_user(User *user){
 	std::map<std::string, Channel>::iterator it = m_channels.begin();
+	std::map<std::string, Channel>::iterator itNext;
 
-	for ( ; it != m_channels.end() ; ++it ){
+	for ( ; it != m_channels.end() ; it = itNext ){
 		it->second.unsubscribe(user);
+		itNext = it;
+		++itNext;
+		if (it->second.empty()) {
+			m_channels.erase(it->first);
+		}
 	}
 }
 

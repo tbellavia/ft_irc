@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:54:08 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/24 13:06:49 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/13 11:10:18 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,12 @@ namespace IRC
 		CmdMODE &operator=(CmdMODE const &rhs);
 
 	private:
+		typedef bool (CmdMODE::*setter_t)(
+			bool, ReplyBuilder &, Actions &, Channel &, std::string *
+		);
+		static setter_t const		m_parameters_func[
+			IRC_CHANNEL_PARAMETERS_MODE_LEN
+		];
 		std::string					m_target;
 		// Parsing
 		std::string					m_authorized_modes;
@@ -50,6 +56,34 @@ namespace IRC
 			ReplyBuilder &reply,
 			Channel &channel,
 			std::string const &mode_list
+		);
+		bool execute_one_chan_mode_(
+			bool to_add, Mode &mode, ReplyBuilder &reply,
+			Actions &actions, Channel &channel
+		);
+		bool can_modified(
+			bool is_add, Mode const &mode, Channel const &channel
+		);
+
+		bool set_channel_op_(
+			bool to_add, ReplyBuilder &reply, Actions &actions,
+			Channel &channel, std::string *parameter
+		);
+		bool set_channel_limit_(
+			bool to_add, ReplyBuilder &reply, Actions &actions,
+			Channel &channel, std::string *parameter
+		);
+		bool set_channel_ban_mask_(
+			bool to_add, ReplyBuilder &reply, Actions &actions,
+			Channel &channel, std::string *parameter
+		);
+		bool set_channel_voice_user_(
+			bool to_add, ReplyBuilder &reply, Actions &actions,
+			Channel &channel, std::string *parameter
+		);
+		bool set_channel_key_(
+			bool to_add, ReplyBuilder &reply, Actions &actions,
+			Channel &channel, std::string *parameter
 		);
 
 		// User mode utils

@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 18:47:47 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/03 20:24:59 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/14 17:07:35 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ void IRC::Server::bind() const {
 
 void IRC::Server::serve_forever() {
 	m_selector.add(m_server, Selector::READ);
+	m_config.update_creation_date();
 
 	while ( true ){
 		this->select_();

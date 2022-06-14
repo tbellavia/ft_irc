@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 15:36:57 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/31 14:44:04 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/10 13:34:17 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ IRC::CmdPRIVMSG::execute() {
 		return Actions::unique_send(user, reply.error_no_text_to_send());
 	std::vector<std::string> targets = ft::split(m_arguments[1], ",");
 	std::vector<std::string>::iterator it = targets.begin();
-	std::string message = ft::popfirst(m_arguments[2]);
+	std::string message = m_arguments[2];
 
 	for ( ; it != targets.end() ; ++it ){
 		// Does the command continue if user or channel does not exists ? Yes

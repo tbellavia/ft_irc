@@ -1,34 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ICmdFactory.hpp                                    :+:      :+:    :+:   */
+/*   CmdINVITE.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/20 14:26:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/13 15:49:07 by lperson-         ###   ########.fr       */
+/*   Created: 2022/06/08 16:17:57 by lperson-          #+#    #+#             */
+/*   Updated: 2022/06/08 16:19:57 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ICMDFACTORY_HPP
-#define ICMDFACTORY_HPP
+#ifndef CMD_INVITE_HPP
 
-# include "CmdCtx.hpp"
+# define CMD_INVITE_HPP
+
 # include "ACmd.hpp"
 
 namespace IRC
 {
-	struct ICmdFactory {
-		ICmdFactory();
-		ICmdFactory(ICmdFactory const &copy);
-		virtual ACmd *create_cmd(
-			std::string const &name, CmdCtx &ctx, std::string const &request
-		) = 0;
-		virtual ~ICmdFactory();
+	class CmdINVITE : public ACmd
+	{
+	public:
+		CmdINVITE(CmdCtx &ctx, std::string const &request);
+		CmdINVITE(CmdINVITE const &copy);
+		~CmdINVITE();
 
-		ICmdFactory &operator=(ICmdFactory const &rhs);
+		Actions execute();
+
+		CmdINVITE &operator=(CmdINVITE const &rhs);
 	};
 }
-
 
 #endif

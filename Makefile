@@ -6,7 +6,7 @@
 #    By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/12 19:27:05 by bbellavi          #+#    #+#              #
-#    Updated: 2022/06/03 19:19:02 by bbellavi         ###   ########.fr        #
+#    Updated: 2022/06/14 17:06:15 by bbellavi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,13 +40,19 @@ SRCS		=	main.cpp								\
 				srcs/irc/cmd/CmdUSER.cpp				\
 				srcs/irc/cmd/CmdNICK.cpp				\
 				srcs/irc/cmd/CmdJOIN.cpp				\
+				srcs/irc/cmd/CmdINVITE.cpp				\
+				srcs/irc/cmd/CmdLIST.cpp				\
+				srcs/irc/cmd/CmdKICK.cpp				\
 				srcs/irc/cmd/CmdWHO.cpp					\
 				srcs/irc/cmd/CmdOPER.cpp				\
 				srcs/irc/cmd/CmdQUIT.cpp				\
+				srcs/irc/cmd/CmdPING.cpp				\
 				srcs/irc/cmd/CmdPONG.cpp				\
 				srcs/irc/cmd/CmdMODE.cpp				\
 				srcs/irc/cmd/CmdPRIVMSG.cpp				\
 				srcs/irc/cmd/CmdPART.cpp				\
+				srcs/irc/cmd/CmdTOPIC.cpp				\
+				srcs/irc/cmd/CmdNAMES.cpp				\
 				srcs/irc/ISubscriber.cpp				\
 				srcs/irc/User.cpp						\
 				srcs/irc/Users.cpp						\
@@ -82,6 +88,8 @@ HEADERS		=	include/irc/Server.hpp					\
 				include/irc/cmd/CmdQUIT.hpp				\
 				include/irc/cmd/CmdPRIVMSG.hpp			\
 				include/irc/cmd/CmdPART.hpp				\
+				include/irc/cmd/CmdTOPIC.hpp			\
+				include/irc/cmd/CmdNAMES.hpp			\
 				srcs/irc/cmd/CmdMODE.hpp				\
 				include/network/Network.hpp				\
 				include/network/Selector.hpp			\

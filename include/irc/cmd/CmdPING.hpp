@@ -1,34 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ICmdFactory.hpp                                    :+:      :+:    :+:   */
+/*   CmdPING.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/20 14:26:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/13 15:49:07 by lperson-         ###   ########.fr       */
+/*   Created: 2022/06/08 13:41:35 by lperson-          #+#    #+#             */
+/*   Updated: 2022/06/08 13:55:21 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ICMDFACTORY_HPP
-#define ICMDFACTORY_HPP
+#ifndef CMD_PING_HPP
 
-# include "CmdCtx.hpp"
+# define CMD_PING_HPP
+
 # include "ACmd.hpp"
 
 namespace IRC
 {
-	struct ICmdFactory {
-		ICmdFactory();
-		ICmdFactory(ICmdFactory const &copy);
-		virtual ACmd *create_cmd(
-			std::string const &name, CmdCtx &ctx, std::string const &request
-		) = 0;
-		virtual ~ICmdFactory();
+	class CmdPING : public ACmd
+	{
+	public:
+		CmdPING(CmdCtx &ctx, std::string const &request);
+		CmdPING(CmdPING const &copy);
+		~CmdPING();
 
-		ICmdFactory &operator=(ICmdFactory const &rhs);
+		Actions execute();
+
+		CmdPING &operator=(CmdPING const &rhs);
 	};
 }
-
 
 #endif

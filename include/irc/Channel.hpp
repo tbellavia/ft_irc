@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:34:06 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/31 12:43:58 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/13 15:05:22 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,16 @@ namespace IRC
 	class Channel {
 		Users		m_users;
 		Users		m_voices;
-		Users		m_bans;
 		Users		m_invites;
 		Users		m_operators;
 
-		User		*m_creator;
-		std::string	m_name;
-		std::string m_key;
-		std::string m_topic;
-		int			m_mode;
+		User						*m_creator;
+		std::vector<std::string>	m_ban_masks;
+		std::string					m_name;
+		std::string const			*m_key;
+		int							m_limit;
+		std::string					m_topic;
+		int							m_mode;
 	public:
 		typedef	Users::iterator					iterator;
 		typedef	Users::const_iterator			const_iterator;
@@ -47,6 +48,8 @@ namespace IRC
 		void set_mode(int mode);
 		void unset_mode(int mode);
 		void set_key(std::string const &pass);
+		void unset_key(std::string const &pass);
+		void set_limit(int limit);
 		void set_topic(std::string const &topic);
 
 		bool is_user(User *user) const;
@@ -76,13 +79,19 @@ namespace IRC
 		reverse_iterator rend();
 		const_reverse_iterator rend() const;
 
-
 		Users::view_type get_users();
+
+		std::size_t size() const;
+
+		bool empty() const;
 
 		std::string const &get_name() const;
 		int get_mode() const;
-		std::string const &get_key() const;
+		std::string get_mode_string() const;
+		std::string const *get_key() const;
+		int get_limit() const;
 		std::string const &get_topic() const;
+		std::vector<std::string> const &get_ban_masks() const;
 
 		bool equal_key(std::string const &key) const;
 
@@ -96,8 +105,12 @@ namespace IRC
 		void unsubscribe(User *user);
 		void setOperator(User *user);
 		void unsetOperator(User *user);
+		void addBanMask(std::string const &ban_mask);
+		void deleteBanMask(std::string const &ban_mask);
 		void allowVoice(User *user);
 		void disallowVoice(User *user);
+		void inviteUser(User *user);
+		void uninviteUser(User *user);
 
 		Action notify(std::string const &msg, User *sender = NULL);
 

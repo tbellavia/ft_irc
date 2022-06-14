@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   User.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 14:36:26 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/01 15:50:39 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/13 16:09:54 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 # include "Masks.hpp"
 
 IRC::User::User() : 
-	m_username(),
-	m_nickname(),
-	m_realname(),
+	m_username(""),
+	m_nickname(""),
+	m_realname(""),
 	m_mode(0),
 	m_socket(NULL) { }
 
@@ -30,9 +30,9 @@ IRC::User::User(std::string const &pseudo, std::string const &nick,
 	m_socket(socket) { }
 
 IRC::User::User(Socket *socket) : 
-	m_username(),
-	m_nickname(),
-	m_realname(),
+	m_username(""),
+	m_nickname(""),
+	m_realname(""),
 	m_mode(MODE_RESTRICTED_),
 	m_socket(socket) { }
 
@@ -102,7 +102,7 @@ IRC::User::get_realname() const {
 }
 
 std::string
-IRC::User::get_fullname() const {
+IRC::User::get_mask() const {
 	return std::string(
 		m_nickname + "!" + m_username + "@" + this->get_hostname()
 	);
@@ -135,9 +135,7 @@ IRC::User::is_invisible() const {
 
 bool
 IRC::User::mask_match(std::string const &mask) {
-	return mask::match(this->get_hostname(), mask)
-		|| mask::match(this->get_realname(), mask)
-		|| mask::match(this->get_nickname(), mask);
+	return mask::match(this->get_mask(), mask);
 }
 
 bool
@@ -152,14 +150,14 @@ IRC::User::connected() const {
 
 bool
 IRC::User::connection_complete() const {
-	return mode_isset(MODE_PASS_) && mode_isset(MODE_NICK_) && mode_isset(MODE_USER_);
+	return \
+		mode_isset(MODE_PASS_) && mode_isset(MODE_NICK_) && mode_isset(MODE_USER_);
 }
 
 bool
 IRC::User::pass_accepted() const {
 	return mode_isset(MODE_PASS_);
 }
-
 void
 IRC::User::update(std::string const &msg) {
 	m_socket->send(net::ston(msg));

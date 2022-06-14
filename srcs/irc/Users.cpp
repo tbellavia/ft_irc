@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 15:43:00 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/03 19:48:45 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/14 17:07:43 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,16 @@ IRC::Users::get_rview() const{
 bool
 IRC::Users::has(User *user) const {
 	return m_users.count(user) == 1;
+}
+
+std::size_t
+IRC::Users::size() const {
+	return m_users.size();
+}
+
+bool
+IRC::Users::empty() const {
+	return m_users.empty();
 }
 
 IRC::Users::iterator

@@ -6,13 +6,26 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:52:41 by lperson-          #+#    #+#             */
-/*   Updated: 2022/05/24 13:53:28 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/13 16:05:53 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "irc/cmd/CmdMODE.hpp"
 #include "irc/Mode.hpp"
 #include <iostream>
+#include <sstream>
+#include "Masks.hpp"
+
+IRC::CmdMODE::setter_t const IRC::CmdMODE::m_parameters_func[
+	IRC_CHANNEL_PARAMETERS_MODE_LEN
+] = 
+{
+	&IRC::CmdMODE::set_channel_op_,
+	&IRC::CmdMODE::set_channel_limit_,
+	&IRC::CmdMODE::set_channel_ban_mask_,
+	&IRC::CmdMODE::set_channel_voice_user_,
+	&IRC::CmdMODE::set_channel_key_
+};
 
 /**
  * @brief Construct a new IRC::CmdMODE object
@@ -115,13 +128,8 @@ IRC::Actions IRC::CmdMODE::execute_channel_mode_(
 			sender, reply.error_not_on_channel(channel_name)
 		);
 
-	if (!channel->is_operator_user(sender))
-		return Actions::unique_send(
-			sender, reply.error_chan_o_privs_needed(channel_name)
-		);
-
 	if (m_arguments.size() == 2)
-		return channel->notify(reply.reply_channel_mode_is(*channel));
+		return Action::send(sender, reply.reply_channel_mode_is(*channel));
 
 	Actions actions;
 	for (std::size_t i = 0; i < m_mode_lists.size(); ++i)
@@ -130,12 +138,19 @@ IRC::Actions IRC::CmdMODE::execute_channel_mode_(
 			actions, reply, *channel, m_mode_lists[i]
 		);
 	}
-	Actions reply_action = channel->notify(
-		reply.reply_channel_mode_is(
-			m_target, m_mode_reply, m_mode_arguments_reply
-		)
-	);
-	actions.append(reply_action);
+
+	if (!m_mode_reply.empty())
+	{
+		ReplyBuilder user_reply(this->sender()->get_mask());
+		Actions reply_action = channel->notify(
+			user_reply.reply_channel_mode(
+				m_target, m_mode_reply, m_mode_arguments_reply
+			)
+		);
+		actions.append(reply_action);
+	}
+	else if (actions.empty())
+		return Actions::unique_idle();
 	return actions;
 }
 
@@ -147,12 +162,16 @@ void IRC::CmdMODE::execute_channel_mode_list_(
 )
 {
 	std::string const delimiters = "+-";
-	bool is_add = true, already_written = false;
+	bool is_add = true, writted = false;
+	char correct_delimiter = '+';
 	std::size_t i = 0;
 	if (delimiters.find(mode_list[i]) != std::string::npos)
 	{
 		if (mode_list[i] == '-')
+		{
 			is_add = false;
+			correct_delimiter = '-';
+		}
 		++i;
 	}
 
@@ -167,31 +186,303 @@ void IRC::CmdMODE::execute_channel_mode_list_(
 				reply.error_unknown_mode(mode_list[i])
 			));
 		}
-		else if (m_parameter_modes.find(mode.litteral) != std::string::npos)
+		else if (
+			this->execute_one_chan_mode_(is_add, mode, reply, actions, channel)
+		)
 		{
-			; // TODO: handle parameters
-		}
-		else if (is_add && !(channel.get_mode() & mode.value))
-		{
-			if (!already_written)
+			if (!writted)
 			{
-				already_written = true;
-				m_mode_reply += "+";
+				writted = true;
+				m_mode_reply += correct_delimiter;
 			}
-			channel.set_mode(mode.value);
+
 			m_mode_reply += mode.litteral;
-		}
-		else if (!is_add && channel.get_mode() & mode.value)
-		{
-			if (!already_written)
-			{
-				already_written = true;
-				m_mode_reply += "-";
-			}
-			channel.unset_mode(mode.value);
-			m_mode_reply += mode.litteral;
+			if (mode.parameter)
+				m_mode_arguments_reply.push_back(*mode.parameter);
 		}
 	}
+}
+
+bool IRC::CmdMODE::execute_one_chan_mode_(
+	bool to_add, Mode &mode, ReplyBuilder &reply,
+	Actions &actions, Channel &channel
+)
+{
+	if (m_parameter_modes.find(mode.litteral) != std::string::npos)
+	{
+		if (mode.parameter && !channel.is_operator_user(this->sender()))
+		{
+			actions.push(IRC::Action(
+				IRC::Event::SEND, this->sender(),
+				reply.error_chan_o_privs_needed(channel.get_name())
+			));
+			return false;
+		}
+
+		for (std::size_t i = 0; i < m_parameter_modes.length(); ++i)
+		{
+			if (m_parameter_modes[i] == mode.litteral)
+			{
+				return (this->*m_parameters_func[i])(
+					to_add, reply, actions, channel, mode.parameter
+				);
+			}
+		}
+	}
+	else if (this->can_modified(to_add, mode, channel))
+	{
+		if (!channel.is_operator_user(this->sender()))
+		{
+			actions.push(IRC::Action(
+				IRC::Event::SEND, this->sender(),
+				reply.error_chan_o_privs_needed(channel.get_name())
+			));
+			return false;
+		}
+		if (!to_add)
+			channel.unset_mode(mode.value);
+		else
+			channel.set_mode(mode.value);
+		return true;
+	}
+	return false;
+}
+
+bool IRC::CmdMODE::can_modified(
+	bool is_add, Mode const &mode, Channel const &channel
+)
+{
+	return is_add != (channel.get_mode() & mode.value);
+}
+
+bool IRC::CmdMODE::set_channel_op_(
+	bool to_add, ReplyBuilder &reply, Actions &actions,
+	Channel &channel, std::string *parameter
+)
+{
+	if (!parameter)
+	{
+		/*
+		actions.push(
+			IRC::Action(
+				Event::SEND, this->sender(),
+				reply.error_need_more_params(m_name)
+			)
+		);
+		*/
+		return false;
+	}
+
+	Channel::const_iterator first = channel.begin();
+	Channel::const_iterator last = channel.end();
+	for (; first != last; ++first)
+	{
+		if ((*first)->get_nickname() == *parameter)
+		{
+			if (to_add && !channel.is_operator_user(*first))
+			{
+				channel.setOperator(*first);
+				return true;
+			}
+			else if (!to_add && channel.is_operator_user(*first))
+			{
+				channel.unsetOperator(*first);
+				return true;
+			}
+			return false;
+		}
+	}
+
+	actions.push(
+		IRC::Action(
+			Event::SEND, this->sender(), reply.error_no_such_nick(*parameter)
+		)
+	);
+	return false;
+}
+
+bool IRC::CmdMODE::set_channel_limit_(
+	bool to_add, ReplyBuilder &reply, Actions &actions,
+	Channel &channel, std::string *parameter
+)
+{
+	(void)reply;
+	(void)actions;
+	if (to_add && !parameter)
+	{
+		/*
+		actions.push(
+			IRC::Action(
+				Event::SEND, this->sender(),
+				reply.error_need_more_params(m_name)
+			)
+		);
+		*/
+		return false;
+	}
+
+	if (to_add)
+	{
+		std::stringstream ss(*parameter);
+		std::size_t limit;
+		ss >> limit;
+		if (ss.fail() || static_cast<int>(limit) == channel.get_limit())
+			return false;
+	
+		channel.set_limit(limit);
+		return true;
+	}
+	else if (channel.get_limit() >= 0)
+	{
+		channel.set_limit(-1);
+		return true;
+	}
+	return false;
+}
+
+bool IRC::CmdMODE::set_channel_ban_mask_(
+	bool to_add, ReplyBuilder &reply, Actions &actions,
+	Channel &channel, std::string *parameter
+)
+{
+	// List ban masks
+	if (!parameter && to_add)
+	{
+		std::vector<std::string> const &ban_masks = channel.get_ban_masks();
+		for (std::size_t i = 0; i < ban_masks.size(); ++i)
+		{
+			actions.push(
+				Action::send(
+					this->sender(),
+					reply.reply_ban_list(channel.get_name() ,ban_masks[i])
+				)
+			);
+		}
+		actions.push(
+			Action::send(
+				this->sender(), reply.reply_end_of_ban_list(channel.get_name())
+			)
+		);
+		return false;
+	}
+
+	if (!to_add && !parameter)
+	{
+		;// Error: need more params ?
+	}
+
+	// Add ban mask
+	if (to_add && parameter)
+	{
+		*parameter = mask::construct_mask(*parameter);
+		std::vector<std::string> const &ban_masks = channel.get_ban_masks();
+		std::vector<std::string>::const_iterator it = std::find(
+			ban_masks.begin(), ban_masks.end(), *parameter
+		);
+		if (it == ban_masks.end())
+		{
+			channel.addBanMask(*parameter);
+			return true;
+		}
+		return false;
+	}
+
+	// Delete ban mask
+	if (!to_add && parameter)
+	{
+		std::vector<std::string> const &ban_masks = channel.get_ban_masks();
+		std::vector<std::string>::const_iterator it = std::find(
+			ban_masks.begin(), ban_masks.end(), *parameter
+		);
+		if (it == ban_masks.end())
+			return false;
+		channel.deleteBanMask(*parameter);
+		return true;
+	}
+
+	return false;
+}
+
+bool IRC::CmdMODE::set_channel_voice_user_(
+	bool to_add, ReplyBuilder &reply, Actions &actions,
+	Channel &channel, std::string *parameter
+)
+{
+	if (!parameter)
+	{
+		/*
+		actions.push(
+			IRC::Action(
+				Event::SEND, this->sender(),
+				reply.error_need_more_params(m_name)
+			)
+		);
+		*/
+		return false;
+	}
+
+	Channel::const_iterator first = channel.begin();
+	Channel::const_iterator last = channel.end();
+	for (; first != last; ++first)
+	{
+		if ((*first)->get_nickname() == *parameter)
+		{
+			if (to_add && !channel.is_voices_user(*first))
+			{
+				channel.allowVoice(*first);
+				return true;
+			}
+			else if (!to_add && channel.is_voices_user(*first))
+			{
+				channel.disallowVoice(*first);
+				return true;
+			}
+			return false;
+		}
+	}
+
+	actions.push(
+		IRC::Action(
+			Event::SEND, this->sender(), reply.error_no_such_nick(*parameter)
+		)
+	);
+	return false;
+}
+
+bool IRC::CmdMODE::set_channel_key_(
+	bool to_add, ReplyBuilder &reply, Actions &actions,
+	Channel &channel, std::string *parameter
+)
+{
+	if (to_add && parameter)
+	{
+		std::string const *key = channel.get_key();
+		if (key)
+		{
+			actions.push(
+				IRC::Action(
+					Event::SEND, this->sender(), reply.error_key_set(
+						channel.get_name()
+					)
+				)
+			);
+		}
+		else
+		{
+			channel.set_key(*parameter);
+			return true;
+		}
+	}
+	else if (!to_add && parameter)
+	{
+		std::string const *key = channel.get_key();
+		if (key && *key == *parameter)
+		{
+			channel.unset_key(*parameter);
+			return true;
+		}
+	}
+	return false;
 }
 
 /**
@@ -232,10 +523,15 @@ IRC::Actions IRC::CmdMODE::execute_user_mode_(ReplyBuilder &reply)
 	{
 		this->execute_user_mode_list_(actions, reply, *sender, m_mode_lists[i]);
 	}
-	Actions reply_action = Actions::unique_send(
-		sender, reply.reply_u_mode_is(m_target, m_mode_reply)
-	);
-	actions.append(reply_action);
+
+	if (!m_mode_reply.empty())
+	{
+		ReplyBuilder user_reply(sender->get_mask());
+		Actions reply_action = Actions::unique_send(
+			sender, user_reply.reply_user_mode(m_target, m_mode_reply)
+		);
+		actions.append(reply_action);
+	}
 	return actions;
 }
 
@@ -302,7 +598,7 @@ void IRC::CmdMODE::execute_user_mode_list_(
 IRC::Mode IRC::CmdMODE::parse_one_mode_(char c)
 {
 	int value = char_to_mode_(c);
-	std::string const *parameter = NULL;
+	std::string *parameter = NULL;
 
 	if (
 		m_parameter_modes.find(c) != std::string::npos 

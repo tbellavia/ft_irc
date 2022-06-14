@@ -1,34 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ICmdFactory.hpp                                    :+:      :+:    :+:   */
+/*   CmdKICK.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/20 14:26:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/13 15:49:07 by lperson-         ###   ########.fr       */
+/*   Created: 2022/06/09 13:46:17 by lperson-          #+#    #+#             */
+/*   Updated: 2022/06/09 14:42:45 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ICMDFACTORY_HPP
-#define ICMDFACTORY_HPP
+#ifndef CMD_KICK_HPP
 
-# include "CmdCtx.hpp"
+# define CMD_KICK_HPP
+
 # include "ACmd.hpp"
 
 namespace IRC
 {
-	struct ICmdFactory {
-		ICmdFactory();
-		ICmdFactory(ICmdFactory const &copy);
-		virtual ACmd *create_cmd(
-			std::string const &name, CmdCtx &ctx, std::string const &request
-		) = 0;
-		virtual ~ICmdFactory();
+	class CmdKICK : public ACmd
+	{
+	public:
+		CmdKICK(CmdCtx &ctx, std::string const &request);
+		CmdKICK(CmdKICK const &copy);
+		~CmdKICK();
 
-		ICmdFactory &operator=(ICmdFactory const &rhs);
+		Actions execute();
+
+		CmdKICK &operator=(CmdKICK const &rhs);
 	};
 }
-
 
 #endif

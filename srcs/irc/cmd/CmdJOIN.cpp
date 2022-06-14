@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 22:53:22 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/20 15:12:39 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/09 11:35:35 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,9 @@ IRC::CmdJOIN::execute() {
 					return Actions::unique_send(user, reply.error_invite_only_channel(name));
 				channel->subscribe(user);
 
+				// Delete invitation once user has joined if it was invited
+				if (channel->is_invited_user(user))
+					channel->uninviteUser(user);
 				this->channel_joined_reply(reply, actions, *channel);
 				std::cout << "Join channel: " << name << std::endl;
 			} else {
@@ -97,11 +100,15 @@ IRC::CmdJOIN::channel_joined_reply(ReplyBuilder &reply, Actions &actions, Channe
 	std::string name = channel.get_name();
 	
 	// JOIN response
-	actions.push(Action::send(this->sender(), reply.reply_join(channel.get_name())));
+	actions.push(channel.notify(reply.reply_join(channel.get_name())));
 	// RPL_NAMEREPLY
 	actions.push(Action::send(this->sender(), reply.reply_name_reply(channel)));
 	// RPL_ENDOFNAMES
 	actions.push(Action::send(this->sender(), reply.reply_end_of_names(name)));
 	// RPL_TOPIC
-	actions.push(Action::send(this->sender(), reply.reply_topic(name, channel.get_topic())));
+	std::string const &topic = channel.get_topic();
+	if ( topic.empty() )
+		actions.push(Action::send(this->sender(), reply.reply_notopic(name)));
+	else
+		actions.push(Action::send(this->sender(), reply.reply_topic(name, channel.get_topic())));
 }
