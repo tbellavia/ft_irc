@@ -3,7 +3,7 @@
 	- NICK [x] 
 	- USER [x]
 	- OPER [x]
-	- QUIT []
+	- QUIT [x]
 
 [Channel Operations]
 	- JOIN    [x]
