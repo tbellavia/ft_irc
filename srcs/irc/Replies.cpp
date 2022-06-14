@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Replies.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/14 17:11:47 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/14 21:00:12 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -718,7 +718,7 @@ IRC::ReplyBuilder::reply_privmsg(std::string const &cmd, std::string const &msg,
 	reply.append(cmd);
 	reply.append(" ");
 	reply.append(channel);
-	reply.append(" ");
+	reply.append(" :");
 	reply.append(msg);
 	return reply;
 }
