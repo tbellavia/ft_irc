@@ -38,9 +38,7 @@ File &File::operator=(File const &other) {
 	return *this;
 }
 
-File::~File() {
-	delete m_fileobj;
-}
+File::~File() { }
 
 void
 File::set_event(int event) {
