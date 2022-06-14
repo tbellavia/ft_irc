@@ -57,9 +57,7 @@ Socket &Socket::operator=(Socket const &other) {
 	return *this;
 }
 
-Socket::~Socket() {
-
-}
+Socket::~Socket() { }
 
 /**
  * Access functions
@@ -184,7 +182,7 @@ ssize_t Socket::recv(std::string &s, std::string const &seq, int flags) const {
 	return bytes;
 }
 
-void Socket::close() const {
+void Socket::close() {
 	::close(m_fd);
 }
 

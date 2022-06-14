@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 18:31:32 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/14 18:02:26 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/14 18:29:45 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ public:
 	ssize_t					recv(void *buf, size_t len, int flags = 0) const;
 	ssize_t					recv(std::string &s, int flags = 0) const;
 	ssize_t					recv(std::string &s, std::string const &seq, int flags = 0) const;
-	void					close() const;
+	void					close();
 	void					shutdown(int how) const;
 	int						setsockopt(int level, int optname, const void *optval, socklen_t optlen) const;
 	int						getsockopt(int level, int optname, void *optval, socklen_t *optlen) const;

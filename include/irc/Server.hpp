@@ -11,12 +11,14 @@
 # include "Selector.hpp"
 # include "IRCApi.hpp"
 # include "Config.hpp"
+# include "SignalFD.hpp"
 
 namespace IRC
 {
 	class Server {
 		ConfigServer			&m_config;
 		Socket					*m_server;
+		SignalFD				*m_signalfd;
 		Selector				m_selector;
 		std::pair<
 			std::set<File*>,
@@ -24,12 +26,13 @@ namespace IRC
 		std::set<File*>			m_writers;
 		std::set<File*>			m_readers;
 		Api						&m_api;
+		bool					m_continue;
 
 
 		void sendall_(Action &action);
 		void push_send_(Socket *socket, std::string const &response);
 
-		void disconnectall_(Action &action);
+		void disconnectall_(Action const &action);
 		// Push disconnect request into File
 		void push_disconnect_(Socket *socket);
 		// Disconnect a socket
@@ -54,6 +57,7 @@ namespace IRC
 		void activate() const;
 		void bind() const;
 		void serve_forever();
+		void stop();
 	};
 }
 

@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 18:47:47 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/14 18:15:38 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/14 19:54:28 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,20 @@
 IRC::Server::Server(ConfigServer &conf, Api &api, bool bind_and_activate) : 
 	m_config(conf),
 	m_server(Socket::create_tcp_socket()), 
+	m_signalfd(NULL),
 	m_selector(),
 	m_ready(),
 	m_writers(),
 	m_readers(),
-	m_api(api)
+	m_api(api),
+	m_continue(true)
 {
 	int enable = true;
+
+	std::vector<int> signals;
+	signals.push_back(SIGTERM);
+	signals.push_back(SIGINT);
+	m_signalfd = new SignalFD(signals);
 
 	m_server->setsockopt(SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int));
 	m_server->set_blocking(false);
@@ -33,9 +40,11 @@ IRC::Server::Server(ConfigServer &conf, Api &api, bool bind_and_activate) :
 
 IRC::Server::Server(IRC::Server const &other) :
 		m_config(other.m_config),
-		m_server(other.m_server), 
+		m_server(other.m_server),
+		m_signalfd(other.m_signalfd),
 		m_selector(other.m_selector),
-		m_api(other.m_api) { }
+		m_api(other.m_api),
+		m_continue(other.m_continue) { }
 
 IRC::Server&
 IRC::Server::operator=(Server const &other) {
@@ -43,11 +52,15 @@ IRC::Server::operator=(Server const &other) {
 		return *this;
 	m_config = other.m_config;
 	m_server = other.m_server;
+	m_signalfd = other.m_signalfd;
 	m_selector = other.m_selector;
+	m_continue = other.m_continue;
 	return *this;
 }
 
-IRC::Server::~Server() { }
+IRC::Server::~Server() {
+	delete m_server;
+}
 
 void IRC::Server::activate() const {
 	std::cout << "Listening on " << m_config.server_host << ":" << m_config.server_port << std::endl;
@@ -60,9 +73,10 @@ void IRC::Server::bind() const {
 
 void IRC::Server::serve_forever() {
 	m_selector.add(m_server, Selector::READ);
+	m_selector.add(m_signalfd, Selector::READ);
 	m_config.update_creation_date();
 
-	while ( true ){
+	while ( m_continue ){
 		this->select_();
 
 		this->read_requests_();
@@ -82,12 +96,16 @@ IRC::Server::read_requests_() {
 
 	for ( it = m_readers.begin() ; it != m_readers.end() ; ++it ){
 		File		*file = *it;
-		Socket		*socket = reinterpret_cast<Socket *>(file->fileobj());
+		IFileObj	*fileobj = file->fileobj();
 		std::string	buffer;
 
-		if ( *socket == *m_server ){
+		if ( *fileobj == *m_server ){
 			this->connect_socket_(m_server->accept());
+		} else if ( *fileobj == *m_signalfd ) {
+			std::cout << "Server stopped by signal!" << std::endl;
+			m_continue = false;
 		} else {
+			Socket *socket = reinterpret_cast<Socket *>(fileobj);
 			if ( (bytes = socket->recv(buffer)) <= 0 ){
 				// Connection shutdown
 				if ( bytes == 0 ){
@@ -272,7 +290,7 @@ IRC::Server::disconnect_socket_(Socket *socket) {
  * Push disconnect event into all File object associated to sockets.
  */
 void
-IRC::Server::disconnectall_(Action &action){
+IRC::Server::disconnectall_(Action const &action){
 	std::vector<Socket*> sockets = action.sockets();
 	
 	for ( std::vector<Socket*>::iterator it = sockets.begin() ; it != sockets.end() ; ++it )
