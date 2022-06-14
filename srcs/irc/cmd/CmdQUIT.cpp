@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/23 21:57:08 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/03 20:26:51 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/15 00:14:16 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ IRC::CmdQUIT::execute() {
 	
 	// Notify all channels where sender is present
 	if ( m_arguments.size() == Expected_args(1))
-		message = ft::popfirst(m_arguments[1]);
+		message = m_arguments[1];
 	message = reply.reply_quit(message);
 	actions = this->channels().notify_by_user(sender, message);
 	actions.push(Action::disconnect(sender));
