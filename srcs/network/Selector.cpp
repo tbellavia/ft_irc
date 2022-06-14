@@ -37,11 +37,11 @@ Selector::get_entries() const {
 }
 
 void
-Selector::unset(Socket *socket, int events) {
-	if ( socket == NULL )
+Selector::unset(IFileObj *fileobj, int events) {
+	if ( fileobj == NULL )
 		return;
-	File *value = this->find(socket);
-	int fd = socket->fd();
+	File *value = this->find(fileobj);
+	int fd = fileobj->fd();
 
 	if ( value == NULL )
 		return;
@@ -54,10 +54,10 @@ Selector::unset(Socket *socket, int events) {
 }
 
 void
-Selector::add(Socket *socket, int events) {
-	if ( socket != NULL ){
-		File *val = new File(socket, events);
-		int fd = socket->fd();
+Selector::add(IFileObj *fileobj, int events) {
+	if ( fileobj != NULL ){
+		File *val = new File(fileobj, events);
+		int fd = fileobj->fd();
 
 		if ( val->isset_event(READ) )
 			FD_SET(fd, &m_read);
@@ -69,18 +69,18 @@ Selector::add(Socket *socket, int events) {
 }
 
 void
-Selector::remove(Socket *socket) {
-	if ( socket != NULL ){
-		File								*value;
-		std::map<int, File*>::iterator		found = m_entries.find(socket->fd());
+Selector::remove(IFileObj *fileobj) {
+	if ( fileobj != NULL ){
+		File							*value;
+		std::map<int, File*>::iterator	found = m_entries.find(fileobj->fd());
 
 		if ( found == m_entries.end() )
 			return ;
 		value = found->second;
 		if ( value->isset_event(READ) )
-			FD_CLR(socket->fd(), &m_read);
+			FD_CLR(fileobj->fd(), &m_read);
 		if ( value->isset_event(WRITE) )
-			FD_CLR(socket->fd(), &m_write);
+			FD_CLR(fileobj->fd(), &m_write);
 		m_entries.erase(found);
 		delete value;
 	}
@@ -100,8 +100,8 @@ Selector::select(int seconds, int useconds){
 		::select(m_max_fd + 1, &read_set, &write_set, NULL, &timeout );
 
 	for (std::map<int, File*>::iterator it = m_entries.begin() ; it != m_entries.end() ; ++it ){
-		Socket  *socket = it->second->socket();
-		int     fd = socket->fd();
+		IFileObj  *fileobj = it->second->fileobj();
+		int     fd = fileobj->fd();
 
 		if ( it->second->isset_event(READ) && FD_ISSET(fd, &read_set) )
 			ready_readers.insert( it->second );
@@ -112,12 +112,12 @@ Selector::select(int seconds, int useconds){
 }
 
 File*
-Selector::find(Socket *socket){
+Selector::find(IFileObj *fileobj){
 	std::map<int, File*>::iterator found;
 
-	if ( socket == NULL )
+	if ( fileobj == NULL )
 		return NULL;
-	found = m_entries.find(socket->fd());
+	found = m_entries.find(fileobj->fd());
 	if ( found == m_entries.end() )
 		return NULL;
 	return found->second;

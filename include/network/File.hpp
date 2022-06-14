@@ -15,7 +15,7 @@
 
 # include <string>
 # include <queue>
-# include "Socket.hpp"
+# include "IFileObj.hpp"
 
 # define CRLF "\r\n"
 
@@ -34,19 +34,19 @@ class File {
 		void seek(size_t offset);
 		bool available() const;
 	};
-	Socket					*m_socket;
+	IFileObj				*m_fileobj;
 	int						m_events;
 	std::string				m_buffer;
 	std::queue<std::string> m_requests;
 	ResponseBuffer			m_responses;
 public:
 	File();
-	File(Socket *socket, int events);
+	File(IFileObj *socket, int events);
 	File(File const &other);
 	File &operator=(File const &other);
 	virtual ~File();
 
-	Socket				*socket();
+	IFileObj			*fileobj();
 	std::string const	&buffer() const;
 	
 	void				set_event(int event);

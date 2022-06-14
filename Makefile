@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+         #
+#    By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/12 19:27:05 by bbellavi          #+#    #+#              #
-#    Updated: 2022/06/14 17:06:15 by bbellavi         ###   ########.fr        #
+#    Updated: 2022/06/14 20:23:03 by lperson-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,8 @@ SRCS		=	main.cpp								\
 				srcs/network/File.cpp					\
 				srcs/network/Socket.cpp					\
 				srcs/network/Network.cpp				\
+				srcs/network/IFileObj.cpp				\
+				srcs/network/SignalFD.cpp				\
 				srcs/irc/ICmdFactory.cpp				\
 				srcs/irc/CmdFactory.cpp					\
 				srcs/irc/CmdCtx.cpp						\
