@@ -39,7 +39,7 @@ File &File::operator=(File const &other) {
 }
 
 File::~File() {
-	
+	delete m_fileobj;
 }
 
 void

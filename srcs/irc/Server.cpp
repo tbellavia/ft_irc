@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 18:47:47 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/14 20:23:08 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/14 20:31:45 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,7 @@ IRC::Server::operator=(Server const &other) {
 	return *this;
 }
 
-IRC::Server::~Server() {
-	delete m_server;
-	delete m_signalfd;
-}
+IRC::Server::~Server() { }
 
 void IRC::Server::activate() const {
 	std::cout << "Listening on " << m_config.server_host << ":" << m_config.server_port << std::endl;
