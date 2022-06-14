@@ -10,8 +10,8 @@
 	- PART    [x]
 	- MODE    [x]
 	- TOPIC   [X]
-	- NAMES   []
-	- LIST    []
+	- NAMES   [x]
+	- LIST    [x]
 	- INVITE  [x]
 	- KICK    [x]
 
