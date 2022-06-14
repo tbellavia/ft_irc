@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 14:22:35 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/10 15:21:09 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/14 16:33:39 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include "cmd/CmdOPER.hpp"
 # include "cmd/CmdJOIN.hpp"
 # include "cmd/CmdINVITE.hpp"
+# include "cmd/CmdLIST.hpp"
 # include "cmd/CmdKICK.hpp"
 # include "cmd/CmdPRIVMSG.hpp"
 # include "cmd/CmdWHO.hpp"
@@ -38,7 +39,7 @@ namespace IRC
 {
 	class CmdFactory : public ICmdFactory {
 		typedef ACmd *(CmdFactory::*callback_t)(CmdCtx&, std::string const&);
-		std::map<std::string, callback_t> m_callbacks;
+		std::map<std::string, callback_t>	m_callbacks;
 
 		ACmd *create_pass_cmd(CmdCtx &ctx, std::string const &request);
 		ACmd *create_nick_cmd(CmdCtx &ctx, std::string const &request);
@@ -46,6 +47,7 @@ namespace IRC
 		ACmd *create_oper_cmd(CmdCtx &ctx, std::string const &request);
 		ACmd *create_join_cmd(CmdCtx &ctx, std::string const &request);
 		ACmd *create_invite_cmd(CmdCtx &ctx, std::string const &request);
+		ACmd *create_list_cmd(CmdCtx &ctx, std::string const &request);
 		ACmd *create_kick_cmd(CmdCtx &ctx, std::string const &request);
 		ACmd *create_ping_cmd(CmdCtx &ctx, std::string const &request);
 		ACmd *create_pong_cmd(CmdCtx &ctx, std::string const &request);
@@ -61,7 +63,9 @@ namespace IRC
 		CmdFactory(CmdFactory const &copy);
 		virtual ~CmdFactory();
 
-		ACmd *create_cmd(CmdCtx &ctx, std::string const &request);
+		ACmd *create_cmd(
+			std::string const &name, CmdCtx &ctx, std::string const &request
+		);
 
 		CmdFactory &operator=(CmdFactory const &rhs);
 	};

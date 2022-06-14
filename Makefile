@@ -6,7 +6,7 @@
 #    By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/12 19:27:05 by bbellavi          #+#    #+#              #
-#    Updated: 2022/06/10 15:21:23 by bbellavi         ###   ########.fr        #
+#    Updated: 2022/06/14 16:33:13 by bbellavi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,6 +41,7 @@ SRCS		=	main.cpp								\
 				srcs/irc/cmd/CmdNICK.cpp				\
 				srcs/irc/cmd/CmdJOIN.cpp				\
 				srcs/irc/cmd/CmdINVITE.cpp				\
+				srcs/irc/cmd/CmdLIST.cpp				\
 				srcs/irc/cmd/CmdKICK.cpp				\
 				srcs/irc/cmd/CmdWHO.cpp					\
 				srcs/irc/cmd/CmdOPER.cpp				\

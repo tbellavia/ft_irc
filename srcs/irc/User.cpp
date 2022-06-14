@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 14:36:26 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/08 11:28:11 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/13 16:09:54 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 # include "Masks.hpp"
 
 IRC::User::User() : 
-	m_username(),
-	m_nickname(),
-	m_realname(),
+	m_username(""),
+	m_nickname(""),
+	m_realname(""),
 	m_mode(0),
 	m_socket(NULL) { }
 
@@ -30,9 +30,9 @@ IRC::User::User(std::string const &pseudo, std::string const &nick,
 	m_socket(socket) { }
 
 IRC::User::User(Socket *socket) : 
-	m_username(),
-	m_nickname(),
-	m_realname(),
+	m_username(""),
+	m_nickname(""),
+	m_realname(""),
 	m_mode(MODE_RESTRICTED_),
 	m_socket(socket) { }
 

@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:34:06 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/09 16:24:24 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/13 15:05:22 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,13 @@ namespace IRC
 
 		Users::view_type get_users();
 
+		std::size_t size() const;
+
 		bool empty() const;
 
 		std::string const &get_name() const;
 		int get_mode() const;
+		std::string get_mode_string() const;
 		std::string const *get_key() const;
 		int get_limit() const;
 		std::string const &get_topic() const;

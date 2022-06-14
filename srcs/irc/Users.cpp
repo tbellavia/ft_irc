@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 15:43:00 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/09 16:25:58 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/13 15:06:37 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,11 @@ IRC::Users::get_rview() const{
 bool
 IRC::Users::has(User *user) const {
 	return m_users.count(user) == 1;
+}
+
+std::size_t
+IRC::Users::size() const {
+	return m_users.size();
 }
 
 bool

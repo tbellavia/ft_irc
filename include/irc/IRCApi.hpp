@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/18 14:08:41 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/09 11:36:46 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/13 17:23:59 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,12 @@
 namespace IRC
 {
 	class Api {
-		MasterUsers 	m_users;
-		Channels		m_channels;
-		ConfigServer	&m_config;
-		ICmdFactory		*m_cmd_factory;
+		MasterUsers 					m_users;
+		Channels						m_channels;
+		ConfigServer					&m_config;
+		std::set<std::string>			m_register_exceptions_cmds;
+		ICmdFactory						*m_cmd_factory;
+
 	public:
 		Api(ConfigServer &config);
 		Api(Api const &other);

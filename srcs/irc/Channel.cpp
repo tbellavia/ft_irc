@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:38:55 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/09 16:26:03 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/13 15:30:08 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,18 @@ IRC::Channel::get_name() const {
 int
 IRC::Channel::get_mode() const {
 	return m_mode;
+}
+
+std::string
+IRC::Channel::get_mode_string() const {
+	std::string const mode_string = IRC_CHANNEL_MODE_STRING;
+	std::string reply;
+	for (std::string::size_type i = 0 ; i < mode_string.length(); ++i)
+	{
+		if (this->get_mode() & (0x01 << i))
+			reply += mode_string[i];
+	}
+	return reply;
 }
 
 std::string const*
@@ -260,6 +272,11 @@ IRC::Channel::rend() const {
 IRC::Users::view_type
 IRC::Channel::get_users() {
 	return m_users.get_view();
+}
+
+std::size_t
+IRC::Channel::size() const {
+	return m_users.size();
 }
 
 bool

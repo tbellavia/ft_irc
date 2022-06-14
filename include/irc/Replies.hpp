@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:16 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/09 14:55:41 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/13 17:33:27 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,12 @@ namespace IRC
 
 		std::string error_need_more_params(std::string const &command);
 		std::string error_already_registered();
+
+		// General replies - errors
+		std::string error_not_registered();
+		std::string error_summon_disabled();
+		std::string error_users_disabled();
+		std::string error_unknown_command(std::string const &name);
 
 		// Connection replies
 		std::string reply_welcome(std::string const &user_mask);
@@ -121,6 +127,10 @@ namespace IRC
 		std::string reply_who_reply(User *user, Channel *channel = NULL);
 		std::string reply_end_of_who(Channel *channel = NULL);
 		std::string reply_end_of_who(std::string const &mask);
+
+		std::string reply_list_start();
+		std::string reply_list(Channel const &channel);
+		std::string reply_list_end();
 
 
 		std::string reply_kick(

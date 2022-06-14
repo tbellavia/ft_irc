@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 23:07:36 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/10 15:20:49 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/14 16:33:26 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ IRC::CmdFactory::CmdFactory() : ICmdFactory(), m_callbacks()
 	m_callbacks.insert(
 		std::make_pair("INVITE", &CmdFactory::create_invite_cmd)
 	);
+	m_callbacks.insert(std::make_pair("LIST", &CmdFactory::create_list_cmd));
 	m_callbacks.insert(std::make_pair("KICK", &CmdFactory::create_kick_cmd));
 	m_callbacks.insert(std::make_pair("WHO", &CmdFactory::create_who_cmd));
 	m_callbacks.insert(std::make_pair("PING", &CmdFactory::create_ping_cmd));
@@ -45,12 +46,13 @@ IRC::CmdFactory::CmdFactory(CmdFactory const &copy) :
 IRC::CmdFactory::~CmdFactory() { }
 
 IRC::ACmd*
-IRC::CmdFactory::create_cmd(CmdCtx &ctx, std::string const &request) {
+IRC::CmdFactory::create_cmd(
+	std::string const &name, CmdCtx &ctx, std::string const &request
+) {
 	std::map<std::string, callback_t>::iterator found;
-	std::string command = ft::split_one(request)[0];
 
-	std::cout << "COMMAND: " << command << std::endl;
-	if ( (found = m_callbacks.find(command)) != m_callbacks.end() ){
+	std::cout << "COMMAND: " << name << std::endl;
+	if ( (found = m_callbacks.find(name)) != m_callbacks.end() ){
 		return (this->*found->second)(ctx, request);
 	}
 	return NULL;
@@ -104,6 +106,11 @@ IRC::CmdFactory::create_invite_cmd(CmdCtx &ctx, std::string const &request) {
 IRC::ACmd*
 IRC::CmdFactory::create_kick_cmd(CmdCtx &ctx, std::string const &request) {
 	return new CmdKICK(ctx, request);
+}
+
+IRC::ACmd*
+IRC::CmdFactory::create_list_cmd(CmdCtx &ctx, std::string const &request) {
+	return new CmdLIST(ctx, request);
 }
 
 IRC::ACmd*

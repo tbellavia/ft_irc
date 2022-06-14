@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Masks.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/27 21:56:31 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/01 13:39:00 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/13 11: by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,4 +136,61 @@ bool
 IRC::mask::is_mask(std::string const &mask) {
 	return mask.find(MASK_SYM_SELECTOR_ALL) != std::string::npos
 		|| mask.find(MASK_SYM_SELECTOR_OPT) != std::string::npos;
+}
+
+/**
+ * @brief Construct mask from partial mask
+ * 
+ * Example: eassouli => eassouli!*@*
+ * 			!localhost => *!localhost@*
+ * 			localhost@ => *!locahost@*
+ * 			etc...
+ * 
+ * @param mask the partial mask
+ * @return std::string the complete mask
+ */
+
+std::string
+IRC::mask::construct_mask(std::string const &mask) {
+	std::string user_id, user_network;
+	std::string::size_type net_sep_pos = mask.find('@');
+
+	user_id = mask.substr(0, net_sep_pos);
+	if ( net_sep_pos == std::string::npos )
+		user_network = user_id;
+	else {
+		user_network = mask.substr(net_sep_pos + 1);
+	}
+
+	std::string nickname, username, hostname;
+	std::string::size_type nick_set_pos = user_id.find('!');
+	std::string::size_type namespace_set_pos = user_id.find('.');
+	if ( nick_set_pos != std::string::npos ) {
+		nickname = user_id.substr(0, nick_set_pos);
+		username = user_id.substr(nick_set_pos + 1);
+	} else {
+		if ( namespace_set_pos != std::string::npos ) {
+			nickname = "*";
+			username = "*";
+		} else if ( net_sep_pos != std::string::npos ) {
+			nickname = "*";
+			username = user_id;
+		} else {
+			nickname = user_id;
+			username = "*";
+		}
+	}
+
+	if ( 
+		net_sep_pos != std::string::npos ||
+		(nick_set_pos == std::string::npos &&
+		namespace_set_pos != std::string::npos)
+	) {
+		hostname = user_network;
+		hostname = user_network;
+	} else {
+		hostname = "*";
+	}
+
+	return nickname + "!" + username + "@" + hostname;
 }
