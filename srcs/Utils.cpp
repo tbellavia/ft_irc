@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 15:20:16 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/08 11:36:28 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/15 10:34:05 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 
 #include "../include/Utils.hpp"
 #include <iostream>
+#include <ctype.h>
 
 bool ft::ends_with(const std::string &val, const std::string &ending) {
 	if ( ending.size() > val.size() )
@@ -74,4 +75,15 @@ ft::remove(std::vector<std::string> &v, std::string const &val){
 void
 ft::debug_notice(std::string const &msg){
 	std::cout << "NOTICE: " << msg << std::endl;
+}
+
+
+std::string
+ft::string_toupper(std::string const &string){
+	std::string ret = string;
+
+	for ( std::size_t i = 0; i < string.length(); ++i ){
+		ret[i] = std::toupper(string[i]);
+	}
+	return ret;
 }

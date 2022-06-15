@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 18:31:44 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/08 11:41:26 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/15 10:32:41 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ namespace ft {
 	std::string					popfirst(std::string const &s);
 	std::string					poplast(std::string const &s);
 	void						remove(std::vector<std::string> &v, std::string const &val);
+	std::string					string_toupper(std::string const &string);
 
 	template<typename InputIt>
 	void debug_log_args(InputIt first, InputIt last, std::ostream &os){
