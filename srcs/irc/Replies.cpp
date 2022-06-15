@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/14 21:00:12 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/15 10:03:52 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,13 @@ IRC::ReplyBuilder::error_already_registered() {
 	reply.append(" ");
 	reply.append(":You may not reregister");
 	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::error_no_privileges() {
+	std::string reply = this->build_header_(NumericReplies::ERR_NOPRIVILEGES);
+
+	return reply + " :Permission Denied- You're not an IRC operator";
 }
 
 std::string
@@ -227,13 +234,24 @@ std::string IRC::ReplyBuilder::error_erroneus_nickname(std::string const &nickna
 	return reply;
 }
 
-std::string IRC::ReplyBuilder::error_nickname_collision(std::string const &nickname){
+std::string IRC::ReplyBuilder::error_nickname_collision(
+	std::string const &nickname
+){
 	std::string reply = this->build_header_(NumericReplies::ERR_NICKCOLLISION);
 
 	reply.append(" ");
 	reply.append(nickname);
 	reply.append(" :Nickname collision KILL");
 	return reply;
+}
+
+std::string IRC::ReplyBuilder::reply_cmd_kill(
+	std::string const &nickname, std::string const &comment
+)
+{
+	std::string reply = this->build_header_();
+
+	return reply + " KILL " + nickname + " :" + comment;
 }
 
 std::string
