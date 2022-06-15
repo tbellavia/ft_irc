@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:19:21 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/15 10:35:45 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/15 10:54:40 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,10 @@ IRC::Channels::has(std::string const &name) {
 IRC::Channel*
 IRC::Channels::find(std::string const &name) {
 	std::map<std::string, Channel>::iterator found = m_channels.find(
-		ft::string_toupper(name)
+		ft::string_tolower(name)
 	);
 	if ( found == m_channels.end() )
-		found = m_channels.find(name);
+		found = m_channels.find(ft::string_toupper(name));
 
 	if ( found != m_channels.end() )
 		return &found->second;

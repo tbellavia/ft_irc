@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:52:41 by lperson-          #+#    #+#             */
-/*   Updated: 2022/06/15 10:26:56 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/15 10:39:49 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ IRC::Actions IRC::CmdMODE::execute_channel_mode_(
 		ReplyBuilder user_reply(this->sender()->get_mask());
 		Actions reply_action = channel->notify(
 			user_reply.reply_channel_mode(
-				m_target, m_mode_reply, m_mode_arguments_reply
+				channel->get_name(), m_mode_reply, m_mode_arguments_reply
 			)
 		);
 		actions.append(reply_action);

@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 15:20:16 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/15 10:34:05 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/15 10:53:35 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,16 @@ ft::string_toupper(std::string const &string){
 
 	for ( std::size_t i = 0; i < string.length(); ++i ){
 		ret[i] = std::toupper(string[i]);
+	}
+	return ret;
+}
+
+std::string
+ft::string_tolower(std::string const &string){
+	std::string ret = string;
+
+	for ( std::size_t i = 0; i < string.length(); ++i ){
+		ret[i] = std::tolower(string[i]);
 	}
 	return ret;
 }
