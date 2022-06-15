@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/14 21:00:12 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/15 10:26:46 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,13 @@ IRC::ReplyBuilder::error_already_registered() {
 	reply.append(" ");
 	reply.append(":You may not reregister");
 	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::error_no_privileges() {
+	std::string reply = this->build_header_(NumericReplies::ERR_NOPRIVILEGES);
+
+	return reply + " :Permission Denied- You're not an IRC operator";
 }
 
 std::string
@@ -227,13 +234,24 @@ std::string IRC::ReplyBuilder::error_erroneus_nickname(std::string const &nickna
 	return reply;
 }
 
-std::string IRC::ReplyBuilder::error_nickname_collision(std::string const &nickname){
+std::string IRC::ReplyBuilder::error_nickname_collision(
+	std::string const &nickname
+){
 	std::string reply = this->build_header_(NumericReplies::ERR_NICKCOLLISION);
 
 	reply.append(" ");
 	reply.append(nickname);
 	reply.append(" :Nickname collision KILL");
 	return reply;
+}
+
+std::string IRC::ReplyBuilder::reply_cmd_kill(
+	std::string const &nickname, std::string const &comment
+)
+{
+	std::string reply = this->build_header_();
+
+	return reply + " KILL " + nickname + " :" + comment;
 }
 
 std::string
@@ -372,13 +390,11 @@ IRC::ReplyBuilder::error_u_mode_unknown_flag() {
 // User replies (infos etc...)
 std::string
 IRC::ReplyBuilder::reply_u_mode_is(
-	std::string const &user_name, int user_mode
+	int user_mode
 ) {
 	std::string reply = this->build_header_(NumericReplies::RPL_UMODEIS);
 
-	reply.append(" ");
-	reply.append(user_name);
-	reply.append(" :+");
+	reply += " :+";
 
 	std::string const mode_string = IRC_USER_MODE_STRING;
 	for (std::string::size_type i = 0; i < mode_string.length(); ++i) {
@@ -395,6 +411,21 @@ IRC::ReplyBuilder::reply_user_mode(
 	std::string reply = this->build_header_();
 
 	reply += " MODE " + user_name + " " + modes;
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::reply_user_mode(
+	std::string const &user_name, int user_mode
+) {
+	std::string reply = this->build_header_();
+
+	reply += " MODE " + user_name + " :";
+	std::string const mode_string = IRC_USER_MODE_STRING;
+	for (std::string::size_type i = 0; i < mode_string.length(); ++i) {
+		if ( user_mode & (0x01 << i) )
+			reply.push_back(mode_string[i]);
+	}
 	return reply;
 }
 
@@ -788,14 +819,6 @@ IRC::ReplyBuilder::build_header_(){
 	s.append(":");
 	s.append(m_sender);
 	// TODO: Manage 0 padding.
-	if ( m_target ) {
-		if ( !m_target->get_nickname().empty() ) {
-			s += " " + m_target->get_nickname();
-		}
-		else {
-			s += " *";
-		}
-	}
 	return s;
 }
 

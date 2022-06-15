@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:52:41 by lperson-          #+#    #+#             */
-/*   Updated: 2022/06/13 16:05:53 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/15 11:48:16 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ IRC::Actions IRC::CmdMODE::execute_channel_mode_(
 		ReplyBuilder user_reply(this->sender()->get_mask());
 		Actions reply_action = channel->notify(
 			user_reply.reply_channel_mode(
-				m_target, m_mode_reply, m_mode_arguments_reply
+				channel->get_name(), m_mode_reply, m_mode_arguments_reply
 			)
 		);
 		actions.append(reply_action);
@@ -512,9 +512,7 @@ IRC::Actions IRC::CmdMODE::execute_user_mode_(ReplyBuilder &reply)
 	if (m_arguments.size() == 2)
 	{
 		return Actions::unique_send(
-			sender, reply.reply_u_mode_is(
-				sender->get_nickname(), sender->get_mode()
-			)
+			sender, reply.reply_u_mode_is(sender->get_mode())
 		);
 	}
 
@@ -572,8 +570,11 @@ void IRC::CmdMODE::execute_user_mode_list_(
 				already_written = true;
 				m_mode_reply += "+";
 			}
-			user.set_mode(mode.value);
-			m_mode_reply += mode.litteral;
+			if (mode.value != MODE_OPERATOR)
+			{
+				user.set_mode(mode.value);
+				m_mode_reply += mode.litteral;
+			}
 		}
 		else if (!is_add && user.get_mode() & mode.value)
 		{

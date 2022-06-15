@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 22:53:22 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/09 11:35:35 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/15 10:38:27 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ IRC::CmdJOIN::execute() {
 			Channel *channel = channels.find(name);
 
 			if ( channel != NULL ) {
+				name = channel->get_name();
 				if ( channel->is_banned_user(user) )
 					return Actions::unique_send(user, reply.error_banned_from_channel(name));
 				if ( channel->is_private() && !channel->equal_key(key) )

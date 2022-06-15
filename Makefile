@@ -6,7 +6,7 @@
 #    By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/12 19:27:05 by bbellavi          #+#    #+#              #
-#    Updated: 2022/06/14 20:23:03 by lperson-         ###   ########.fr        #
+#    Updated: 2022/06/15 09:25:13 by lperson-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,6 +55,7 @@ SRCS		=	main.cpp								\
 				srcs/irc/cmd/CmdPART.cpp				\
 				srcs/irc/cmd/CmdTOPIC.cpp				\
 				srcs/irc/cmd/CmdNAMES.cpp				\
+				srcs/irc/cmd/CmdKILL.cpp				\
 				srcs/irc/ISubscriber.cpp				\
 				srcs/irc/User.cpp						\
 				srcs/irc/Users.cpp						\

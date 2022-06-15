@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CmdFactory.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 23:07:36 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/14 16:33:26 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/15 11:01:00 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ IRC::CmdFactory::CmdFactory() : ICmdFactory(), m_callbacks()
 	m_callbacks.insert(std::make_pair("PART", &CmdFactory::create_part_cmd));
 	m_callbacks.insert(std::make_pair("TOPIC", &CmdFactory::create_topic_cmd));
 	m_callbacks.insert(std::make_pair("NAMES", &CmdFactory::create_names_cmd));
+	m_callbacks.insert(std::make_pair("KILL", &CmdFactory::create_kill_cmd));
 	// Both PRIVMSG and NOTICE are the same
 	m_callbacks.insert(std::make_pair("PRIVMSG", &CmdFactory::create_privmsg_cmd));
 	m_callbacks.insert(std::make_pair("NOTICE", &CmdFactory::create_privmsg_cmd));
@@ -49,10 +50,11 @@ IRC::ACmd*
 IRC::CmdFactory::create_cmd(
 	std::string const &name, CmdCtx &ctx, std::string const &request
 ) {
-	std::map<std::string, callback_t>::iterator found;
+	std::map<std::string, callback_t>::iterator found = m_callbacks.find(
+		ft::string_toupper(name)
+	);
 
-	std::cout << "COMMAND: " << name << std::endl;
-	if ( (found = m_callbacks.find(name)) != m_callbacks.end() ){
+	if ( found != m_callbacks.end() ){
 		return (this->*found->second)(ctx, request);
 	}
 	return NULL;
@@ -141,4 +143,9 @@ IRC::CmdFactory::create_topic_cmd(CmdCtx &ctx, std::string const &request) {
 IRC::ACmd*
 IRC::CmdFactory::create_names_cmd(CmdCtx &ctx, std::string const &request) {
 	return new CmdNAMES(ctx, request);
+}
+
+IRC::ACmd*
+IRC::CmdFactory::create_kill_cmd(CmdCtx &ctx, std::string const &request) {
+	return new CmdKILL(ctx, request);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Replies.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:16 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/14 17:07:10 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/15 10:26:45 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,11 @@ namespace IRC
 		ReplyBuilder &operator=(ReplyBuilder const &other);
 		~ReplyBuilder();
 
-		std::string error_need_more_params(std::string const &command);
-		std::string error_already_registered();
-
 		// General replies - errors
+		std::string error_need_more_params(std::string const &command);
 		std::string error_not_registered();
+		std::string error_already_registered();
+		std::string error_no_privileges();
 		std::string error_summon_disabled();
 		std::string error_users_disabled();
 		std::string error_unknown_command(std::string const &name);
@@ -77,6 +77,11 @@ namespace IRC
 		std::string error_nickname_in_use(std::string const &nickname);
 		std::string error_erroneus_nickname(std::string const &nickname);
 		std::string error_nickname_collision(std::string const &nickname);
+
+		// Kill
+		std::string reply_cmd_kill(
+			std::string const &nickname, std::string const &comment
+		);
 
 		// Channel errors
 		std::string error_no_such_channel(std::string const &channel);
@@ -151,10 +156,13 @@ namespace IRC
 
 		// User replies (infos etc...)
 		std::string reply_u_mode_is(
-			std::string const &user_name, int user_mode
+			int user_mode
 		);
 		std::string reply_user_mode(
 			std::string const &user_name, std::string const &modes
+		);
+		std::string reply_user_mode(
+			std::string const &user_name, int user_mode
 		);
 
 		std::string reply_privmsg(std::string const &cmd, std::string const &msg, std::string const &channel);
