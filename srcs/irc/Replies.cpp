@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/15 10:17:56 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/15 10:26:46 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -390,13 +390,11 @@ IRC::ReplyBuilder::error_u_mode_unknown_flag() {
 // User replies (infos etc...)
 std::string
 IRC::ReplyBuilder::reply_u_mode_is(
-	std::string const &user_name, int user_mode
+	int user_mode
 ) {
 	std::string reply = this->build_header_(NumericReplies::RPL_UMODEIS);
 
-	reply.append(" ");
-	reply.append(user_name);
-	reply.append(" :+");
+	reply += " :+";
 
 	std::string const mode_string = IRC_USER_MODE_STRING;
 	for (std::string::size_type i = 0; i < mode_string.length(); ++i) {

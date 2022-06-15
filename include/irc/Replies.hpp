@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:16 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/15 10:16:21 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/15 10:26:45 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,7 @@ namespace IRC
 
 		// User replies (infos etc...)
 		std::string reply_u_mode_is(
-			std::string const &user_name, int user_mode
+			int user_mode
 		);
 		std::string reply_user_mode(
 			std::string const &user_name, std::string const &modes
