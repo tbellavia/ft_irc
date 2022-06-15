@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 18:18:53 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/08 11:43:41 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/15 11:25:04 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,11 @@ IRC::CmdNICK::execute() {
 				// Send error and disconnect all users
 				return actions
 					.push(Action::send(user, reply.error_nickname_collision(nickname)))
+					.push(
+						Action::sendall(collided_users,reply.reply_cmd_kill(
+							nickname, "Nick collision"
+						))
+					)
 					.push(Action::disconnectall(collided_users));
 			}
 		} 
