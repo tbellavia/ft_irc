@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/15 10:03:52 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/15 10:17:56 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -417,6 +417,21 @@ IRC::ReplyBuilder::reply_user_mode(
 }
 
 std::string
+IRC::ReplyBuilder::reply_user_mode(
+	std::string const &user_name, int user_mode
+) {
+	std::string reply = this->build_header_();
+
+	reply += " MODE " + user_name + " :";
+	std::string const mode_string = IRC_USER_MODE_STRING;
+	for (std::string::size_type i = 0; i < mode_string.length(); ++i) {
+		if ( user_mode & (0x01 << i) )
+			reply.push_back(mode_string[i]);
+	}
+	return reply;
+}
+
+std::string
 IRC::ReplyBuilder::error_unknown_mode(char mode)
 {
 	std::string reply = this->build_header_(NumericReplies::ERR_UNKNOWNMODE);
@@ -806,14 +821,6 @@ IRC::ReplyBuilder::build_header_(){
 	s.append(":");
 	s.append(m_sender);
 	// TODO: Manage 0 padding.
-	if ( m_target ) {
-		if ( !m_target->get_nickname().empty() ) {
-			s += " " + m_target->get_nickname();
-		}
-		else {
-			s += " *";
-		}
-	}
 	return s;
 }
 
