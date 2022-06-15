@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 09:22:18 by lperson-          #+#    #+#             */
-/*   Updated: 2022/06/15 11:19:12 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/15 11:44:37 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,11 @@ IRC::Actions IRC::CmdKILL::execute()
 	Actions queue;
 	queue.push(
 		Action::sendall(
-			targets, reply.reply_cmd_kill(m_arguments[1], m_arguments[2])
+			targets, reply.reply_cmd_kill(
+				m_arguments[1],
+				"Killed (" + sender->get_nickname() + " (" + m_arguments[2] +
+					"))"
+			)
 		)
 	);
 	queue.push(Action::disconnectall(targets));
