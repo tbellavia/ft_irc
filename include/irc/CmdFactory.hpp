@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CmdFactory.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 14:22:35 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/14 16:33:39 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/15 09:27:28 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@
 # include "cmd/CmdPART.hpp"
 # include "cmd/CmdTOPIC.hpp"
 # include "cmd/CmdNAMES.hpp"
+# include "cmd/CmdKILL.hpp"
 
 namespace IRC
 {
@@ -58,6 +59,7 @@ namespace IRC
 		ACmd *create_part_cmd(CmdCtx &ctx, std::string const &request);
 		ACmd *create_topic_cmd(CmdCtx &ctx, std::string const &request);
 		ACmd *create_names_cmd(CmdCtx &ctx, std::string const &request);
+		ACmd *create_kill_cmd(CmdCtx &ctx, std::string const &request);
 	public:
 		CmdFactory();
 		CmdFactory(CmdFactory const &copy);
