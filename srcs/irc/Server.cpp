@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 18:47:47 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/14 20:46:52 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/16 10:06:15 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ IRC::Server::Server(ConfigServer &conf, Api &api, bool bind_and_activate) :
 			this->bind();
 			this->activate();
 		}
-	} catch (std::exception const &e) {
+	} catch (Socket::SocketException const &e) {
 		delete m_signalfd;
 		delete m_server;
 		throw e;
