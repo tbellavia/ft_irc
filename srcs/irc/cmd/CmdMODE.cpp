@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:52:41 by lperson-          #+#    #+#             */
-/*   Updated: 2022/06/15 11:48:16 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/16 10:01:45 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -563,18 +563,18 @@ void IRC::CmdMODE::execute_user_mode_list_(
 		{
 			; // TODO: handle parameters
 		}
-		else if (is_add && !(user.get_mode() & mode.value))
+		else if (
+			is_add && !(user.get_mode() & mode.value) &&
+			mode.value != MODE_OPERATOR
+		)
 		{
 			if (!already_written)
 			{
 				already_written = true;
 				m_mode_reply += "+";
 			}
-			if (mode.value != MODE_OPERATOR)
-			{
-				user.set_mode(mode.value);
-				m_mode_reply += mode.litteral;
-			}
+			user.set_mode(mode.value);
+			m_mode_reply += mode.litteral;
 		}
 		else if (!is_add && user.get_mode() & mode.value)
 		{
