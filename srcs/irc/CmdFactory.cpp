@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 23:07:36 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/14 16:33:26 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/18 21:17:09 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ IRC::CmdFactory::CmdFactory() : ICmdFactory(), m_callbacks()
 	// Both PRIVMSG and NOTICE are the same
 	m_callbacks.insert(std::make_pair("PRIVMSG", &CmdFactory::create_privmsg_cmd));
 	m_callbacks.insert(std::make_pair("NOTICE", &CmdFactory::create_privmsg_cmd));
+	m_callbacks.insert(std::make_pair("WHOIS", &CmdFactory::create_whois_cmd));
 }
 
 IRC::CmdFactory::CmdFactory(CmdFactory const &copy) :
@@ -141,4 +142,9 @@ IRC::CmdFactory::create_topic_cmd(CmdCtx &ctx, std::string const &request) {
 IRC::ACmd*
 IRC::CmdFactory::create_names_cmd(CmdCtx &ctx, std::string const &request) {
 	return new CmdNAMES(ctx, request);
+}
+
+IRC::ACmd*
+IRC::CmdFactory::create_whois_cmd(CmdCtx &ctx, std::string const &request) {
+	return new CmdWHOIS(ctx, request);
 }
