@@ -6,11 +6,12 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 17:58:02 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/19 23:01:21 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/19 23:25:44 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "CmdWHOIS.hpp"
+# include "Masks.hpp"
 # include <iostream>
 
 IRC::CmdWHOIS::CmdWHOIS(CmdCtx &ctx, std::string const &request)
@@ -28,13 +29,16 @@ IRC::CmdWHOIS::execute() {
 	if ( m_arguments.size() < Expected_args(1) )
 		return Actions::unique_send(user, reply.error_no_nickname_given());
 	if ( m_arguments.size() == Expected_args(1) )
-		nickmasks = ft::split(m_arguments[1]);
+		nickmasks = ft::split(m_arguments[1], ",");
 	else
-		nickmasks = ft::split(m_arguments[2]);
+		nickmasks = ft::split(m_arguments[2], ",");
 
 	std::vector<std::string>::iterator it = nickmasks.begin();
 	for ( ; it != nickmasks.end() ; ++it ){
-		whois(*it, actions, reply);
+		if ( mask::is_mask(*it) )
+			whois_mask(*it, actions, reply);
+		else
+			whois(*it, actions, reply);
 	}
 	return actions;
 }
