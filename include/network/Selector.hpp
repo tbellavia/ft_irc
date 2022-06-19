@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Selector.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 18:31:22 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/20 16:14:55 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/14 18:03:55 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@
 # include <vector>
 # include <map>
 # include <set>
-# include "Socket.hpp"
 # include "Network.hpp"
 # include "File.hpp"
+# include "IFileObj.hpp"
 
 class Selector {
 public:
@@ -46,12 +46,14 @@ public:
 	~Selector();
 
 	std::map<int, File*> const &get_entries() const;
-	File *find(Socket *socket);
+	File *find(IFileObj *fileobj);
 
-	void unset(Socket *socket, int events);
-	void add(Socket *socket, int events);
-	void remove(Socket *socket);
-	std::pair<std::set<File*>, std::set<File*> > select(int seconds = -1, int useconds = -1);
+	void unset(IFileObj *fileobj, int events);
+	void add(IFileObj *fileobj, int events);
+	void remove(IFileObj *fileobj);
+	std::pair<std::set<File*>, std::set<File*> > select(
+		int seconds = -1, int useconds = -1
+	);
 };
 
 #endif //FT_IRC_SELECTOR_HPP

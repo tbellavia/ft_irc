@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 11:16:49 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/19 13:01:21 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/15 10:16:54 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,17 @@ IRC::CmdOPER::execute() {
 	if ( oper_user != m_ctx.config.oper_name || oper_pass != m_ctx.config.oper_pass ){
 		return Actions::unique_send(user, reply.error_password_mismatch());
 	}
+
 	// Set operator mode
 	user->set_mode(MODE_OPERATOR);
-	return Actions::unique_send(user, reply.reply_youre_oper());
+	Actions queue;
+	queue.push(
+		Action::send(user, reply.reply_youre_oper())
+	);
+	queue.push(
+		Action::send(
+			user, reply.reply_user_mode(user->get_nickname(), user->get_mode())
+		)
+	);
+	return queue;
 }

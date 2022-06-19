@@ -57,9 +57,7 @@ Socket &Socket::operator=(Socket const &other) {
 	return *this;
 }
 
-Socket::~Socket() {
-
-}
+Socket::~Socket() { }
 
 /**
  * Access functions
@@ -104,8 +102,11 @@ void Socket::bind(std::string const &host, std::string const &port)  {
 	if ( status != 0 )
 		throw SocketGaiException(status);
 	m_addr = *infos;
-	if ( ::bind(m_fd, m_addr.ai_addr, m_addr.ai_addrlen) == -1 )
+	if ( ::bind(m_fd, m_addr.ai_addr, m_addr.ai_addrlen) == -1 ) {
+		freeaddrinfo(infos);
 		throw SocketException("bind exception");
+	}
+	freeaddrinfo(infos);
 }
 
 void Socket::connect(std::string const &host, std::string const &port) {
@@ -116,8 +117,11 @@ void Socket::connect(std::string const &host, std::string const &port) {
 	if ( status != 0 )
 		throw SocketGaiException(status);
 	m_addr = *infos;
-	if ( ::connect(m_fd, m_addr.ai_addr, m_addr.ai_addrlen) == -1 )
+	if ( ::connect(m_fd, m_addr.ai_addr, m_addr.ai_addrlen) == -1 ) {
+		freeaddrinfo(infos);
 		throw SocketException("connect exception");
+	}
+	freeaddrinfo(infos);
 }
 
 void Socket::listen(int n) const {
@@ -184,7 +188,7 @@ ssize_t Socket::recv(std::string &s, std::string const &seq, int flags) const {
 	return bytes;
 }
 
-void Socket::close() const {
+void Socket::close() {
 	::close(m_fd);
 }
 

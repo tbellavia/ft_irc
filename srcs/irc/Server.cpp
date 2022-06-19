@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 18:47:47 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/14 17:07:35 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/19 15:12:54 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,27 +15,42 @@
 IRC::Server::Server(ConfigServer &conf, Api &api, bool bind_and_activate) : 
 	m_config(conf),
 	m_server(Socket::create_tcp_socket()), 
+	m_signalfd(NULL),
 	m_selector(),
 	m_ready(),
 	m_writers(),
 	m_readers(),
-	m_api(api)
+	m_api(api),
+	m_continue(true)
 {
 	int enable = true;
 
-	m_server->setsockopt(SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int));
-	m_server->set_blocking(false);
-	if ( bind_and_activate ){
-		this->bind();
-		this->activate();
+	std::vector<int> signals;
+	signals.push_back(SIGTERM);
+	signals.push_back(SIGINT);
+	m_signalfd = new SignalFD(signals);
+
+	try {
+		m_server->setsockopt(SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int));
+		m_server->set_blocking(false);
+		if ( bind_and_activate ){
+			this->bind();
+			this->activate();
+		}
+	} catch (Socket::SocketException const &e) {
+		delete m_signalfd;
+		delete m_server;
+		throw e;
 	}
 }
 
 IRC::Server::Server(IRC::Server const &other) :
 		m_config(other.m_config),
-		m_server(other.m_server), 
+		m_server(other.m_server),
+		m_signalfd(other.m_signalfd),
 		m_selector(other.m_selector),
-		m_api(other.m_api) { }
+		m_api(other.m_api),
+		m_continue(other.m_continue) { }
 
 IRC::Server&
 IRC::Server::operator=(Server const &other) {
@@ -43,11 +58,28 @@ IRC::Server::operator=(Server const &other) {
 		return *this;
 	m_config = other.m_config;
 	m_server = other.m_server;
+	m_signalfd = other.m_signalfd;
 	m_selector = other.m_selector;
+	m_continue = other.m_continue;
 	return *this;
 }
 
-IRC::Server::~Server() { }
+IRC::Server::~Server() {
+	std::map<int, File*> const &entries = m_selector.get_entries();
+	std::map<int, File*>::const_iterator first = entries.begin(),
+		last = entries.end();
+
+	for (; first != last; ) {
+		IFileObj *fileobj = first->second->fileobj();
+		++first;
+		if (fileobj != m_signalfd)
+			this->disconnect_socket_(reinterpret_cast<Socket *>(fileobj));
+		else {
+			m_selector.remove(m_signalfd);
+			delete m_signalfd;
+		}
+	}
+}
 
 void IRC::Server::activate() const {
 	std::cout << "Listening on " << m_config.server_host << ":" << m_config.server_port << std::endl;
@@ -60,9 +92,10 @@ void IRC::Server::bind() const {
 
 void IRC::Server::serve_forever() {
 	m_selector.add(m_server, Selector::READ);
+	m_selector.add(m_signalfd, Selector::READ);
 	m_config.update_creation_date();
 
-	while ( true ){
+	while ( m_continue ){
 		this->select_();
 
 		this->read_requests_();
@@ -82,18 +115,23 @@ IRC::Server::read_requests_() {
 
 	for ( it = m_readers.begin() ; it != m_readers.end() ; ++it ){
 		File		*file = *it;
-		Socket		*socket = file->socket();
+		IFileObj	*fileobj = file->fileobj();
 		std::string	buffer;
 
-		if ( *socket == *m_server ){
+		if ( *fileobj == *m_server ){
 			this->connect_socket_(m_server->accept());
+		} else if ( *fileobj == *m_signalfd ) {
+			std::cout << "Server stopped by signal!" << std::endl;
+			m_continue = false;
 		} else {
+			Socket *socket = reinterpret_cast<Socket *>(fileobj);
 			if ( (bytes = socket->recv(buffer)) <= 0 ){
 				// Connection shutdown
 				if ( bytes == 0 ){
 					std::cout << "Client has closed the connection" << std::endl;
 				}
 				// Remove File from writers to prevent using it in the writer loop.
+				m_readers.erase( file );
 				m_writers.erase( file );
 				this->disconnect_socket_( socket );
 			} else {
@@ -125,7 +163,18 @@ IRC::Server::write_responses_() {
 
 		if ( file->available_response() ){
 			response = file->pop_response();
-			bytes = file->socket()->send( response );
+			bytes = reinterpret_cast<Socket *>(
+				file->fileobj()
+			)->send( response );
+			if ( bytes < 0 ) {
+				std::cerr << "Unsucessful write, disconnect client: "
+				<< std::endl;
+				m_readers.erase( file );
+				m_writers.erase( file );
+				this->disconnect_socket_(
+					reinterpret_cast<Socket *>(file->fileobj())
+				);
+			}
 			file->seek_response(bytes);
 		}
 	}
@@ -138,7 +187,7 @@ IRC::Server::finish_requests_() {
 
 	for ( it = entries.begin() ; it != entries.end() ; ++it ){
 		File *file = it->second;
-		Socket *socket = file->socket();
+		Socket *socket = reinterpret_cast<Socket *>(file->fileobj());
 
 		if ( file->isset_event(Selector::DISCONNECT) && !file->available_response() ){
 			// WARN: this line is super important, do not touch !!!
@@ -271,7 +320,7 @@ IRC::Server::disconnect_socket_(Socket *socket) {
  * Push disconnect event into all File object associated to sockets.
  */
 void
-IRC::Server::disconnectall_(Action &action){
+IRC::Server::disconnectall_(Action const &action){
 	std::vector<Socket*> sockets = action.sockets();
 	
 	for ( std::vector<Socket*>::iterator it = sockets.begin() ; it != sockets.end() ; ++it )

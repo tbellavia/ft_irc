@@ -6,7 +6,7 @@
 #    By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/12 19:27:05 by bbellavi          #+#    #+#              #
-#    Updated: 2022/06/18 21:11:59 by bbellavi         ###   ########.fr        #
+#    Updated: 2022/06/19 23:13:01 by bbellavi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,8 @@ SRCS		=	main.cpp								\
 				srcs/network/File.cpp					\
 				srcs/network/Socket.cpp					\
 				srcs/network/Network.cpp				\
+				srcs/network/IFileObj.cpp				\
+				srcs/network/SignalFD.cpp				\
 				srcs/irc/ICmdFactory.cpp				\
 				srcs/irc/CmdFactory.cpp					\
 				srcs/irc/CmdCtx.cpp						\
@@ -54,6 +56,7 @@ SRCS		=	main.cpp								\
 				srcs/irc/cmd/CmdPART.cpp				\
 				srcs/irc/cmd/CmdTOPIC.cpp				\
 				srcs/irc/cmd/CmdNAMES.cpp				\
+				srcs/irc/cmd/CmdKILL.cpp				\
 				srcs/irc/ISubscriber.cpp				\
 				srcs/irc/User.cpp						\
 				srcs/irc/Users.cpp						\

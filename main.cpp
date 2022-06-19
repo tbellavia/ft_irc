@@ -6,13 +6,14 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/22 15:02:17 by lperson-          #+#    #+#             */
-/*   Updated: 2022/06/08 10:23:33 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/14 20:11:11 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
 #include <cstdlib>
 #include <exception>
+#include <iostream>
 #include "App.hpp"
 
 int main(int argc, char *argv[])
@@ -37,6 +38,10 @@ int main(int argc, char *argv[])
 		10
 	);
 
-	app.start(config);
+	try {
+		app.start(config);
+	} catch (std::exception const &e) {
+		std::cerr << e.what() << std::endl;
+	}
 	return EXIT_SUCCESS;
 }

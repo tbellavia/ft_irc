@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 18:31:32 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/05/12 16:43:01 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/14 18:29:45 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 
 # include "Network.hpp"
 # include "../Utils.hpp"
+# include "IFileObj.hpp"
 
 
 // TODO: Remove this includes
@@ -40,7 +41,7 @@
 
 void *get_in_addr(sockaddr *sa);
 
-class Socket {
+class Socket : public IFileObj {
 public:
 	/* Internal implementation */
 	struct SocketStorage {
@@ -114,7 +115,7 @@ public:
 	ssize_t					recv(void *buf, size_t len, int flags = 0) const;
 	ssize_t					recv(std::string &s, int flags = 0) const;
 	ssize_t					recv(std::string &s, std::string const &seq, int flags = 0) const;
-	void					close() const;
+	void					close();
 	void					shutdown(int how) const;
 	int						setsockopt(int level, int optname, const void *optval, socklen_t optlen) const;
 	int						getsockopt(int level, int optname, void *optval, socklen_t *optlen) const;

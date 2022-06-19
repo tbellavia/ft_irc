@@ -12,17 +12,18 @@
 
 #include "File.hpp"
 #include <iostream>
+#include "Utils.hpp"
 
-File::File() : m_socket(NULL), m_events(0), m_buffer(), m_requests() { }
+File::File() : m_fileobj(NULL), m_events(0), m_buffer(), m_requests() { }
 
-File::File(Socket *socket, int events) : 
-	m_socket(socket),
+File::File(IFileObj *fileobj, int events) : 
+	m_fileobj(fileobj),
 	m_events(events),
 	m_buffer(),
 	m_requests() { }
 
 File::File(File const &other) : 
-	m_socket(other.m_socket), 
+	m_fileobj(other.m_fileobj), 
 	m_events(other.m_events), 
 	m_buffer(other.m_buffer),
 	m_requests(other.m_requests) { }
@@ -30,16 +31,14 @@ File::File(File const &other) :
 File &File::operator=(File const &other) {
 	if ( this == &other )
 		return *this;
-	m_socket = other.m_socket;
+	m_fileobj = other.m_fileobj;
 	m_events = other.m_events;
 	m_buffer = other.m_buffer;
 	m_requests = other.m_requests;
 	return *this;
 }
 
-File::~File() {
-	
-}
+File::~File() { }
 
 void
 File::set_event(int event) {
@@ -51,9 +50,9 @@ File::unset_event(int event) {
 	m_events &= ~event;
 }
 
-Socket*
-File::socket() {
-	return m_socket;
+IFileObj*
+File::fileobj() {
+	return m_fileobj;
 }
 
 std::string const&
