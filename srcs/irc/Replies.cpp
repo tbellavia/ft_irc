@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/19 23:10:36 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/19 23:21:39 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -809,6 +809,8 @@ IRC::ReplyBuilder::reply_whois_channels(User *user, std::vector<Channel*> &chann
 
 		reply.append(this->get_user_mode_symbol_(user, channel));
 		reply.append(channel->get_name());
+		if ( (it + 1) != channels.end() )
+			reply.append(" ");
 	}
 	return reply;
 }
@@ -831,7 +833,7 @@ IRC::ReplyBuilder::reply_whois_server(User *user, std::string const &server_name
 	reply.append(user->get_nickname());
 	reply.append(" ");
 	reply.append(server_name);
-	reply.append(":" + server_info);
+	reply.append(" :" + server_info);
 	return reply;
 }
 
