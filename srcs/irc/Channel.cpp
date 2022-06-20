@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:38:55 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/20 15:03:22 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/20 17:58:28 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -396,7 +396,7 @@ IRC::Channel::is_key_protected() const {
 
 bool
 IRC::Channel::is_channel_name(std::string const &name) {
-	return !name.empty() && (name[0] == '#' || name[0] == '&');
+	return name.size() > 1 && (name[0] == '#' || name[0] == '&');
 }
 
 bool
