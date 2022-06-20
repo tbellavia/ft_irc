@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   User.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 14:36:26 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/13 16:09:54 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/19 19:07:15 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 IRC::User::User() : 
 	m_username(""),
 	m_nickname(""),
-	m_realname(""),
+	m_realname("realname"),
 	m_mode(0),
 	m_socket(NULL) { }
 
@@ -68,7 +68,10 @@ IRC::User::set_nickname(std::string const &nick) {
 
 void
 IRC::User::set_realname(std::string const &realname){
-	m_realname = realname;
+	if ( realname.empty() )
+		m_realname = "realname";
+	else
+		m_realname = realname;
 }
 
 void

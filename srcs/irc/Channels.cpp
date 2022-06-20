@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channels.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:19:21 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/15 10:54:40 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/19 23:09:48 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,22 @@ IRC::Channels::find_by_user(User *user) {
 			return &it->second;
 	}
 	return NULL;
+}
+
+/**
+ * Returns a list of channels where user has subscribed to.
+ */
+std::vector<IRC::Channel*>
+IRC::Channels::get_channels_by_user(User *user) {
+	std::vector<IRC::Channel*> channels;
+	std::map<std::string, Channel>::iterator it = m_channels.begin();
+
+	for ( ; it != m_channels.end() ; ++it ){
+		if ( it->second.is_user(user) ){
+			channels.push_back(&it->second);
+		}
+	}
+	return channels;
 }
 
 /**

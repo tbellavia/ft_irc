@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Users.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 15:22:18 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/13 15:06:14 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/19 22:53:03 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ namespace IRC
 		/**
 		 * Getters and iterators for user.
 		 */
-
 		iterator find(User *to_find);
 		const_iterator find(User *to_find) const;
 
@@ -78,8 +77,10 @@ namespace IRC
 		template<typename Pred>
 		User *select_unique(Pred pred);
 
+		User *unique_find_by_nickmask(std::string const &nickmask);
+		Users find_by_nickmask(std::string const &nickmask);
+
 		Action notify(std::string const &msg, User *sender = NULL);
-		// Action notify_server_mask(std::string const &msg, std::string const &mask, User *sender = NULL);
 		Action notify_host_mask(std::string const &msg, std::string const &mask, User *sender = NULL);
 	};
 

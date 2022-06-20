@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:16 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/20 11:21:21 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/20 11:36:59 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,6 +174,13 @@ namespace IRC
 		std::string error_password_mismatch();
 		std::string reply_youre_oper();
 
+		// Whois
+		std::string reply_whois_user(User *user);
+		std::string reply_whois_channels(User *user, std::vector<Channel*> &channels);
+		std::string reply_whois_operator(User *user);
+		std::string reply_whois_server(User *user, std::string const &server_name, 
+			std::string const &server_info);
+		std::string reply_end_of_whois(std::string const &nick);
 	};
 }
 

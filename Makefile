@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+         #
+#    By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/12 19:27:05 by bbellavi          #+#    #+#              #
-#    Updated: 2022/06/15 09:25:13 by lperson-         ###   ########.fr        #
+#    Updated: 2022/06/19 23:13:01 by bbellavi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,6 +46,7 @@ SRCS		=	main.cpp								\
 				srcs/irc/cmd/CmdLIST.cpp				\
 				srcs/irc/cmd/CmdKICK.cpp				\
 				srcs/irc/cmd/CmdWHO.cpp					\
+				srcs/irc/cmd/CmdWHOIS.cpp				\
 				srcs/irc/cmd/CmdOPER.cpp				\
 				srcs/irc/cmd/CmdQUIT.cpp				\
 				srcs/irc/cmd/CmdPING.cpp				\
@@ -87,6 +88,7 @@ HEADERS		=	include/irc/Server.hpp					\
 				include/irc/cmd/CmdOPER.hpp				\
 				include/irc/cmd/CmdJOIN.hpp				\
 				include/irc/cmd/CmdWHO.hpp				\
+				include/irc/cmd/CmdWHOIS.hpp			\
 				include/irc/cmd/CmdPONG.hpp				\
 				include/irc/cmd/CmdQUIT.hpp				\
 				include/irc/cmd/CmdPRIVMSG.hpp			\

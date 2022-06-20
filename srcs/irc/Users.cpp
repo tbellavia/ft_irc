@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 15:43:00 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/14 17:07:43 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/19 22:52:58 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,35 @@ IRC::Users::find(User *to_find) {
 IRC::Users::const_iterator
 IRC::Users::find(User *to_find) const {
 	return m_users.find(to_find);
+}
+
+IRC::User*
+IRC::Users::unique_find_by_nickmask(std::string const &nickmask) {
+	view_type view = this->get_view();
+
+	for ( ; view.first != view.second ; ++view.first ){
+		User *user = *view.first;
+
+		if ( mask::match(user->get_nickname(), nickmask) ){
+			return user;
+		}
+	}
+	return NULL;
+}
+
+IRC::Users
+IRC::Users::find_by_nickmask(std::string const &nickmask) {
+	Users		users;
+	view_type	view = this->get_view();
+
+	for ( ; view.first != view.second ; ++view.first ){
+		User *user = *view.first;
+
+		if ( mask::match(user->get_nickname(), nickmask) ){
+			users.add(user);
+		}
+	}
+	return users;
 }
 
 

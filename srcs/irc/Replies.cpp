@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/20 11:29:38 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/20 11:36:42 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -785,6 +785,72 @@ IRC::ReplyBuilder::reply_quit(std::string const &message) {
 	reply.append(m_target->get_mask());
 	reply.append(" QUIT :Quit: ");
 	reply.append(message);
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::reply_whois_user(User *user) {
+	std::string reply = this->build_header_(NumericReplies::RPL_WHOISUSER);
+
+	reply.append(" ");
+	reply.append(user->get_nickname());
+	reply.append(" ");
+	reply.append(user->get_username());
+	reply.append(" ");
+	reply.append(user->get_hostname());
+	reply.append(" * :");
+	reply.append(user->get_realname());
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::reply_whois_channels(User *user, std::vector<Channel*> &channels){
+	std::string reply = this->build_header_(NumericReplies::RPL_WHOISCHANNELS);
+	std::vector<Channel*>::iterator it = channels.begin();
+
+	reply.append(" ");
+	reply.append(user->get_nickname());
+	reply.append(" ");
+	for ( ; it != channels.end() ; ++it ){
+		Channel *channel = *it;
+
+		reply.append(this->get_user_mode_symbol_(user, channel));
+		reply.append(channel->get_name());
+		if ( (it + 1) != channels.end() )
+			reply.append(" ");
+	}
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::reply_whois_operator(User *user) {
+	std::string reply = this->build_header_(NumericReplies::RPL_WHOISOPERATOR);
+
+	reply.append(" ");
+	reply.append(user->get_nickname());
+	reply.append(" :is an IRC operator");
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::reply_whois_server(User *user, std::string const &server_name, std::string const &server_info) {
+	std::string reply = this->build_header_(NumericReplies::RPL_WHOISSERVER);
+
+	reply.append(" ");
+	reply.append(user->get_nickname());
+	reply.append(" ");
+	reply.append(server_name);
+	reply.append(" :" + server_info);
+	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::reply_end_of_whois(std::string const &nick){ 
+	std::string reply = this->build_header_(NumericReplies::RPL_ENDOFWHOIS);
+
+	reply.append(" ");
+	reply.append(nick);
+	reply.append(" :End of /WHOIS list");
 	return reply;
 }
 

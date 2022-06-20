@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 23:16:06 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/03 18:52:33 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/19 23:12:17 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ namespace IRC
 
 		void	remove_user(User *user);
 		Channel	*find_by_user(User *user);
+		std::vector<Channel*> get_channels_by_user(User *user);
+
 		Actions notify_by_user(User *user, std::string const &message);
 		std::vector<Channel> get_channels();
 	};
