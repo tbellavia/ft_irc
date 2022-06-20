@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 12:08:34 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/02 00:05:09 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/20 13:10:14 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ IRC::CmdWHO::drop_by_mask_(std::string const &mask, bool op_only, Actions &actio
 		// host, server, realname, nickname
 		User *user = *view.first;
 
-		if ( !user->mask_match(mask) )
+		if ( !user->mask_match(mask::construct_mask(mask)) )
 			continue;
 		channel = this->channels().find_by_user(user);
 		if ( (!op_only && !user->is_invisible()) || (op_only && !user->is_invisible() && user->is_server_operator()) )
