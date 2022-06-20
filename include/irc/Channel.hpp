@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:34:06 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/20 14:24:32 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/20 14:49:57 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ namespace IRC
 		bool is_invite() const;
 		bool is_moderated() const;
 		bool is_outside_disable() const;
+		bool is_key_protected() const;
 
 		void subscribe(User *user);
 		void unsubscribe(User *user);

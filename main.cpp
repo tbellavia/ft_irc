@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/22 15:02:17 by lperson-          #+#    #+#             */
-/*   Updated: 2022/06/14 20:11:11 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/20 13:14:25 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 
 	IRC::ConfigServer config(
 		pass, 
-		"127.0.0.1", 
+		"0.0.0.0",
 		"ft.irc.com", 
 		port, 
 		"1.0",
@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
 	try {
 		app.start(config);
 	} catch (std::exception const &e) {
-		std::cerr << e.what() << std::endl;
+		std::cerr << "ft_irc: failed to start server: " << e.what() << std::endl;
 	}
 	return EXIT_SUCCESS;
 }

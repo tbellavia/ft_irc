@@ -6,7 +6,7 @@
 #    By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/12 19:27:05 by bbellavi          #+#    #+#              #
-#    Updated: 2022/06/19 23:13:01 by bbellavi         ###   ########.fr        #
+#    Updated: 2022/06/20 13:12:29 by bbellavi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -115,7 +115,7 @@ vpath %.cpp ${foreach dir, ${SUBDIRS}, ${dir}:}
 
 .PHONY: re clean fclean
 
-NAME = ft_irc
+NAME = ircserv
 
 all: $(NAME)
 
