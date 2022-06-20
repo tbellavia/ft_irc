@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:38:55 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/20 14:13:16 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/20 14:25:31 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ IRC::Channel::unset_key(std::string const &pass) {
 }
 
 void
-IRC::Channel::set_limit(int limit) {
+IRC::Channel::set_limit(std::size_t limit) {
 	m_limit = limit;
 }
 
@@ -159,7 +159,7 @@ IRC::Channel::get_key() const {
 	return m_key;
 }
 
-int
+std::size_t
 IRC::Channel::get_limit() const {
 	return m_limit;
 }

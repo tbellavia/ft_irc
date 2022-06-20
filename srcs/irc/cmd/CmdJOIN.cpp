@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 22:53:22 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/15 10:38:27 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/20 14:21:27 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,13 @@ IRC::CmdJOIN::execute() {
 					return Actions::unique_send(user, reply.error_bad_channel_key(name));
 				if ( channel->is_invite() && !channel->is_invited_user(user) )
 					return Actions::unique_send(user, reply.error_invite_only_channel(name));
+				if (
+					channel->get_mode() & CHAN_MODE_USER_LIMIT
+					&& channel->size() == channel->get_limit()
+				)
+					return Actions::unique_send(
+						user, reply.error_channel_is_full(channel->get_name())
+					);
 				channel->subscribe(user);
 
 				// Delete invitation once user has joined if it was invited
