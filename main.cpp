@@ -6,7 +6,7 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/22 15:02:17 by lperson-          #+#    #+#             */
-/*   Updated: 2022/06/19 23:44:44 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/20 13:14:25 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 
 	IRC::ConfigServer config(
 		pass, 
-		"127.0.0.1", 
+		"0.0.0.0",
 		"ft.irc.com", 
 		port, 
 		"1.0",
