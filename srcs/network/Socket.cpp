@@ -83,10 +83,10 @@ void Socket::set_blocking(bool blocking) {
 
 	m_blocking = blocking;
 	if ( blocking && m_fd != net::FD_UNSET ){
-		::fcntl(m_fd, opts & (~O_NONBLOCK));
+		::fcntl(m_fd, F_SETFL, opts & (~O_NONBLOCK));
 	}
 	if ( !blocking && m_fd != net::FD_UNSET ){
-		::fcntl(m_fd, O_NONBLOCK);
+		::fcntl(m_fd, F_SETFL, O_NONBLOCK);
 	}
 }
 
