@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:38:55 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/20 14:25:31 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/20 14:50:31 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -387,6 +387,11 @@ IRC::Channel::is_moderated() const {
 bool
 IRC::Channel::is_outside_disable() const {
 	return m_mode & CHAN_MODE_NO_OUTSIDE_MESSAGE;
+}
+
+bool
+IRC::Channel::is_key_protected() const {
+	return m_mode & CHAN_MODE_KEY;
 }
 
 bool
