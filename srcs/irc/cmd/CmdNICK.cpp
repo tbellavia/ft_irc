@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 18:18:53 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/20 11:32:25 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/20 12:53:28 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,18 +60,35 @@ IRC::CmdNICK::execute() {
 				std::cout << "> NICK COLLISION!" << std::endl;
 				collided_users.push_back(user);
 
+				// Send error and disconnect all users
+				Actions queue;
+				for ( std::size_t i = 0; i < collided_users.size(); ++i ) {
+					ReplyBuilder reply_quit(
+						this->server_name(), collided_users[i]
+					);
+					Actions quits = m_ctx.channels.notify_by_user(
+						collided_users[i],
+						reply_quit.reply_quit(
+							"Nick collision " + nickname + " -> " +
+							collided_users.front()->get_mask()
+						)
+					);
+					queue.append(quits);
+				}
+
 				// Remove the user from all channels
 				channels().remove_user(collided_users.front());
 
-				// Send error and disconnect all users
-				return actions
-					.push(Action::send(user, reply.error_nickname_collision(nickname)))
-					.push(
-						Action::sendall(collided_users,reply.reply_cmd_kill(
-							nickname, "Nick collision " + nickname + " -> " + collided_users.front()->get_mask()
-						))
-					)
-					.push(Action::disconnectall(collided_users));
+				return queue.push(Action::send(
+					user, reply.error_nickname_collision(nickname)
+				))
+				.push(
+					Action::sendall(collided_users,reply.reply_cmd_kill(
+						nickname, "Nick collision " + nickname + " -> " + 
+						collided_users.front()->get_mask()
+					))
+				)
+				.push(Action::disconnectall(collided_users));
 			}
 		} 
 		// No Collision occurred, change nickname
