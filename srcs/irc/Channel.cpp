@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:38:55 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/14 17:07:28 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/20 14:25:31 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <algorithm>
+#include <sstream>
 #include "Channel.hpp"
 #include "Masks.hpp"
 
@@ -113,7 +114,7 @@ IRC::Channel::unset_key(std::string const &pass) {
 }
 
 void
-IRC::Channel::set_limit(int limit) {
+IRC::Channel::set_limit(std::size_t limit) {
 	m_limit = limit;
 }
 
@@ -141,6 +142,15 @@ IRC::Channel::get_mode_string() const {
 		if (this->get_mode() & (0x01 << i))
 			reply += mode_string[i];
 	}
+	if (this->get_mode() & CHAN_MODE_USER_LIMIT)
+	{
+		std::stringstream convert;
+
+		convert << this->get_limit();
+		reply += " " + convert.str();
+	}
+	if (this->get_mode() & CHAN_MODE_KEY)
+		reply += " " + *this->get_key();
 	return reply;
 }
 
@@ -149,7 +159,7 @@ IRC::Channel::get_key() const {
 	return m_key;
 }
 
-int
+std::size_t
 IRC::Channel::get_limit() const {
 	return m_limit;
 }

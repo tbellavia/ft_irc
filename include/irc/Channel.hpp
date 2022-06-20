@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:34:06 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/13 15:05:22 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/20 14:24:32 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ namespace IRC
 		std::vector<std::string>	m_ban_masks;
 		std::string					m_name;
 		std::string const			*m_key;
-		int							m_limit;
+		std::size_t					m_limit;
 		std::string					m_topic;
 		int							m_mode;
 	public:
@@ -49,7 +49,7 @@ namespace IRC
 		void unset_mode(int mode);
 		void set_key(std::string const &pass);
 		void unset_key(std::string const &pass);
-		void set_limit(int limit);
+		void set_limit(std::size_t limit);
 		void set_topic(std::string const &topic);
 
 		bool is_user(User *user) const;
@@ -89,7 +89,7 @@ namespace IRC
 		int get_mode() const;
 		std::string get_mode_string() const;
 		std::string const *get_key() const;
-		int get_limit() const;
+		std::size_t get_limit() const;
 		std::string const &get_topic() const;
 		std::vector<std::string> const &get_ban_masks() const;
 

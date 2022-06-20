@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Replies.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:16 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/19 23:12:07 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/20 11:36:59 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ namespace IRC
 		std::string error_nickname_in_use(std::string const &nickname);
 		std::string error_erroneus_nickname(std::string const &nickname);
 		std::string error_nickname_collision(std::string const &nickname);
+		std::string reply_nick(std::string const &nickname);
 
 		// Kill
 		std::string reply_cmd_kill(
