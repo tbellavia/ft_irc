@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/15 10:26:46 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/20 10:31:38 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -538,7 +538,7 @@ IRC::ReplyBuilder::reply_new_topic(
 	User *user, std::string const &channel_name, std::string const &topic
 )
 {
-	return ":" + user->get_mask() + " TOPIC " + channel_name + " " + topic;
+	return ":" + user->get_mask() + " TOPIC " + channel_name + " :" + topic;
 }
 
 std::string
