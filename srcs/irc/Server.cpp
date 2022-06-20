@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 18:47:47 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/20 13:58:32 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/20 18:41:37 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,15 +128,17 @@ IRC::Server::read_requests_() {
 			if ( (bytes = socket->recv(buffer)) <= 0 ){
 				// Connection shutdown
 				if ( bytes == 0 ){
+					actions = m_api.process_request(socket, "QUIT :client has closed the connection");
 					std::cout << "Client has closed the connection" << std::endl;
 				}
 				else {
+					actions = m_api.process_request(socket, "QUIT :An error has occured during connection");
 					std::cout << "An error has occured during connection";
 					std::cout << std::endl;
 				}
+				this->handle_actions_(actions);
 				// Remove File from writers to prevent using it in the writer loop.
 				m_writers.erase( file );
-				this->disconnect_socket_( socket );
 			} else {
 				file->push_request( buffer );
 
