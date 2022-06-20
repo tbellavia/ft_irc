@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 18:18:53 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/15 11:33:26 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/20 11:32:25 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ IRC::CmdNICK::execute() {
 	std::cout << "CmdNICK" << std::endl;
 	// Check if role not onboard
 	if ( user->pass_accepted() || user->connected() ){
-		std::cout << "HELLO there 0" << std::endl;
 		if ( m_arguments.size() == 1 ){
 			std::cout << "> NICK not enough parameters" << std::endl;
 			return Actions::unique_send(user, reply.error_no_nickname_given());
@@ -77,13 +76,23 @@ IRC::CmdNICK::execute() {
 		} 
 		// No Collision occurred, change nickname
 		std::cout << "> NICK SET TO " << nickname << std::endl;
+		ReplyBuilder user_reply(user->get_mask());
 		user->set_nickname(nickname);
 		user->set_mode(MODE_NICK_);
 		
-		if ( user->connection_complete() ){
+		if ( !user->connected() && user->connection_complete() ){
 			std::cout << "Connection completed!" << std::endl;
 			user->unset_mode(MODE_RESTRICTED_);
 			return reply.connection_complete_replies(user, m_ctx.config);
+		}
+		else if ( user->connected() ) {
+
+			Actions queue;
+			queue = m_ctx.channels.notify_by_user(
+				user, user_reply.reply_nick(nickname)
+			);
+			queue.push(Action::send(user, user_reply.reply_nick(nickname)));
+			return queue;
 		}
 	}
 	return Actions::unique_idle();

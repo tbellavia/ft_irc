@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:16 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/15 10:26:45 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/20 11:21:21 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ namespace IRC
 		std::string error_nickname_in_use(std::string const &nickname);
 		std::string error_erroneus_nickname(std::string const &nickname);
 		std::string error_nickname_collision(std::string const &nickname);
+		std::string reply_nick(std::string const &nickname);
 
 		// Kill
 		std::string reply_cmd_kill(

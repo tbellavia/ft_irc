@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/20 10:31:38 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/20 11:29:38 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,6 +243,13 @@ std::string IRC::ReplyBuilder::error_nickname_collision(
 	reply.append(nickname);
 	reply.append(" :Nickname collision KILL");
 	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::reply_nick(std::string const &nickname) {
+	std::string reply = this->build_header_();
+
+	return reply + " NICK " + ":" + nickname;
 }
 
 std::string IRC::ReplyBuilder::reply_cmd_kill(
