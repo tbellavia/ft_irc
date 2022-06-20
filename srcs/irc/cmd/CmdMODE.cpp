@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 10:52:41 by lperson-          #+#    #+#             */
-/*   Updated: 2022/06/16 10:01:45 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/20 14:05:56 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -330,11 +330,13 @@ bool IRC::CmdMODE::set_channel_limit_(
 			return false;
 	
 		channel.set_limit(limit);
+		channel.set_mode(CHAN_MODE_USER_LIMIT);
 		return true;
 	}
 	else if (channel.get_limit() >= 0)
 	{
 		channel.set_limit(-1);
+		channel.unset_mode(CHAN_MODE_USER_LIMIT);
 		return true;
 	}
 	return false;
@@ -469,6 +471,7 @@ bool IRC::CmdMODE::set_channel_key_(
 		}
 		else
 		{
+			channel.set_mode(CHAN_MODE_KEY);
 			channel.set_key(*parameter);
 			return true;
 		}
@@ -478,6 +481,7 @@ bool IRC::CmdMODE::set_channel_key_(
 		std::string const *key = channel.get_key();
 		if (key && *key == *parameter)
 		{
+			channel.unset_mode(CHAN_MODE_KEY);
 			channel.unset_key(*parameter);
 			return true;
 		}
