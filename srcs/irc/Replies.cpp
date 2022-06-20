@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/20 12:40:07 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/20 13:11:15 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -783,7 +783,7 @@ IRC::ReplyBuilder::reply_quit(std::string const &message) {
 	// :b!b3@172.17.0.1 QUIT :Quit: Leaving
 	reply.append(":");
 	reply.append(m_target->get_mask());
-	reply.append(" QUIT :Quit: ");
+	reply.append(" QUIT :");
 	reply.append(message);
 	return reply;
 }
