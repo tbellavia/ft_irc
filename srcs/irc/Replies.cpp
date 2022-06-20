@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/20 13:11:15 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/20 15:03:13 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -715,7 +715,7 @@ IRC::ReplyBuilder::reply_list(Channel const &channel) {
 	convert >> channel_size;
 
 	return reply + " " + channel.get_name() + " " + channel_size +
-		" :[+" + channel.get_mode_string() + "] " + channel.get_topic();
+		" :[+" + channel.get_mode_string(true) + "] " + channel.get_topic();
 }
 
 std::string

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:34:06 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/20 14:49:57 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/20 14:59:53 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ namespace IRC
 
 		std::string const &get_name() const;
 		int get_mode() const;
-		std::string get_mode_string() const;
+		std::string get_mode_string(bool secure = false) const;
 		std::string const *get_key() const;
 		std::size_t get_limit() const;
 		std::string const &get_topic() const;

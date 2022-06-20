@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:38:55 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/20 14:50:31 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/20 15:03:22 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ IRC::Channel::get_mode() const {
 }
 
 std::string
-IRC::Channel::get_mode_string() const {
+IRC::Channel::get_mode_string(bool secure) const {
 	std::string const mode_string = IRC_CHANNEL_MODE_STRING;
 	std::string reply;
 	for (std::string::size_type i = 0 ; i < mode_string.length(); ++i)
@@ -149,7 +149,7 @@ IRC::Channel::get_mode_string() const {
 		convert << this->get_limit();
 		reply += " " + convert.str();
 	}
-	if (this->get_mode() & CHAN_MODE_KEY)
+	if (this->get_mode() & CHAN_MODE_KEY && !secure)
 		reply += " " + *this->get_key();
 	return reply;
 }
