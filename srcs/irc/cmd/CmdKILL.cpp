@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 09:22:18 by lperson-          #+#    #+#             */
-/*   Updated: 2022/06/15 11:44:37 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/20 12:41:59 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,20 @@ IRC::Actions IRC::CmdKILL::execute()
 			sender, reply_error.error_no_such_nick(m_arguments[1])
 		);
 
-	ReplyBuilder reply(sender->get_mask());
 	Actions queue;
+	for (std::size_t i = 0; i < targets.size(); ++i)
+	{
+		ReplyBuilder reply_target(this->server_name(), targets[i]);
+		Actions actions = m_ctx.channels.notify_by_user(
+			targets[i],
+			reply_target.reply_quit(
+				"Killed (" + sender->get_nickname() + " (" + m_arguments[2] +
+					"))"
+			)
+		);
+		queue.append(actions);
+	}
+	ReplyBuilder reply(sender->get_mask());
 	queue.push(
 		Action::sendall(
 			targets, reply.reply_cmd_kill(
@@ -57,8 +69,8 @@ IRC::Actions IRC::CmdKILL::execute()
 					"))"
 			)
 		)
-	);
-	queue.push(Action::disconnectall(targets));
+	)
+	.push(Action::disconnectall(targets));
 	return queue;
 }
 

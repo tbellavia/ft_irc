@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 16:20:12 by lperson-          #+#    #+#             */
-/*   Updated: 2022/06/08 17:37:48 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/20 14:51:22 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,11 @@ IRC::Actions IRC::CmdINVITE::execute()
 			);
 		}
 	}
-
 	ReplyBuilder user_reply(sender->get_mask());
 	Actions actions;
 
-	channel->inviteUser(target);
+	if (channel)
+		channel->inviteUser(target);
 	actions.push(
 		IRC::Action(IRC::Event::SEND, target, user_reply.reply_invite(
 			m_arguments[1], m_arguments[2]

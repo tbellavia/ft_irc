@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/21 15:33:31 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/21 15:41:10 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,6 +243,13 @@ std::string IRC::ReplyBuilder::error_nickname_collision(
 	reply.append(nickname);
 	reply.append(" :Nickname collision KILL");
 	return reply;
+}
+
+std::string
+IRC::ReplyBuilder::reply_nick(std::string const &nickname) {
+	std::string reply = this->build_header_();
+
+	return reply + " NICK " + ":" + nickname;
 }
 
 std::string IRC::ReplyBuilder::reply_cmd_kill(
@@ -538,7 +545,7 @@ IRC::ReplyBuilder::reply_new_topic(
 	User *user, std::string const &channel_name, std::string const &topic
 )
 {
-	return ":" + user->get_mask() + " TOPIC " + channel_name + " " + topic;
+	return ":" + user->get_mask() + " TOPIC " + channel_name + " :" + topic;
 }
 
 std::string
@@ -708,7 +715,7 @@ IRC::ReplyBuilder::reply_list(Channel const &channel) {
 	convert >> channel_size;
 
 	return reply + " " + channel.get_name() + " " + channel_size +
-		" :[+" + channel.get_mode_string() + "] " + channel.get_topic();
+		" :[+" + channel.get_mode_string(true) + "] " + channel.get_topic();
 }
 
 std::string
@@ -776,7 +783,7 @@ IRC::ReplyBuilder::reply_quit(std::string const &message) {
 	// :b!b3@172.17.0.1 QUIT :Quit: Leaving
 	reply.append(":");
 	reply.append(m_target->get_mask());
-	reply.append(" QUIT :Quit: ");
+	reply.append(" QUIT :");
 	reply.append(message);
 	return reply;
 }

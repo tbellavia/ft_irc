@@ -6,11 +6,12 @@
 /*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/19 22:38:55 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/14 17:07:28 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/20 17:58:28 by bbellavi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <algorithm>
+#include <sstream>
 #include "Channel.hpp"
 #include "Masks.hpp"
 
@@ -113,7 +114,7 @@ IRC::Channel::unset_key(std::string const &pass) {
 }
 
 void
-IRC::Channel::set_limit(int limit) {
+IRC::Channel::set_limit(std::size_t limit) {
 	m_limit = limit;
 }
 
@@ -133,7 +134,7 @@ IRC::Channel::get_mode() const {
 }
 
 std::string
-IRC::Channel::get_mode_string() const {
+IRC::Channel::get_mode_string(bool secure) const {
 	std::string const mode_string = IRC_CHANNEL_MODE_STRING;
 	std::string reply;
 	for (std::string::size_type i = 0 ; i < mode_string.length(); ++i)
@@ -141,6 +142,15 @@ IRC::Channel::get_mode_string() const {
 		if (this->get_mode() & (0x01 << i))
 			reply += mode_string[i];
 	}
+	if (this->get_mode() & CHAN_MODE_USER_LIMIT)
+	{
+		std::stringstream convert;
+
+		convert << this->get_limit();
+		reply += " " + convert.str();
+	}
+	if (this->get_mode() & CHAN_MODE_KEY && !secure)
+		reply += " " + *this->get_key();
 	return reply;
 }
 
@@ -149,7 +159,7 @@ IRC::Channel::get_key() const {
 	return m_key;
 }
 
-int
+std::size_t
 IRC::Channel::get_limit() const {
 	return m_limit;
 }
@@ -380,8 +390,13 @@ IRC::Channel::is_outside_disable() const {
 }
 
 bool
+IRC::Channel::is_key_protected() const {
+	return m_mode & CHAN_MODE_KEY;
+}
+
+bool
 IRC::Channel::is_channel_name(std::string const &name) {
-	return !name.empty() && (name[0] == '#' || name[0] == '&');
+	return name.size() > 1 && (name[0] == '#' || name[0] == '&');
 }
 
 bool
