@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Replies.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bbellavi <bbellavi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 23:44:05 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/19 23:21:39 by bbellavi         ###   ########.fr       */
+/*   Updated: 2022/06/21 15:33:31 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ IRC::ReplyBuilder::reply_your_host(
 ) {
 	std::string reply = this->build_header_(NumericReplies::RPL_YOURHOST);
 
-	reply += "Your host is " + hostname + ", running version " + version;
+	reply += " Your host is " + hostname + ", running version " + version;
 	return reply;
 }
 
@@ -116,7 +116,7 @@ std::string
 IRC::ReplyBuilder::reply_created(std::string const &date) {
 	std::string reply = this->build_header_(NumericReplies::RPL_CREATED);
 
-	reply += "This server was created " + date;
+	reply += " This server was created " + date;
 	return reply;
 }
 
@@ -198,7 +198,7 @@ IRC::ReplyBuilder::reply_inviting(
 ) {
 	std::string reply = this->build_header_(NumericReplies::RPL_INVITING);
 
-	return reply + " " + channel_name + nickname;
+	return reply + " " + channel_name + " " + nickname;
 }
 
 std::string IRC::ReplyBuilder::error_no_such_nick(std::string const &nickname)
