@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 18:47:47 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/21 15:26:14 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/21 15:35:33 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,6 @@ IRC::Server::read_requests_() {
 					std::cout << "Client has closed the connection" << std::endl;
 				}
 				// Remove File from writers to prevent using it in the writer loop.
-				m_readers.erase( file );
 				m_writers.erase( file );
 				this->disconnect_socket_( socket );
 			} else {
