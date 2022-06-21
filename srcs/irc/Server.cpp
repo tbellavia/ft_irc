@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 18:47:47 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/19 15:12:54 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/21 15:26:14 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,9 @@ IRC::Server::read_requests_() {
 				* requests.
 				*/
 				while ( file->available_request() ){
-					actions = m_api.process_request(socket, file->pop_request());
+					actions = m_api.process_request(
+						socket, file->pop_request()
+					);
 					this->handle_actions_(actions);
 					std::cout << "============================================" << std::endl;
 				}
@@ -177,6 +179,8 @@ IRC::Server::write_responses_() {
 			}
 			file->seek_response(bytes);
 		}
+		else
+			m_selector.unset(file->fileobj(), Selector::WRITE);
 	}
 }
 
@@ -259,7 +263,11 @@ IRC::Server::sendall_(Action &action) {
 	std::vector<Socket*> sockets = action.sockets();
 	std::vector<Socket*>::iterator it = sockets.begin();
 
+
 	for ( ; it != sockets.end() ; ++it ) {
+		IFileObj *fileobj = reinterpret_cast<IFileObj *>(*it);
+		if ( !m_selector.find(fileobj)->isset_event(Selector::WRITE) )
+			m_selector.set(fileobj, Selector::WRITE);
 		this->push_send_(*it, action.response());
 	}
 }
@@ -276,7 +284,7 @@ IRC::Server::connect_socket_(Socket *socket){
 	if ( socket != NULL ){
 		std::cout << "New connection from : " << socket->ip() << std::endl;
 		socket->set_blocking(false);
-		m_selector.add(socket, Selector::READ | Selector::WRITE);
+		m_selector.add(socket, Selector::READ);
 		m_api.connect(socket);
 	}
 }

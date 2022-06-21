@@ -37,6 +37,23 @@ Selector::get_entries() const {
 }
 
 void
+Selector::set(IFileObj *fileobj, int events) {
+	if ( fileobj == NULL )
+		return ;
+	File *value = this->find(fileobj);
+	int fd = fileobj->fd();
+
+	if ( value == NULL )
+		return ;
+
+	value->set_event(events);
+	if ( value->isset_event(READ) )
+		FD_SET(fd, &m_read);
+	if ( value->isset_event(WRITE) )
+		FD_SET(fd, &m_write);
+}
+
+void
 Selector::unset(IFileObj *fileobj, int events) {
 	if ( fileobj == NULL )
 		return;

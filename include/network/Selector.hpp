@@ -6,7 +6,7 @@
 /*   By: lperson- <lperson-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 18:31:22 by bbellavi          #+#    #+#             */
-/*   Updated: 2022/06/14 18:03:55 by lperson-         ###   ########.fr       */
+/*   Updated: 2022/06/21 15:13:35 by lperson-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ public:
 	std::map<int, File*> const &get_entries() const;
 	File *find(IFileObj *fileobj);
 
+	void set(IFileObj *fileobj, int events);
 	void unset(IFileObj *fileobj, int events);
 	void add(IFileObj *fileobj, int events);
 	void remove(IFileObj *fileobj);
